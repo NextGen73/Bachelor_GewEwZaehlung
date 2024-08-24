@@ -1,1 +1,1 @@
-Hier wird meine Bachelorarbeit und meine Python-Dateien, die in der Arbeit verwendet werden, liegen
+Hier werden meine Bachelorarbeit und meine Python-Dateien, die in der Arbeit verwendet werden, liegen
