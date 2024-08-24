@@ -1,0 +1,9 @@
+[0] Config.pm:308> INFO - This is Biber 2.20
+[0] Config.pm:311> INFO - Logfile is 'Ausarbeitung.blg'
+[288] biber-MSWIN64:340> INFO - === 
+[367] Biber.pm:420> INFO - Reading 'Ausarbeitung.bcf'
+[515] Biber.pm:994> INFO - Found 0 citekeys in bib section 0
+[534] bbl.pm:676> INFO - Writing 'Ausarbeitung.bbl' with encoding 'UTF-8'
+[535] bbl.pm:779> INFO - Output to Ausarbeitung.bbl
+[535] Biber.pm:131> WARN - The file 'Ausarbeitung.bcf' does not contain any citations!
+[535] Biber.pm:133> INFO - WARNINGS: 1
