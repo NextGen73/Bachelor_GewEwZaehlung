@@ -10,7 +10,6 @@ temp/
 *.bak
 *.bbl
 *.bcf
-*.bib
 *.blg
 *.clo
 *.cls
