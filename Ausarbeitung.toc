@@ -1,5 +1,0 @@
-\babel@toc {ngerman}{}\relax 
-\babel@toc {ngerman}{}\relax 
-\babel@toc {ngerman}{}\relax 
-\contentsline {chapter}{\numberline {1}Literaturverzeichnis}{4}{chapter.1}%
-\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
