@@ -30,6 +30,7 @@ temp/
 *.log
 *.lot
 *.mw
+*.md
 *.nav
 *.orig
 *.out
