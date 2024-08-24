@@ -53,15 +53,4 @@ temp/
 *.wrt
 *.xdy
 *.xlg
-## include test files
-!test/**/*.tex
-!test/**/*.cls
-!test/**/*.sty
-!test/**/*.xdy
-## exclude unnecessary generated files
-**/doc/tutorials/*-example.*
-**/doc/tutorials/*-temp*.*
-source/install/*.bxt
-source/install/*.mtx
-source/install/*.sh
-source/install/*.tex
+
