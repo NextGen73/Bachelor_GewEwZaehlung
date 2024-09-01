@@ -73,30 +73,76 @@
 
 \chapter{Einleitung}
 \label{sec: Einleitung}
-      In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt.
-      Dazu wird in den ersten Kapiteln die nötige Theorie anhand der Quellen \cite{grundlageFutamura} und \cite{hauptteilTkachuk} beschrieben und anschließend in Kapitel \ref{sec: Programmieren} in Python angewendet.
-      Daraufhin werden in Kapitel \ref{sec: Verbesserungen} die Ergebnisse kritisch betrachtet und weitere Algorithmen eingeführt, um die Berechnungen zu beschleunigen.
+      
+      Diese Ausarbeitung beschäftigt sich mit numerischen Verfahren, um sicherzustellen, dass für ein gegebenes mechanisches System keine Eigenwerte in einem vorgegebenem festen Intervall liegen.
+      % hier muss noch einiges getan werden
+      Damit kann sichergestellt werden, dass die Eigenfrequenzen des Systems nicht so liegen, dass es zu einer Selbsterregung kommt.
+
+      Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
+      in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
+      Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt. Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
+
+      Daraufhin werden diese Überlegungen in Kapitel \ref{sec: Programmieren} anhand verschiedener Beispiele implementiert und getestet.
+
+      Die Auswertung und Verbesserung der Implementation folgt in Kapitel \ref{sec: Verbesserungen}.
+
+      % In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt, um sicherzustellen, dass bei einem vorgegebenem mechanischem System keine Eigenwerte in einem bestimmten festen Intervall liegen.
+      % Dazu wird in den ersten Kapiteln die nötige Theorie anhand der Quellen \cite{grundlageFutamura} und \cite{hauptteilTkachuk} beschrieben.
+      % Hier werden Matrix Pencil und das verallgemeinerte Eigenwertproblem verwendet, um 
+      % Hierzu nutzt man die Identität von Futamura, um die Zählung der Eigenwerte auf die zugrundeliegenden Matrizen zurückzuführen.
+
+
+      % und anschließend in Kapitel \ref{sec: Programmieren} in Python angewendet.
+      % Daraufhin werden in Kapitel \ref{sec: Verbesserungen} die Ergebnisse kritisch betrachtet und weitere Algorithmen eingeführt, um die Berechnungen zu beschleunigen.
       Zum Schluss werden in Kapitel \ref{sec: Auswertung} die Ergebnisse wiederholt und ein Ausblick in weiterführende Themen gegeben.
+
+      Ferner werden in Kapitel \ref{sec: Quellen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
 
 \chapter{Masse- und Steifigkeits-Matrizen}
 \label{sec: MS Matrizen}
+      \section{Die Massematrix}
 
-      
+      \section{Die Steifigkeitsmatrix}
+
+      \section{Zusammenhang Eigenwert und Eigenfrequenz}
+
+      \section{Das Beispiel: lineares System von Massen und Federn}
 
 \chapter{Das verallgemeinerte Eigenwert-Problem}
 \label{sec: EW Problem}
+      \section{Der Matrix Pencil}
+
+      \section{Das verallgemeinerte Eigenwertproblem}
+
+      \section{Die Schur-Zerlegung}
 
 \chapter{Quellen-Ausarbeitungen}
+\label{sec: Quellen}
+      \section{Die Identität von Futamura}
+
+      \section{Die Hutchinson-Approximation}
+
+      \section{Die Berechnungen nach Tkachuk}
 
 \chapter{Implementierung}
 \label{sec: Programmieren}
+      \section{Erklärungen}
+
+      \section{Implementation}
+
+      \section{Grafiken}
 
 \chapter{Verbesserungen}
 \label{sec: Verbesserungen}
+      \section{Auswertung bisheriger Implementation}
+
+      \section{mögliche Verbesserungen}
+
+      \section{Implementation und Auswertung der verbesserten Programme}
 
 \chapter{Auswertung}
 \label{sec: Auswertung}
 
 \chapter{Literaturverzeichnis}
-\printbibliography
+      \printbibliography
 \end{document}
