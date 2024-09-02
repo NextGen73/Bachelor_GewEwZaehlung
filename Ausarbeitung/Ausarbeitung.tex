@@ -19,7 +19,10 @@
 % Symbolverzeichnis
 \renewcommand{\symheadingname}{Symbolverzeichnis}
 \opensymdef
-      \newsym[afd]{al}{\alpha}
+      % \newsym[]{}{}
+      \newsym[Massenmatrix]{M}{M}
+      \newsym[Steifigkeitsmatrix]{K}{K}
+      \newsym[Eigenfrequenz]{w}{\omega}
 \closesymdef
 
 
@@ -80,13 +83,15 @@
 
       Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
       in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
-      Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt. Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
+      Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt.
+      Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
 
       Daraufhin werden diese Überlegungen in Kapitel \ref{sec: Programmieren} anhand verschiedener Beispiele implementiert und getestet.
 
       Die Auswertung und Verbesserung der Implementation folgt in Kapitel \ref{sec: Verbesserungen}.
 
-      % In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt, um sicherzustellen, dass bei einem vorgegebenem mechanischem System keine Eigenwerte in einem bestimmten festen Intervall liegen.
+      % In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt, um sicherzustellen,
+      % dass bei einem vorgegebenem mechanischem System keine Eigenwerte in einem bestimmten festen Intervall liegen.
       % Dazu wird in den ersten Kapiteln die nötige Theorie anhand der Quellen \cite{grundlageFutamura} und \cite{hauptteilTkachuk} beschrieben.
       % Hier werden Matrix Pencil und das verallgemeinerte Eigenwertproblem verwendet, um 
       % Hierzu nutzt man die Identität von Futamura, um die Zählung der Eigenwerte auf die zugrundeliegenden Matrizen zurückzuführen.
@@ -98,15 +103,90 @@
 
       Ferner werden in Kapitel \ref{sec: Quellen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
 
-\chapter{Masse- und Steifigkeits-Matrizen}
+\chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
-      \section{Die Massematrix}
+      Um die Eigenfrequenzen und/oder Eigenkreisfrequenzen \w eines Systems zu bestimmen, benötigt man zuerst die Massenmatrix \M und die Steifigkeitsmatrix \K des Systems.
 
-      \section{Die Steifigkeitsmatrix}
+      Laut \cite[S. 366]{maschinendynamikDresig} könne man für einfache Systeme das Prinzip von d'Alembert anwenden, es sei aber ungeeignet für komplexere Probleme.
+            
+      In diesem Kapitel werden 2 Systeme vorgestellt und die entsprechenden Matrizen berechnet:
+      das erste ist ein Längsschwinger-System in einer Dimension, das zweite ein Längsschwinger in 2 Dimensionen.
 
+      Hier folgen nun Bilder, um die Systeme zu veranschaulichen:
+
+      Bild mit Längsschwinger in 1D
+
+      Bild mit Längsschwinger in 2D
+
+      Hierbei haben die Federn keine Massen und es existieren keine Dämpfung oder Gewichtskraft.
+
+      \section{Herleitung durch das Prinzip von d'Alembert}
+            Da diese Herleitung auf Kräftegleichgewichten beruht, werden nun die agierenden Kräfte kurz erläutert:
+
+            Die erste Kraft ist gleich m*a, also Masse mal Beschleunigung, die zweite Kraft ist die Federspannkraft, gemäß dem Hook'schen Gesetz.
+
+            betrachte ein Beispiel mit 2 Massen, berachte die wirkenden Kräfte für erste Masse.
+
+            Nun kann man dies verallgemeinern auf ein System mit n Massen, wie in Bild #########.
+
+            Es folgen die Gleichungen:
+
+
+
+            Man hat somit ein System von Kräftegleichgewichten:
+
+            Dieses kann man als
+            \begin{equation}
+                  \label{eqn: MK Gleichung in 1D}
+                  M\,x^{\dot\dot} + K\,x = 0
+            \end{equation}
+
+            Man sieht, dass hier M eine Diagonalmatrix ist, die nur positive Einträge auf der Hauptdiagonalen besitzt.
+            Sie ist somit insbesondere positiv definit, da alle Minoranten positiv sind.
+
+            Für den zwei-dimensionalen Fall benötigt man $n^2$ Punkt Massen und für jeden Punkt auch 2 Einträge in $x$, da es nun eine Bewegung in x- und in y-Richtung gibt.
+            Somit existieren $2\,n^2$ Einträge in $x$, aber jede Masse besitzt nur 2 Verbindungen mehr, somit wird die Steifigkeitsmatrix \K viel größer, aber auch viel schwächer besetzt.
+            
+
+      
+      \section{Ermittlung der Matrizen der Modellprobleme}
+            Nun können wir uns mit der Ermittlung der Massen- und Steifigkeitsmatrizen für die Modellprobleme vornehmen.
+            Beginne dazu mit dem System in einer Dimension (Bild ....)
+
+            Nach Bsp .... kann man die Gleichung für $m_1$ und $m_n$ übernehmen, für die inneren Punkte gelten folgende Kräfte:
+
+            Bild Kräfte innerer Punkt,
+
+            was auf die Gleichung
+            $$m_i\,\ddot x_i + c_{i-1}\,(x_i-x_{i-1}) - c_i\,(x_{i+1}-x_i), \quad i=2,...,n-1$$
+
+            zurückkommt. 
+            % Für i=1,n beachte, dass x_0 bzw. x_{n+1} nicht existieren, da diese Massen mit der festen Begrenzung verbunden sind, es folgen somit analog zu Bsp... die Gleichungen für 1 und n
+
+            Nach Umstellen folgt:
+            \begin{equation}
+                  \label{eqn: System GDgl MK 1d}
+                  \begin{cases}
+                        m_1\ \ddot x_1 + (c_0+c_1)\,x_1 - c_1\,x_2 & = 0   \\
+                        m_i\ \ddot x_i - c_{i-1}\,x_{i-1} + (c_{i-1}+c_i)\,x_i -c_i\,x_{i+1} & = 0,\ i=2,...,n-1 \\
+                        m_n\ \ddot x_n - c_{n-1}\,x_{n-1} + (c_{n-1}+c_n)\,x_n & = 0
+                  \end{cases}
+            \end{equation}
+
+            Dieses System kann man zusammenfassen zu:
+            $$M\,\ddot x + K\,x = 0,\quad M= \text{diag}(m_1,\dots,m_n),
+            K = \begin{pmatrix}
+                  c_0+c_1 & -c_1 &  0& ... & 0 \\
+                  -c_1 & c_1+c_2 & -c_2 & \ddots & \vdots \\
+                   0& -c_2 & c_2+c_3 & \ddots & 0 \\
+                   \vdots & \ddots & \ddots & \ddots  & -c_{n-1} \\
+                   0& ... & 0& -c_{n-1} & c_{n-1}+c_n \\
+                  \end{pmatrix}$$
+                  
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
 
-      \section{Das Beispiel: lineares System von Massen und Federn}
+            wo schreibt man, dass man die Basis $cos(....)....$ nutzt, um auf das Problem $(K-\w^2 M)\, v = 0$ zu kommen?
+
 
 \chapter{Das verallgemeinerte Eigenwert-Problem}
 \label{sec: EW Problem}
