@@ -9,6 +9,7 @@
 \usepackage{csquotes}
 \usepackage[draft]{listofsymbols}
 \usepackage[backend=biber, style=numeric, urldateusetime=true]{biblatex} %% Literature citing engine
+\usepackage{float}
 
 %__________Definitions_____________________________
 
@@ -25,6 +26,8 @@
       \newsym[Eigenfrequenz]{w}{\omega}
 \closesymdef
 
+
+\newcommand{\bild}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
@@ -123,13 +126,47 @@
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
 
-            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
+            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt,
+            wodurch man die Massen- und Steifigkeitsmatrix erhält.
 
-            N
+            Die erhaltene Gleichung muss die Form $M\,\ddot x+K\,x = 0$ besitzen. Dadurch können die gesuchten Matrizen an der Gleichung abgelesen werden.
             
             Da diese Herleitung auf Kräftegleichgewichten beruht, werden nun die agierenden Kräfte kurz erläutert:
 
-            Die erste Kraft ist gleich m*a, also Masse mal Beschleunigung, die zweite Kraft ist die Federspannkraft, gemäß dem Hook'schen Gesetz.
+            \begin{itemize}
+                  \item Federkraft:
+                  
+                        Die Federkraft wird berechnet durch:
+                        \begin{equation}
+                              \label{eqn: Federkraft}
+                              F_L = -k\cdot s,
+                        \end{equation}
+                        wobei $k$ die Federkonstante ist und $s$ die Auslenkung der Feder aus der Ruhe-/Nulllage.
+
+                        beachte, dass die Kraft entgegen der Auslenkung wirkt,
+                        in einem Kräftediagramm wird deshalb oft der zugehörige Kraftpfeil in die der Auslenkung entgegengesetzen Richtung eingezeichnet und die Länge auf $k\cdot s$ bestimmt.
+                  \item Trägheitskraft:
+                  
+                        Die Trägheitskraft ist definiert durch:
+                        \begin{equation}
+                              \label{eqn: Trägheitskraft}
+                              F = m\cdot a,
+                        \end{equation}
+                        mit Masse $m$ und Beschleunigung $a$.
+                        Da diese Kraft der Beschleunigung entgegenwirkt, wird auch hier der Pfeil in entgegengesetzte Richtung gezeichnet.
+            \end{itemize}
+
+            Beide Kräfte werden in dem folgenden Schema veranschaulicht:
+
+                  
+            \begin{figure}[H]
+                  \centering
+                  \bild{"./src/KräfteAnFeder.png"}{0.3}
+                  \label{fig: KräfteAnFeder}
+                  \caption{Kräfte an einer Feder}\cite{federkraft}
+            \end{figure}[H]
+            
+
 
             betrachte ein Beispiel mit 2 Massen, berachte die wirkenden Kräfte für erste Masse.
 
@@ -228,5 +265,23 @@
 \label{sec: Auswertung}
 
 \chapter{Literaturverzeichnis}
+
+      % \begin{figure}[h]
+      %       \centering
+      %       \begin{minipage}[h]{0.49\linewidth}
+      %       \centering
+      %       \bilder{"./sources/himmel_und_wolken (www.umweltbundesamt.de)"}
+      %       \caption{Betrachter:in auf der Erde}\cite{Himmel}
+      %       \label{fig:himmel}
+      %       \end{minipage}
+      %       \hfill
+      %       \begin{minipage}[h]{0.49\linewidth}
+      %       \centering           
+      %       \bilder{"./sources/erde (www.umweltbundesamt.de)"}
+      %       \caption{Betrachter:in im Weltall auf die Erde}\cite{ErdeausWeltall}
+      %       \label{fig:ErdeausWeltall}
+      %       \end{minipage}
+      % \end{figure}
+
       \printbibliography
 \end{document}
