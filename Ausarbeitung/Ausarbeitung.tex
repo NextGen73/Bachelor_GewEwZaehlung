@@ -9,7 +9,8 @@
 \usepackage{csquotes}
 \usepackage[draft]{listofsymbols}
 \usepackage[backend=biber, style=numeric, urldateusetime=true]{biblatex} %% Literature citing engine
-\usepackage{float}
+% \usepackage{tocbasic}
+% \usepackage{floatbytocbasic}
 
 %__________Definitions_____________________________
 
@@ -126,8 +127,7 @@
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
 
-            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt,
-            wodurch man die Massen- und Steifigkeitsmatrix erhält.
+            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
 
             Die erhaltene Gleichung muss die Form $M\,\ddot x+K\,x = 0$ besitzen. Dadurch können die gesuchten Matrizen an der Gleichung abgelesen werden.
             
@@ -159,12 +159,12 @@
             Beide Kräfte werden in dem folgenden Schema veranschaulicht:
 
                   
-            \begin{figure}[H]
+            \begin{figure}[htp]
                   \centering
                   \bild{"./src/KräfteAnFeder.png"}{0.3}
                   \label{fig: KräfteAnFeder}
                   \caption{Kräfte an einer Feder}\cite{federkraft}
-            \end{figure}[H]
+            \end{figure}
             
 
 
