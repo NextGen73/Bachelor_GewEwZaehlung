@@ -17,18 +17,9 @@
 % Literaturverzeichnis
 \addbibresource{Literatur.bib}
 
-
-% Symbolverzeichnis
-\renewcommand{\symheadingname}{Symbolverzeichnis}
-\opensymdef
-      % \newsym[]{}{}
-      \newsym[Massenmatrix]{M}{M}
-      \newsym[Steifigkeitsmatrix]{K}{K}
-      \newsym[Eigenfrequenz]{w}{\omega}
-\closesymdef
-
-
 \newcommand{\bild}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
@@ -47,6 +38,19 @@
 
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Bermerkung}
+
+% Symbolverzeichnis
+\renewcommand{\symheadingname}{Symbolverzeichnis}
+\opensymdef
+      % \newsym[]{}{}
+      \newsym[Massenmatrix]{M}{M}
+      \newsym[Steifigkeitsmatrix]{K}{K}
+      \newsym[Federkraft]{FL}{\overrightarrow{F_L}}
+      \newsym[Trägheitskraft]{FT}{\overrightarrow{F_T}}
+      \newsym[Verschiebung des k-ten Massepunktes aus der Ruhelage]{xk}{x_k}
+      \newsym[Eigenfrequenz]{w}{\omega}
+\closesymdef
+
 
 \begin{document}
 \selectlanguage{ngerman}
@@ -82,7 +86,7 @@
 \label{sec: Einleitung}
       
       Diese Ausarbeitung beschäftigt sich mit numerischen Verfahren, um sicherzustellen, dass für ein gegebenes mechanisches System keine Eigenwerte in einem vorgegebenem festen Intervall liegen.
-      % hier muss noch einiges getan werden
+% hier muss noch einiges getan werden
       Damit kann sichergestellt werden, dass die Eigenfrequenzen des Systems nicht so liegen, dass es zu einer Selbsterregung kommt.
 
       Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
@@ -128,34 +132,36 @@
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
 
             Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
-
+% In Maschinendynamik war von Koeffizientenvgl die Rede, könnte man auch einbauen
             Die erhaltene Gleichung muss die Form $M\,\ddot x+K\,x = 0$ besitzen. Dadurch können die gesuchten Matrizen an der Gleichung abgelesen werden.
-            
+% Es muss irgendwo eine Quelle geben, die genau das sagt
             Da diese Herleitung auf Kräftegleichgewichten beruht, werden nun die agierenden Kräfte kurz erläutert:
 
-            \begin{itemize}
-                  \item Federkraft:
-                  
-                        Die Federkraft wird berechnet durch:
-                        \begin{equation}
-                              \label{eqn: Federkraft}
-                              F_L = -k\cdot s,
-                        \end{equation}
-                        wobei $k$ die Federkonstante ist und $s$ die Auslenkung der Feder aus der Ruhe-/Nulllage.
+            Die Federkraft \FL wird laut \cite{federkraft} berechnet durch:
+            \begin{equation}
+                  \label{eqn: Federkraft}
+                  \FL = -k\cdot \overrightarrow s,
+            \end{equation}
+            wobei $k$ die Federkonstante und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
 
-                        beachte, dass die Kraft entgegen der Auslenkung wirkt,
-                        in einem Kräftediagramm wird deshalb oft der zugehörige Kraftpfeil in die der Auslenkung entgegengesetzen Richtung eingezeichnet und die Länge auf $k\cdot s$ bestimmt.
-                  \item Trägheitskraft:
+            Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei positiver Auslenkung die Feder sich zusammenziehen will, die Kraft also in die entgegengesetzte Richtung wirkt.
+% Quelle finden
                   
-                        Die Trägheitskraft ist definiert durch:
-                        \begin{equation}
-                              \label{eqn: Trägheitskraft}
-                              F = m\cdot a,
-                        \end{equation}
-                        mit Masse $m$ und Beschleunigung $a$.
-                        Da diese Kraft der Beschleunigung entgegenwirkt, wird auch hier der Pfeil in entgegengesetzte Richtung gezeichnet.
-            \end{itemize}
+            Die Trägheitskraft \FT ist definiert durch:
+% Quelle
+            \begin{equation}
+                  \label{eqn: Trägheitskraft}
+                  \FT = -m\cdot \overrightarrow{a}
+            \end{equation}
+            mit Masse $m$ und Beschleunigungsvektor $\overrightarrow{a}$.                  
 
+            Um die Schematas klarer zu gestalten, werden die Kraftpfeile immer in die entgegengesetzte Richtung eingezeichnet, dafür aber die Minuszeichen weggelassen,
+            somit werden in den Kraftschemas keine negativen Richtungen verwendet.
+% Schemas, Kraftschemas, ...
+
+            Generell sind $\FL,\ \overrightarrow{s},\ \FT \text{ und } \overrightarrow{a}\in \R^n$, aber in dieser Ausarbeitung werden sie immer als Skalare verwendet. 
+            Da in diesem Kapitel Feder-Masse-Systeme behandelt werden, kann man $\overrightarrow{s}$ und $\overrightarrow{a}$ auf die Verschiebungen der Massen $(\xk)_k$zurückführen.
+            Im Allgemeinen wird $\overrightarrow{s}$ die Differenz $x_{k+1}-\xk$ und $\overrightarrow{a}$ die zweite Ableitung $\ddot \xk$ sein.
             Beide Kräfte werden in dem folgenden Schema veranschaulicht:
 
                   
