@@ -9,15 +9,22 @@
 \usepackage{csquotes}
 \usepackage[draft]{listofsymbols}
 \usepackage[backend=biber, style=numeric, urldateusetime=true]{biblatex} %% Literature citing engine
-% \usepackage{tocbasic}
-% \usepackage{floatbytocbasic}
+\usepackage{subcaption}
 
 %__________Definitions_____________________________
 
 % Literaturverzeichnis
 \addbibresource{Literatur.bib}
 
-\newcommand{\bild}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
+% \newcommand{\bild}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
+\newcommand{\bild}[4]{
+      \begin{figure}[!htp]
+            \centering
+            \includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}
+            \#3
+            \caption{#4}
+      \end{figure}
+}
 \newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
 
@@ -142,7 +149,7 @@
                   \label{eqn: Federkraft}
                   \FL = -k\cdot \overrightarrow s,
             \end{equation}
-            wobei $k$ die Federkonstante und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
+            wobei $k$ die Federkonstante ist und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
 
             Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei positiver Auslenkung die Feder sich zusammenziehen will, die Kraft also in die entgegengesetzte Richtung wirkt.
 % Quelle finden
@@ -160,21 +167,29 @@
 % Schemas, Kraftschemas, ...
 
             Generell sind $\FL,\ \overrightarrow{s},\ \FT \text{ und } \overrightarrow{a}\in \R^n$, aber in dieser Ausarbeitung werden sie immer als Skalare verwendet. 
-            Da in diesem Kapitel Feder-Masse-Systeme behandelt werden, kann man $\overrightarrow{s}$ und $\overrightarrow{a}$ auf die Verschiebungen der Massen $(\xk)_k$zurückführen.
-            Im Allgemeinen wird $\overrightarrow{s}$ die Differenz $x_{k+1}-\xk$ und $\overrightarrow{a}$ die zweite Ableitung $\ddot \xk$ sein.
-            Beide Kräfte werden in dem folgenden Schema veranschaulicht:
+            Da in diesem Kapitel Feder-Masse-Systeme behandelt werden, kann man $\overrightarrow{s}$ und $\overrightarrow{a}$ auf die Verschiebungen der Massen $(\xk)_k$ zurückführen:
+            Im Allgemeinen wird hier $\overrightarrow{s}$ durch $(x_{k+1}-\xk)$ und $\overrightarrow{a}$ durch die zweite Ableitung $\ddot \xk$ ersetzt.
+            Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht
 
-                  
-            \begin{figure}[htp]
+            \begin{figure}[ht]
                   \centering
-                  \bild{"./src/KräfteAnFeder.png"}{0.3}
-                  \label{fig: KräfteAnFeder}
-                  \caption{Kräfte an einer Feder}\cite{federkraft}
+                  \begin{minipage}[ht]{0.49\linewidth}
+                        \centering
+                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/KräfteAnFeder.png}
+                        \caption{wirkende Kräfte an einer Feder \cite{federkraft}}
+                        \label{fig: KräfteAnFeder}
+                  \end{minipage}%
+                  \begin{minipage}[ht]{0.49\linewidth}
+                        \centering
+                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/3 Massen System.jpg}
+                        \caption{System mit 3 Massen \cite{maschinendynamikDresig}}
+                        \label{fig: 3 Massen System}
+                  \end{minipage}
             \end{figure}
-            
 
-
-            betrachte ein Beispiel mit 2 Massen, berachte die wirkenden Kräfte für erste Masse.
+            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und $F_L$ ist als $c\cdot z$ definiert (vgl. \cite{federkraft}), wobei die Federkonstante hier $c$ benannt wurde.
+% Man könnte es auch umschreiben
+            Betrachte nun ein System mit 3 Massen wie in Abbildung \ref{fig: 3 Massen System}
 
             Nun kann man dies verallgemeinern auf ein System mit n Massen, wie in Bild
 
@@ -187,7 +202,7 @@
             Dieses kann man als
             \begin{equation}
                   \label{eqn: MK Gleichung in 1D}
-                  M\,x^{\dot\dot} + K\,x = 0
+                  M\,\ddot x + K\,x = 0
             \end{equation}
 
             Man sieht, dass hier M eine Diagonalmatrix ist, die nur positive Einträge auf der Hauptdiagonalen besitzt.
