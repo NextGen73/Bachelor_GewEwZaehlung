@@ -21,8 +21,8 @@
       \begin{figure}[!htp]
             \centering
             \includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}
-            \#3
-            \caption{#4}
+            \caption{#3}
+            #4
       \end{figure}
 }
 \newcommand{\R}{\mathbb R}
@@ -129,11 +129,24 @@
 
       Hier folgen nun Bilder, um die Systeme zu veranschaulichen:
 
-      Bild mit Längsschwinger in 1D
+      \begin{figure}[ht]
+            \centering
+            \begin{minipage}[ht]{0.49\linewidth}
+                  \centering
+                  \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/Längsschwinger 1D.png}
+                  \caption{Längsschwinger eindimensional}
+                  \label{fig: Längsschwinger 1d}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[ht]{0.49\linewidth}
+                  \centering
+                  \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/Längsschwinger 2D.png}
+                  \caption{Längsschwinger zweidimensional}
+                  \label{fig: Längsschwinger 2d}
+            \end{minipage}
+      \end{figure}
 
-      Bild mit Längsschwinger in 2D
-
-      Hierbei haben die Federn keine Massen und es existieren keine Dämpfung oder Gewichtskraft.
+      Hierbei haben die Federn keine Massen und es existieren weder Dämpfung noch Gewichtskraft.
 
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
@@ -147,9 +160,9 @@
             Die Federkraft \FL wird laut \cite{federkraft} berechnet durch:
             \begin{equation}
                   \label{eqn: Federkraft}
-                  \FL = -k\cdot \overrightarrow s,
+                  \FL = -c\cdot \overrightarrow s,
             \end{equation}
-            wobei $k$ die Federkonstante ist und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
+            wobei $c$ die Federkonstante ist und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
 
             Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei positiver Auslenkung die Feder sich zusammenziehen will, die Kraft also in die entgegengesetzte Richtung wirkt.
 % Quelle finden
@@ -171,59 +184,72 @@
             Im Allgemeinen wird hier $\overrightarrow{s}$ durch $(x_{k+1}-\xk)$ und $\overrightarrow{a}$ durch die zweite Ableitung $\ddot \xk$ ersetzt.
             Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht
 
+            \bild{./src/Federkraft und Trägheitskraft.png}{0.4}{wirkende Kräfte an Masse mit Feder \cite{federkraft}}{\label{fig: KräfteAnFeder}}
+            
+            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und $F_L$ ist als $c\cdot z$ definiert (vgl. \cite{federkraft}).
+% Man könnte es auch umschreiben
+            Betrachte nun einen Ausschnitt von Abb. \ref{fig: Längsschwinger 1d}: Die Massen $m_{k-1},\ m_k\text{ und }m_{k+1}$, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
+
             \begin{figure}[ht]
                   \centering
                   \begin{minipage}[ht]{0.49\linewidth}
                         \centering
-                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/KräfteAnFeder.png}
-                        \caption{wirkende Kräfte an einer Feder \cite{federkraft}}
-                        \label{fig: KräfteAnFeder}
-                  \end{minipage}%
+                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/3 Massen System.png}
+                        \caption{System mit 3 Massen}
+                        \label{fig: 3 Massen System}
+                  \end{minipage}
+                  \hfill
                   \begin{minipage}[ht]{0.49\linewidth}
                         \centering
-                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/3 Massen System.jpg}
-                        \caption{System mit 3 Massen \cite{maschinendynamikDresig}}
-                        \label{fig: 3 Massen System}
+                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/Kräfte Masse 1D.png}
+                        \caption{Kräfte an frei geschnittener Masse}
+                        \label{fig: Kräfte Masse 1D}
                   \end{minipage}
             \end{figure}
 
-            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und $F_L$ ist als $c\cdot z$ definiert (vgl. \cite{federkraft}), wobei die Federkonstante hier $c$ benannt wurde.
-% Man könnte es auch umschreiben
-            Betrachte nun ein System mit 3 Massen wie in Abbildung \ref{fig: 3 Massen System}
+            Betrachtet man nur die $k$-te Masse, so erhält man die wirkenden Kräfte, wie sie in Abb. \ref{fig: Kräfte Masse 1D} dargestellt wurden.
 
-            Nun kann man dies verallgemeinern auf ein System mit n Massen, wie in Bild
-
-            Es folgen die Gleichungen:
-
-
-
-            Man hat somit ein System von Kräftegleichgewichten:
-
-            Dieses kann man als
+            Mit dem Prinzip von d'Alembert führt dies auf die Gleichung
             \begin{equation}
-                  \label{eqn: MK Gleichung in 1D}
-                  M\,\ddot x + K\,x = 0
+                  \label{eqn: Gl für kte Masse}
+                  m_k\,\ddot x_k + c_{k-1}\,(x_k-x_{k-1}) - c_k\,(x_{k+1}-x_k) = 0
             \end{equation}
 
-            Man sieht, dass hier M eine Diagonalmatrix ist, die nur positive Einträge auf der Hauptdiagonalen besitzt.
-            Sie ist somit insbesondere positiv definit, da alle Minoranten positiv sind.
+            Man beachte, dass für unbewegliche Masse $m_{k-1}$, also für den Fall, dass
+            $$x_{k-1} \equiv 0$$
+            (\ref{eqn: Gl für kte Masse}) sich zu
+            \begin{equation}
+                  \label{eqn: Gl für kte Masse mit Rand links}
+                  m_k\,\ddot x_k + c_{k-1}\,x_k - c_k\,(x_{k+1}-x_k) = m_k\,\ddot x_k + (c_{k-1}+c_k)\,x_k -c_k\,x_{k+1} = 0
+            \end{equation}
+            reduziert.
 
-            Für den zwei-dimensionalen Fall benötigt man $n^2$ Punkt Massen und für jeden Punkt auch 2 Einträge in $x$, da es nun eine Bewegung in x- und in y-Richtung gibt.
-            Somit existieren $2\,n^2$ Einträge in $x$, aber jede Masse besitzt nur 2 Verbindungen mehr, somit wird die Steifigkeitsmatrix \K viel größer, aber auch viel schwächer besetzt.
+            In diesem Fall kann die $(k-1)$-te Masse als Rand betrachtet werden, für $k=1$ entspricht (\ref{eqn: Gl für kte Masse mit Rand links}) also genau der Gleichung für die Masse $m_1$ in Abb. \ref{fig: Längsschwinger 1d}.
+
+            Falls man diese Gleichungen für alle n Massen aufstellt, dann können diese zu einer Gleichung der Art
+
+            \begin{equation}
+                  \label{eqn: MK Gleichung in 1D}
+                  M\,\ddot x + K\,x = 0,\quad M,\ K\in\R^{n\times n}
+            \end{equation}
+            zusammengefasst werden. Anhand der gewonnenen Gleichung werden die Massen- und Steifigkeitsmatrix abgelesen.
+
+            % Man sieht, dass hier M eine Diagonalmatrix ist, die nur positive Einträge auf der Hauptdiagonalen besitzt.
+            % Sie ist somit insbesondere positiv definit, da alle Minoranten positiv sind.
+
+            % Für den zwei-dimensionalen Fall benötigt man $n^2$ Punkt Massen und für jeden Punkt auch 2 Einträge in $x$, da es nun eine Bewegung in x- und in y-Richtung gibt.
+            % Somit existieren $2\,n^2$ Einträge in $x$, aber jede Masse besitzt nur 2 Verbindungen mehr, somit wird die Steifigkeitsmatrix \K viel größer, aber auch viel schwächer besetzt.
             
       \section{Ermittlung der Matrizen der Modellprobleme}
-            Nun können wir uns mit der Ermittlung der Massen- und Steifigkeitsmatrizen für die Modellprobleme vornehmen.
-            Beginne dazu mit dem System in einer Dimension (Bild ....)
+            % Nun werden die Massen- und Steifigkeitsmatrix der obigen Systeme berechnet.
+            Beginne dazu mit dem System aus Abb. \ref{fig: Längsschwinger 1d}
 
-            Nach Bsp .... kann man die Gleichung für $m_1$ und $m_n$ übernehmen, für die inneren Punkte gelten folgende Kräfte:
-
-            Bild Kräfte innerer Punkt,
-
-            was auf die Gleichung
-            $$m_i\,\ddot x_i + c_{i-1}\,(x_i-x_{i-1}) - c_i\,(x_{i+1}-x_i), \quad i=2,...,n-1$$
-
-            zurückkommt. 
-            % Für i=1,n beachte, dass x_0 bzw. x_{n+1} nicht existieren, da diese Massen mit der festen Begrenzung verbunden sind, es folgen somit analog zu Bsp... die Gleichungen für 1 und n
+            Die Gleichung für $m_1$ ist durch (\ref{eqn: Gl für kte Masse mit Rand links}) mit $k=1$ gegeben.
+            Für $k=2,\dots, n-1$ gilt (\ref{eqn: Gl für kte Masse}).
+            
+            Da die Masse $m_n$ durch die rechte Feder mit dem Rand verbunden ist, gilt analog zu oben $x_{n+1} \equiv 0$.
+            Man erhält
+            $$m_n\,\ddot x_n + c_{n-1}\,(x_n-x_{n-1}) + c_n\,x_n = 0.$$  
 
             Nach Umstellen folgt:
             \begin{equation}
@@ -236,19 +262,38 @@
             \end{equation}
 
             Dieses System kann man zusammenfassen zu:
-            $$M\,\ddot x + K\,x = 0,\quad M= \text{diag}(m_1,\dots,m_n),
+            $$M\,\ddot x + K\,x = 0,$$
+            % damit wird die folgende Matrix quadratischer
+            \renewcommand{\arraystretch}{1.5}
+            wobei $$M= \text{diag}(m_1,\dots,m_n),\ 
             K = \begin{pmatrix}
-                  c_0+c_1 & -c_1 &  0& ... & 0 \\
-                  -c_1 & c_1+c_2 & -c_2 & \ddots & \vdots \\
-                   0& -c_2 & c_2+c_3 & \ddots & 0 \\
-                   \vdots & \ddots & \ddots & \ddots  & -c_{n-1} \\
-                   0& ... & 0& -c_{n-1} & c_{n-1}+c_n \\
+                  c_0+c_1 & -c_1 &  &  & 0 \\
+                  -c_1 & c_1+c_2 & -c_2 &  &  \\
+                   & -c_2 & c_2+c_3 & \ddots &  \\
+                    &  & \ddots & \ddots  & -c_{n-1} \\
+                   0&  & & -c_{n-1} & c_{n-1}+c_n \\
                   \end{pmatrix}$$
 
+                  
+            % wird wieder auf Standard zurückgesetzt
+            \renewcommand{\arraystretch}{1}
+% Erklärung x? Oder kennt das jeder
+
+% hier muss was über die Eigenschaften gesagt werden
+
+            % Für das zwei-dimensionale System kann dieses Verfahren analog angewendet werden. 
+
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
+            
+            Nach der Ermittlung der zugehörigen Matrizen, werden nun die Eigenfrequenzen des Systems bestimmt.
+% Eigenkreisfrequenzen?
+            Laut \cite[text]{maschinendynamikDresig} sind die Eigenfrequenzen des Systems genau die \w, die die Gleichung
+            \begin{equation}
+                  \label{eqn: verallg EW Problem mit w}
+            \end{equation}
+            lösen%\footnote[number]{Die Gleichung folgt aus (\ref{eqn: MK Gleichung in 1D}), falls man annimmt, dass $x(t) = v\,\exp(i\w\,t)$}.
 
-            wo schreibt man, dass man die Basis $cos(....)....$ nutzt, um auf das Problem $(K-\w^2 M)\, v = 0$ zu kommen?
-
+            
 
 \chapter{Das verallgemeinerte Eigenwert-Problem}
 \label{sec: EW Problem}
