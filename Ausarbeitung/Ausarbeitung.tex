@@ -27,6 +27,8 @@
 }
 \newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
+\newcommand{\zitat}[1]{\glqq #1 \grqq}
+\newcommand{\klammer}[1]{\left(#1\right)}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
@@ -55,7 +57,7 @@
       \newsym[Federkraft]{FL}{\overrightarrow{F_L}}
       \newsym[Trägheitskraft]{FT}{\overrightarrow{F_T}}
       \newsym[Verschiebung des k-ten Massepunktes aus der Ruhelage]{xk}{x_k}
-      \newsym[Eigenfrequenz]{w}{\omega}
+      \newsym[Eigenkreisfrequenz]{w}{\omega}
 \closesymdef
 
 
@@ -126,6 +128,7 @@
             
       In diesem Kapitel werden 2 Systeme vorgestellt und die entsprechenden Matrizen berechnet:
       das erste ist ein Längsschwinger-System in einer Dimension, das zweite ein Längsschwinger in 2 Dimensionen.
+      
 
       Hier folgen nun Bilder, um die Systeme zu veranschaulichen:
 
@@ -146,6 +149,7 @@
             \end{minipage}
       \end{figure}
 
+% in maschinendy gibt es def, was schwingersysteme sind 
       Hierbei haben die Federn keine Massen und es existieren weder Dämpfung noch Gewichtskraft.
 
       \section{Herleitung durch das Prinzip von d'Alembert}
@@ -175,7 +179,7 @@
             \end{equation}
             mit Masse $m$ und Beschleunigungsvektor $\overrightarrow{a}$.                  
 
-            Um die Schematas klarer zu gestalten, werden die Kraftpfeile immer in die entgegengesetzte Richtung eingezeichnet, dafür aber die Minuszeichen weggelassen,
+            Um die Schematas klarer zu gestalten, werden die Kraftpfeile hier immer in die entgegengesetzte Richtung eingezeichnet, dafür aber die Minuszeichen weggelassen,
             somit werden in den Kraftschemas keine negativen Richtungen verwendet.
 % Schemas, Kraftschemas, ...
 
@@ -280,18 +284,35 @@
 % Erklärung x? Oder kennt das jeder
 
 % hier muss was über die Eigenschaften gesagt werden
-
+            
             % Für das zwei-dimensionale System kann dieses Verfahren analog angewendet werden. 
 
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
-            
             Nach der Ermittlung der zugehörigen Matrizen, werden nun die Eigenfrequenzen des Systems bestimmt.
 % Eigenkreisfrequenzen?
-            Laut \cite[text]{maschinendynamikDresig} sind die Eigenfrequenzen des Systems genau die \w, die die Gleichung
+
+            Da in diesen Systemen die Massen um ihre Ruhelage schwingen und keine weiteren Kräfte wirken, schwingt jede einzelne Masse harmonisch.
+            Nach \cite[S. 380]{maschinendynamikDresig} gilt daher mit $x$ statt $q$:
+            $$x(t) = v\,\exp(i\w t),\ \ \ddot x(t) = -\w^2\,v \exp(i\w t)$$
+            mit $v=(v_1,...,v_n)$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfreqenz \w}\cite[S. 380]{maschinendynamikDresig}
+            
+            Diesen Ansatz kann man in (\ref{eqn: MK Gleichung in 1D}) einsetzen und erhält nach dividieren durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
+            
             \begin{equation}
                   \label{eqn: verallg EW Problem mit w}
+                  (K-\w^2\,M)\,v = 0
             \end{equation}
-            lösen%\footnote[number]{Die Gleichung folgt aus (\ref{eqn: MK Gleichung in 1D}), falls man annimmt, dass $x(t) = v\,\exp(i\w\,t)$}.
+
+            Die Gleichung kann ebenfalls in \cite[S. 380]{maschinendynamikDresig} gefunden werden.
+
+            Man will diese Gleichung für $v\ne 0$ lösen, da man sonst eine triviale Lösung erhält, in der keine Masse schwingt.
+
+
+% braucht man wohl hier noch nicht
+            Um (\ref{eqn: verallg EW Problem mit w}) mit $v\ne 0$ zu erfüllen, muss
+            $$\det\klammer{K-\w^2\,M} = 0$$
+            erfüllt sein.
+% nachschlagen, warum das so ist
 
             
 
