@@ -8,7 +8,7 @@
 \usepackage{amsmath, amsfonts, amssymb, amsthm} %% mathematics tools
 \usepackage{csquotes}
 \usepackage[draft]{listofsymbols}
-\usepackage[backend=biber, style=numeric, urldateusetime=true]{biblatex} %% Literature citing engine
+\usepackage[backend=biber, urldateusetime=true, sorting=none]{biblatex} %% Literature citing engine
 \usepackage{subcaption}
 
 %__________Definitions_____________________________
@@ -29,6 +29,7 @@
 \newcommand{\C}{\mathbb C}
 \newcommand{\zitat}[1]{\glqq #1 \grqq}
 \newcommand{\klammer}[1]{\left(#1\right)}
+\newcommand{\AlamB}{A-\lambda\,B}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
@@ -52,6 +53,7 @@
 \renewcommand{\symheadingname}{Symbolverzeichnis}
 \opensymdef
       % \newsym[]{}{}
+      \newsym[Einheitsmatrix]{In}{I_n}
       \newsym[Massenmatrix]{M}{M}
       \newsym[Steifigkeitsmatrix]{K}{K}
       \newsym[Federkraft]{FL}{\overrightarrow{F_L}}
@@ -98,12 +100,12 @@
 % hier muss noch einiges getan werden
       Damit kann sichergestellt werden, dass die Eigenfrequenzen des Systems nicht so liegen, dass es zu einer Selbsterregung kommt.
 
-      Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
-      in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
-      Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt.
-      Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
+      % Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
+      % in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
+      % Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt.
+      % Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
 
-      Daraufhin werden diese Überlegungen in Kapitel \ref{sec: Programmieren} anhand verschiedener Beispiele implementiert und getestet.
+      % Daraufhin werden diese Überlegungen in Kapitel \ref{sec: Programmieren} anhand verschiedener Beispiele implementiert und getestet.
 
       Die Auswertung und Verbesserung der Implementation folgt in Kapitel \ref{sec: Verbesserungen}.
 
@@ -118,8 +120,66 @@
       % Daraufhin werden in Kapitel \ref{sec: Verbesserungen} die Ergebnisse kritisch betrachtet und weitere Algorithmen eingeführt, um die Berechnungen zu beschleunigen.
       Zum Schluss werden in Kapitel \ref{sec: Auswertung} die Ergebnisse wiederholt und ein Ausblick in weiterführende Themen gegeben.
 
-      Ferner werden in Kapitel \ref{sec: Quellen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
+      Ferner werden in Kapitel \ref{sec: Verbesserungen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
 
+\chapter{Das verallgemeinerte Eigenwert-Problem und die Identität von Futamura}
+\label{sec: EW Problem_Futamura}
+
+      Zu Beginn der Ausarbeitung werden einige Resultate über Matrizen und lineare Algebra behandelt.
+      Diese werden in Kapitel \ref{sec: EW Zählung} verwendet, um die Zählung der Eigenwerte zu einer differenzierbaren Funktion umzustellen.
+      
+      \section{Der Matrix Pencil}
+            Betrachte zunächst das Konzept des Matrix Pencil, welches in dieser Ausarbeitung eine entscheidende Rolle spielt.
+            \begin{definition}(pencil, \cite[S. 375]{matrixGolub})
+                  \label{def: pencil}
+                  Seien $A$ und $B$ Matrizen in $\C^{n\times n}$, dann wird die Menge aller Matrizen der Form
+                  $\AlamB, \lambda \in \C$ pencil genannt.
+            \end{definition}
+
+            Laut \cite[S. 375]{matrixGolub} seien die Eigenwerte von $\AlamB$ diejenigen $\lambda \in\C$, für die gelte:
+            \begin{equation}
+                  \label{eqn: verallg EW Problem}
+                  (\AlamB)x=0,\quad x\ne 0
+            \end{equation}
+            
+            Hier wird $x\in\C^n$ Eigenvektor genannt.
+            Man beachte, dass für $B=\In$ Gleichung (\ref{eqn: verallg EW Problem}) die folgende Form annimmt:
+            $$(A-\lambda\In)x=0 \Leftrightarrow Ax = \lambda x,$$
+            also genau die Definition des Eigenwert-Problems.
+% gibt es ein Eigenwert-Problem und wenn ja, gibt es eine Definition? oder ist es einfach eine Gleichung?
+            Daher wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: verallg EW Problem}) erfüllen auch verallgemeinertes Eigenwert-Problem genannt, da sie eine allgemeine Form des speziellen Eigenwertproblems darstellen.
+
+            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: verallg EW Problem}) das lineare homogene Gleichungssystem
+            $$Cx=0,\quad x\ne 0$$
+
+            Nach einem Resultat aus der linearen Algebra gilt:
+% welches Resultat?, ich habe es bis jetzt nur in Skript LA20 gefunden
+            $$\det(C)\ne 0 \Leftrightarrow Cx=0 \text{ hat als einzige Lösung }x=0$$
+            Durch Negation folgt:
+            $$\det(C)=0 \Leftrightarrow \exists x\ne 0: Cx=0$$
+
+            Somit sucht man die Eigenwerte des Pencils, in dem man die Nullstellen des Polynoms $\det(\AlamB)$ berechnet\footnote{Man könnte das Polynom $\det(\AlamB)$ als eine Art charakteristisches Polynom des Pencils $\AlamB$ betrachten, ähnlich dem charakteristischen Polynom $f(A)$ einer Matrix $A$}.
+            
+            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Pencils $\AlamB$ wie folgt definiert:
+            \begin{equation}
+                  \label{def: EW Pencil}
+                  \lambda(A,B):=\{z\in\C:\ \det(A - zB) = 0\}
+            \end{equation}
+
+            Zum Schluss folgt noch eine Definition, welche in Kapitel \ref{sec: Futamura} benötigt wird:
+            \begin{definition}
+                  Ein Pencil heißt regulär, falls $B$ invertierbar ist.
+            \end{definition}
+Quelle einfügen
+
+            Man beachte, dass für einen regulären Pencil gilt:
+            $$(\AlamB)x = 0 \Leftrightarrow (B^{-1}A - \lambda \In)x = 0$$
+            Weshalb $$\lambda(A,B) = \lambda(B^{-1}A,\In) = \lambda(B^{-1}A),$$
+            also kann man die Eigenwerte des regulären Pencils auf ein spezielles Eigenwertproblem zurückführen und die normalen Eigenwerte von $B^{-1}A$ sind genau die Eigenwerte des Pencils $\AlamB$.
+      \section{Die Schur-Zerlegung}
+      
+      \section{Die Identität von Futamura}
+      \label{sec: Futamura}
 \chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
       Um die Eigenfrequenzen und/oder Eigenkreisfrequenzen \w eines Systems zu bestimmen, benötigt man zuerst die Massenmatrix \M und die Steifigkeitsmatrix \K des Systems.
@@ -315,23 +375,11 @@
             erfüllt sein.
 % nachschlagen, warum das so ist
 
-            
+\chapter{Zählung von Eigenwerten}
+\label{sec: EW Zählung}
 
-\chapter{Das verallgemeinerte Eigenwert-Problem}
-\label{sec: EW Problem}
-      \section{Der Matrix Pencil}
-
-      \section{Das verallgemeinerte Eigenwertproblem}
-
-      \section{Die Schur-Zerlegung}
-
-\chapter{Quellen-Ausarbeitungen}
-\label{sec: Quellen}
-      \section{Die Identität von Futamura}
-
-      \section{Die Hutchinson-Approximation}
-
-      \section{Die Berechnungen nach Tkachuk}
+      \section{Idee}
+      \section{mathematische Formulierung}
 
 \chapter{Implementierung}
 \label{sec: Programmieren}
@@ -348,6 +396,8 @@
       \section{mögliche Verbesserungen}
 
       \section{Implementation und Auswertung der verbesserten Programme}
+
+      \section{Approximation der Spur}
 
 \chapter{Auswertung}
 \label{sec: Auswertung}
