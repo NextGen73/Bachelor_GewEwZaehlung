@@ -1,3 +1,4 @@
+% !TeX spellcheck = de_DE
 \documentclass[a4paper,12pt]{report}
 % es wurde leqno entfernt, da damit die Nummern von Gleichungen links standen
 \usepackage{inputenc,fontenc}
@@ -47,6 +48,8 @@
 \newcommand{\C}{\mathbb C}
 \newcommand{\zitat}[1]{\glqq #1 \grqq}
 \newcommand{\klammer}[1]{\left(#1\right)}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\rang}{\text{rang}}
 \newcommand{\AlamB}{A-\lambda\,B}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
@@ -212,15 +215,161 @@ Tag der Einreichung: \datum
                   Sei $Q \in\C^{n\times n}$, dann wird $Q$ unitär genannt, wenn
                   $$Q^HQ = QQ^H=\In$$
             \end{definition}
+
             Hier ist $Q^H := \Bar{Q^T}$ die Adjungierte von $Q$, also die skalar komplex konjugierte Transponierte von $Q$.
 % hier gibt es noch Verbesserungsmöglichkeiten
 
-            Mithilfe dieser Definition können nun folgende 2 Theoreme behandelt werden:
+            Mithilfe dieser Definition können nun folgende Resultate behandelt werden:
             \begin{theorem}(Theorem 7.1.3 (Schur Decomposition)\cite[S. 313]{matrixGolub})
                   \label{thrm: Schur Zerlegung}
-
+                  Wenn $A \in \C^{n\times n}$, dann existiert eine unitäre Matrix $Q\in\C^{n\times n}$, sodass
+                  \begin{equation}
+                        \label{eqn: Schur_Resultat}
+                        Q^H\,AQ = T = D+N
+                  \end{equation}
+                  mit $D=\diag(\lambda_1,\dots,\lambda_n)$ und $N\in\C^{n\times n}$ strikter oberer Dreiecksmatrix.
+                  Ferner kann $Q$ so gewählt werden, dass die Eigenwerte $\lambda_i$ in beliebiger Reihenfolge auf der Diagonalen auftauchen.
             \end{theorem}
 
+% bessere Erlärung, warum spezielleres Lemma
+            Um dieses Theorem zu beweisen, benötigt man ein Hilfslemma aus \cite[S.312]{matrixGolub}.
+            Das Resultat wird hier in dem speziellen Fall vorgestellt, wie er für den Beweis von Theorem \ref{thrm: Schur Zerlegung} benötigt wird.
+
+            \begin{lemma}(vgl. Lemma 7.1.2\cite[S. 312]{matrixGolub})
+                  \label{lemma: Hilfe Schur}
+                  Falls für $A\in\C^{n\times n}, \lambda\in \C \text{ Eigenwert von }A\text{ und }X\in \C^{n}$
+                  \begin{equation}
+                        \label{eqn: Hilfslemma Schur_Bed}
+                        AX = X\lambda,\qquad \rang(X)=1
+                  \end{equation}
+                  
+                  gilt, dann existiert ein $Q\in \C^{n\times n}$ unitär, sodass
+                  $$Q^H\,AQ = T =  \begin{bmatrix}
+                        \lambda & T_{12} \\
+                        0 & T_{22} \\
+                        \end{bmatrix}$$
+                  mit $T_{22}\in \C^{(n-1)\times(n-1)}$
+            \end{lemma}
+
+            Beweis:
+            Erhalte mit \cite[S. 233]{matrixGolub} eine komplexe QR-Zerlegung für $X$. Es gilt dann
+            $$X = Q\ \begin{bmatrix}
+                  r\\
+                  0\\
+                  \vdots\\
+                  0
+            \end{bmatrix}$$
+            mit $Q\in \C^{n \times n}$ unitär und $r\in \C$.
+            Durch Einsetzen in (\ref{eqn: Hilfslemma Schur_Bed}) und Multiplikation mit $Q^H$ folgt
+            \begin{equation}
+                  \label{eqn: Hilfslemma_Schur_Gl}
+                  \underbrace{Q^H\,AQ}_{=:T}\ \begin{bmatrix}
+                        r\\
+                        0\\
+                        \vdots\\
+                        0
+                  \end{bmatrix} = Q^H\,Q\ \begin{bmatrix}
+                        r\\
+                        0\\
+                        \vdots\\
+                        0
+                  \end{bmatrix}\ \lambda
+            \end{equation}
+% man könnte hier R statt dem Vektor nutzen, dann wäre es kompakter
+            mit $T:=\begin{matrix}
+                  \begin{bmatrix}
+                        T_{11} & T_{12}\\
+                        T_{21} & T_{22}\\
+                  \end{bmatrix} & \begin{matrix}
+                  \text{\small 1} \\\text{\small{n-1}}
+                  \end{matrix} \\
+                  \begin{matrix}
+                  \text{\small 1} &  \text{  \small{n-1}}\\
+                  \end{matrix} &  \\
+                  \end{matrix}$\\
+
+                  
+            Durch Ausmultiplizieren von (\ref{eqn: Hilfslemma_Schur_Gl}) folgen die Gleichungen\\
+
+            $$\begin{aligned}
+                  T_{11}\,r =& r\,\lambda\\
+                  T_{21}\,r =& 0
+            \end{aligned}$$
+
+            mit $\rang(X)=1 \Rightarrow X\ne 0 \Rightarrow r\ne 0$ folgt $T_{11} = \lambda,\ T_{21} = 0$.\qed
+% irgendwo muss erklärt werden, dass lam(A) = lam vereinigt lam(T_22)
+            
+
+            Nun können wir Theorem \ref{thrm: Schur Zerlegung} beweisen.
+
+
+            Beweis Theorem \ref{thrm: Schur Zerlegung}(vgl. \cite[S. 313]{matrixGolub}):
+
+            Offenbar gilt für $n=1$: $A$ ist ein Skalar, wodurch (\ref{eqn: Schur_Resultat}) für alle $Q$ unitär erfüllt ist.
+            Sei nun $n>1$ und (\ref{eqn: Schur_Resultat}) gelte für alle $k<n$, dann gilt für einen beliebigen Eigenwert $\lambda$ von $A$:
+            $$AX = \lambda X = X \lambda,\quad X\in \C^n, X\ne 0$$
+            Nach Lemma \ref{lemma: Hilfe Schur} existiert $U\in \C^{n\times n}$, sodass
+            $$U^H\, AU = \begin{bmatrix}
+                  \lambda & T_{12} \\
+                  0 & T_{22} \\
+                  \end{bmatrix}$$
+            Da aber $T_{22}\in\C^{(n-1)\times(n-1)}$, so gilt nach der Induktionsvoraussetzung:
+            $$\tilde U^H\,T_{22}\tilde U = R,$$
+            wobei $R\in\C^{(n-1)\times(n-1)}$  rechte obere Dreiecksmatrix, $\tilde U \in\C^{(n-1)\times(n-1)}$ unitär.
+
+            Sei nun $Q:=U\cdot\begin{bmatrix}
+                  1&0\\
+                  0&\tilde U
+            \end{bmatrix}$
+
+            dann gilt mit\footnote{die folgende Gleichung stammt aus \cite{conjugateTranspose}, Beweis ebenfalls dort zu finden}
+% Fussnote vielleicht scheisse platziert
+            \begin{equation}
+                  \label{eqn: Produkt Adjungierter}
+                  \klammer{AB}^H = B^HA^H,\quad A,B\in \C^{n\times n}
+            \end{equation}
+            für (\ref{eqn: Schur_Resultat})
+            $$\begin{aligned}
+                  Q^H\,AQ =& \begin{bmatrix}
+                        1&0\\
+                        0&\tilde U
+                  \end{bmatrix}^H\,U^H\,AU \begin{bmatrix}
+                        1&0\\
+                        0&\tilde U
+                  \end{bmatrix} = \begin{bmatrix}
+                        1&0\\
+                        0&\tilde U^H
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                        \lambda & T_{12} \\
+                        0 & T_{22} \\
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                        1&0\\
+                        0&\tilde U
+                  \end{bmatrix}\\
+                  =& \begin{bmatrix}
+                        \lambda&T_{12}\\
+                        0&\tilde U^H\, T_{22}
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                        1&0\\
+                        0&\tilde U
+                  \end{bmatrix}
+                  = \begin{bmatrix}
+                        \lambda&T_{12}\,\tilde U\\
+                        0&\tilde U^H\, T_{22}\, \tilde U
+                  \end{bmatrix}
+                  = \begin{bmatrix}
+                        \lambda&T_{12}\,\tilde U\\
+                        0&R
+                  \end{bmatrix}
+            \end{aligned}$$
+
+
+            
+
+% k.A. ob das so stimmt
       
       \section{Die Identität von Futamura}
       \label{sec: Futamura}
