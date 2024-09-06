@@ -1,21 +1,37 @@
-\documentclass[ngerman,BCOR=4mm]{tudscrreprt}
-
-% \usepackage[T1]{fontenc}
-\usepackage{fontspec}
+\documentclass[a4paper,12pt,leqno]{report}
+\usepackage{inputenc,fontenc}
+\usepackage[a4paper,margin=3cm]{geometry}
+\usepackage[english, german]{babel}
 \usepackage[ngerman=ngerman]{hyphsubst}
-\usepackage[ngerman]{babel}
-\usepackage{isodate}
+% \usepackage{isodate}
 \usepackage[hidelinks]{hyperref}
 \usepackage{amsmath, amsfonts, amssymb, amsthm} %% mathematics tools
 \usepackage{csquotes}
 \usepackage[draft]{listofsymbols}
 \usepackage[backend=biber, urldateusetime=true, sorting=none]{biblatex} %% Literature citing engine
 \usepackage{subcaption}
+\usepackage{graphicx}
+
+%%
+%% Pflichtangaben -bitte hier einsetzen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\newcommand{\name}{Göpel}
+\newcommand{\vorname}{Noah}
+\newcommand{\gebdatum}{01.02.2003}
+\newcommand{\ort}{Riesa}
+\newcommand{\betreuer}{Prof. Dr. Oliver Sander}
+\newcommand{\institut}{Institut für Numerische Mathematik}
+\newcommand{\thema}{Gewichtete Eigenwert-Zählung auf einem Intervall}
+\newcommand{\datum}{tt.\ mm.\ jjjj} %Format tt.\ mm.\ jjjj
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %__________Definitions_____________________________
 
 % Literaturverzeichnis
 \addbibresource{Literatur.bib}
+\graphicspath{{src/}}
 
 % \newcommand{\bild}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
 \newcommand{\bild}[4]{
@@ -34,7 +50,6 @@
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
-
 
 % Math
 \theoremstyle{plain} % text is cursive
@@ -65,30 +80,42 @@
 
 
 \begin{document}
-\selectlanguage{ngerman}
+\selectlanguage{german}
 
-%__________Deckblatt_Allg_Infos_____________________________
-\faculty{Fakultät Mathematik}
-\institute{Institut für Numerische Mathematik}
-% \chair{Professur für Numerik partieller Differentialgleichungen}
-\date{23.08.2024}
-\title{%
-      Gewichtete Eigenwert-Zählung auf einem Intervall
-}
-\subject{bachelor}
-\graduation[B.Sc.]{Bachelor of Science}
-\author{%
-      Noah Göpel%
-      \matriculationnumber{5029415}%
-      \dateofbirth{01.02.2003}%
-      \placeofbirth{Riesa}%
-}
-\matriculationyear{2021}
-% \supervisor{}
-\professor{Prof. Dr. Oliver Sander}
-\maketitle
+%% Titelseite
+\thispagestyle{empty}
 
-\clearpage
+\begin{center}
+{\Large Technische Universit\"{a}t Dresden\  \ \textbullet\ \ Fakult\"{a}t Mathematik}
+
+\vfil
+
+{\bfseries\Huge\thema}
+
+\vfil
+{\LARGE
+Bachelorarbeit \\[\bigskipamount]
+zur Erlangung des ersten Hochschulgrades\\[\bigskipamount]
+\bfseries{\itshape Bachelor of Science  \textup{(}B.Sc.\textup{)}}\\[\bigskipamount]
+}
+
+\vfil\vfil
+
+\vfil
+
+vorgelegt von
+\\[\bigskipamount]
+\textsc{\vorname\ } \MakeUppercase{\name}
+\\[\bigskipamount]
+(geboren am \gebdatum\ in \textsc{\ort})
+\\[\bigskipamount]
+Tag der Einreichung: \datum
+\\[\bigskipamount]
+\betreuer\ (\institut)
+\end{center}
+
+\cleardoublepage
+%%%%%%%%%%%%%%%%%%%%%%Beginn Ausarbeitung%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tableofcontents
 \clearpage
 \listofsymbols
@@ -178,6 +205,21 @@
             Weshalb $$\lambda(A,B) = \lambda(B^{-1}A,\In) = \lambda(B^{-1}A),$$
             also kann man die Eigenwerte des regulären Pencils auf ein spezielles Eigenwertproblem zurückführen und die normalen Eigenwerte von $B^{-1}A$ sind genau die Eigenwerte des Pencils $\AlamB$.
       \section{Die Schur-Zerlegung}
+            In diesem Kapitel werden weitere wichtige Konzepte vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt werden.
+
+            \begin{definition}(\cite[S. 73]{matrixGolub})
+                  Sei $Q \in\C^{n\times n}$, dann wird $Q$ unitär genannt, wenn
+                  $$Q^HQ = QQ^H=\In$$
+            \end{definition}
+            Hier ist $Q^H := \Bar{Q^T}$ die Adjungierte von $Q$, also die skalar komplex konjugierte Transponierte von $Q$.
+% hier gibt es noch Verbesserungsmöglichkeiten
+
+            Mithilfe dieser Definition können nun folgende 2 Theoreme behandelt werden:
+            \begin{theorem}(Theorem 7.1.3 (Schur Decomposition)\cite[S. 313]{matrixGolub})
+                  \label{thrm: Schur Zerlegung}
+
+            \end{theorem}
+
       
       \section{Die Identität von Futamura}
       \label{sec: Futamura}
@@ -250,7 +292,7 @@
             Im Allgemeinen wird hier $\overrightarrow{s}$ durch $(x_{k+1}-\xk)$ und $\overrightarrow{a}$ durch die zweite Ableitung $\ddot \xk$ ersetzt.
             Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht.
 
-            \bild{./src/Federkraft und Trägheitskraft.png}{0.4}{wirkende Kräfte an Masse mit Feder \cite{federkraft}}{\label{fig: KräfteAnFeder}}
+            \bild{Federkraft und Trägheitskraft.png}{0.4}{wirkende Kräfte an Masse mit Feder \cite{federkraft}}{\label{fig: KräfteAnFeder}}
             
             In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und $F_L$ ist als $c\cdot z$ definiert (vgl. \cite{federkraft}).
 % Man könnte es auch umschreiben
@@ -423,4 +465,24 @@
       % \end{figure}
 
       \printbibliography
+
+
+%%
+%% Erscheint auf letzter Seite
+%%
+\chapter*{Erkl\"{a}rung}
+\thispagestyle{empty}
+Hiermit erkl\"{a}re ich, dass ich die am \datum\ eingereichte Bachelorarbeit zum Thema
+\emph{\thema} unter Betreuung von \betreuer\ selbstst\"{a}ndig erarbeitet,
+verfasst und Zitate kenntlich gemacht habe. Andere als die angegebenen Hilfsmittel
+wurden von mir nicht benutzt.
+
+\bigskip \bigskip \bigskip \bigskip \bigskip
+
+Dresden, \datum\ \hfill Unterschrift
+
+\normalsize
 \end{document}
+
+
+
