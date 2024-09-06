@@ -314,12 +314,12 @@ Tag der Einreichung: \datum
                   0 & T_{22} \\
                   \end{bmatrix}$$
             Da aber $T_{22}\in\C^{(n-1)\times(n-1)}$, so gilt nach der Induktionsvoraussetzung:
-            $$\tilde U^H\,T_{22}\tilde U = R,$$
-            wobei $R\in\C^{(n-1)\times(n-1)}$  rechte obere Dreiecksmatrix, $\tilde U \in\C^{(n-1)\times(n-1)}$ unitär.
+            $$\widetilde U^H\,T_{22}\widetilde U = R,$$
+            wobei $R\in\C^{(n-1)\times(n-1)}$  rechte obere Dreiecksmatrix, $\widetilde U \in\C^{(n-1)\times(n-1)}$ unitär.
 
             Sei nun $Q:=U\cdot\begin{bmatrix}
                   1&0\\
-                  0&\tilde U
+                  0&\widetilde U
             \end{bmatrix}$
 
             dann gilt mit\footnote{die folgende Gleichung stammt aus \cite{conjugateTranspose}, Beweis ebenfalls dort zu finden}
@@ -328,17 +328,17 @@ Tag der Einreichung: \datum
                   \label{eqn: Produkt Adjungierter}
                   \klammer{AB}^H = B^HA^H,\quad A,B\in \C^{n\times n}
             \end{equation}
-            für (\ref{eqn: Schur_Resultat})
+            für (\ref{eqn: Schur_Resultat}):
             $$\begin{aligned}
                   Q^H\,AQ =& \begin{bmatrix}
                         1&0\\
-                        0&\tilde U
+                        0&\widetilde U
                   \end{bmatrix}^H\,U^H\,AU \begin{bmatrix}
                         1&0\\
-                        0&\tilde U
+                        0&\widetilde U
                   \end{bmatrix} = \begin{bmatrix}
                         1&0\\
-                        0&\tilde U^H
+                        0&\widetilde U^H
                   \end{bmatrix}
                   \begin{bmatrix}
                         \lambda & T_{12} \\
@@ -346,26 +346,68 @@ Tag der Einreichung: \datum
                   \end{bmatrix}
                   \begin{bmatrix}
                         1&0\\
-                        0&\tilde U
+                        0&\widetilde U
                   \end{bmatrix}\\
                   =& \begin{bmatrix}
                         \lambda&T_{12}\\
-                        0&\tilde U^H\, T_{22}
+                        0&\widetilde U^H\, T_{22}
                   \end{bmatrix}
                   \begin{bmatrix}
                         1&0\\
-                        0&\tilde U
+                        0&\widetilde U
                   \end{bmatrix}
                   = \begin{bmatrix}
-                        \lambda&T_{12}\,\tilde U\\
-                        0&\tilde U^H\, T_{22}\, \tilde U
-                  \end{bmatrix}
-                  = \begin{bmatrix}
-                        \lambda&T_{12}\,\tilde U\\
+                        \lambda&T_{12}\,\widetilde U\\
+                        0&\widetilde U^H\, T_{22}\, \widetilde U
+                  \end{bmatrix}\\
+                  =& \begin{bmatrix}
+                        \lambda&T_{12}\,\widetilde U\\
                         0&R
                   \end{bmatrix}
             \end{aligned}$$
+            Wobei verwendet wurde, dass die komplex konjugierte skalar wirkt, also es gilt:
+% vllt. Bullshit, am besten Beweis/Quelle finden
+           
+           \begin{equation}
+            \label{eqn: Adjungierte reinziehen}
+                  \begin{bmatrix}
+                        1&0\\
+                        0&\widetilde U
+                  \end{bmatrix}^H = \overline{\begin{bmatrix}
+                        1&0\\
+                        0&\widetilde U^T
+                  \end{bmatrix}} = \begin{bmatrix}
+                        \overline{1}&0\\
+                        0&\overline{\widetilde U^T}
+                  \end{bmatrix} = \begin{bmatrix}
+                        1&0\\
+                        0&\widetilde U^H
+                  \end{bmatrix}
+           \end{equation}
 
+            Damit ist gezeigt, dass $Q^H\,AQ$ eine rechte obere Dreiecksmatrix ist.
+            Es fehlt noch zu zeigen, dass $Q$ unitär ist, dass kann aber mit (\ref{eqn: Produkt Adjungierter}) und (\ref{eqn: Adjungierte reinziehen}) einfach gezeigt werden.
+            Die Beliebigkeit der Anordnung der Eigenwerte auf der Diagonalen folgt durch rekursives Anwenden von Theorem \ref{thrm: Schur Zerlegung} auf die Matrix $T_{22}$. \qed
+
+            % Durch Lemma 7.1.1 aus \cite[S. 311]{matrixGolub} kann ferner gefolgert werden, dass die Diagonaleinträge genau die Eigenwerte sind.
+
+            Nun wird eine weitere Schur-Zerlegung vorgestellt. Diese wird für den Beweis der Identität von Futamura in Kapitel \ref{sec: Futamura} benötigt.
+%hier kann noch viel mehr erzählt werden: die Eigenschaft der Eigenwerte ist von entscheideneer Relevanz
+            \begin{theorem}(Generalized Schur Decompositon, \cite[S. 377]{matrixGolub})
+                  \label{thrm: allg Schur Zerlegung}
+                  Seien $A, B \in \C^{n\times n}$, dann existieren $Q$ und $Z$ unitär, sodass
+                  \begin{equation}
+                        \label{eqn: allg Schur_Resultat}
+                        Q^H\,AZ = T,\quad Q^H\, BZ = S
+                  \end{equation}
+                  mit $T$ und $S$ obere Dreiecksmatrizen.
+                  Falls für ein $k\in \{1,..., n\}\ t_{kk}=s_{kk}=0$, dann gilt $\lambda(A, B) = \C$, sonst
+                  \begin{equation}
+                        \label{eqn: EW Pencil nach Schur}
+                        \lambda(A, B) = \{t_{ii}/s_{ii}:\, s_{ii}\ne 0\}
+                  \end{equation}
+            \end{theorem}
+            Beweis: siehe \cite[S. 377]{matrixGolub}\qed
 
             
 
