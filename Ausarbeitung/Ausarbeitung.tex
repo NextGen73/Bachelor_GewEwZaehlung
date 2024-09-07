@@ -13,6 +13,7 @@
 \usepackage[backend=biber, urldateusetime=true, sorting=none]{biblatex} %% Literature citing engine
 \usepackage{subcaption}
 \usepackage{graphicx}
+\usepackage{dsfont} % für charakteristische 1
 
 %%
 %% Pflichtangaben -bitte hier einsetzen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,6 +55,7 @@
 \newcommand{\AlamB}{A-\lambda\,B}
 \newcommand{\Cnn}{\C^{n\times n}}
 \newcommand{\inv}{^{-1}}
+\newcommand{\1}{\mathds{1}}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
@@ -726,9 +728,50 @@ Tag der Einreichung: \datum
 \chapter{Zählung von Eigenwerten}
 \label{sec: EW Zählung}
 % vielleicht eher Finden der Zielfunktion nennen
-
-      \section{Idee}
+% es fehlt noch: Einführung s und Erklärung, warum nun lambda statt w^2
+      
+      Nun wende man sich dem Finden einer Zielfunktion zu, die die Anzahl der Eigenwerte auf einem Intervall beschreibt.
+      Diese Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) abhängen und schlussendlich minimiert werden,
+      um ein $s$ aus der zulässigen Menge $\Omega$ zu finden, für welches die Zielfunktion minimal ist, also kein Eigenwert in dem vorgegebenen Intervall liegt.
       \section{mathematische Formulierung}
+
+      Betrachte das Problem
+      $$(K-\w^2 M)x = 0$$
+      Gesucht ist eine Familie $(\w_j)_j$, die diese Gleichung für ein $x_j \ne 0$ löst.
+
+      Um auf die Form eines Matrix pencils und somit auf die normale Form eines verallgemeinerten Eigenwertproblems zu gelangen, definiere
+      $$\lambda_j := \w_j^2$$
+      
+      Für das Lösen dieser Gleichung sucht man nun nicht mehr eine Familie $(\w_j)_j$, sondern genau die Eigenwerte des pencils, $\lambda(K,M)$.
+      Man beachte aber, dass sich durch die Substitution auch die gegebenen Grenzen verändert haben:
+      man will nun keine Eigenwerte mehr in dem Intervall $[\w_a^2,\w^2_b] =: [\lambda_a, \lambda_b]$
+
+      Eine normale Massematrix, d.h. eine Diagonalmatrix mit ausschließlich positiven Einträgen, ist offenbar regulär.
+
+      Definiere nun die Funktion $h$ wie folgt:
+      $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)$$
+
+      Da man nur daran interessiert ist, ob ein Eigenwert in dem Intervall liegt oder nicht, definiere
+
+      $$\mu := \sum_{j=1}^{n'} h(\lambda_j)$$
+
+      Obwohl diese Funktion korrekt ist, so gibt es doch einige Schwachstellen, sollte man diese Funktion minimieren wollen:
+      Die Funktion ist nicht stetig differenzierbar und entscheidender: sie ist eine Treppenfunktion, damit sind alle Ableitungen gleich 0, also unbrauchbar für Minimierungsalogrithmen.
+
+      Diese Probleme kann man abfedern, indem man die Funktion auf dem Intervall $[\lambda_a, \lambda_b]$ gewichtet.
+
+      Nutze dazu eine Gewichtungsfunktion, die auf dem ganzen Intervall positiv ist und außerdem konkav, damit die Eigenwerte, die sich in dem Intervall befinden \zitat{herausgedrückt} werden.
+
+      Nach \cite[S. 3]{hauptteilTkachuk} empfielt sich die Funktion
+      $$g(z) = -(z-((1+\alpha)\lambda_a -\alpha\lambda_b))(z-((1+\alpha)\lambda_b-\alpha\lambda_a))$$
+      wobei $\alpha$ der Inflations-Parameter (vgl. \cite[S. 3]{hauptteilTkachuk}) genannt wird.
+
+      Man findet so die erste Funktion, welche man mit Verfahren der Optimierung sinnvoll minimieren könnte:
+      $$J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)$$
+
+      Hier müsste man allerdings jeden Eigenwert zuerst berechnen, um dann diese Formel anzuwenden.
+      Auch hängt weder $g$ noch $h$ explizit von $s$ ab, weshalb diese Funktion eher zur Ermittlung der gewichteten Anzahl von Eigenwerten gesehen werden kann, als die tatächliche Zielfunktion, die es zu minimieren gilt.
+% Inflationsparameter
 
 \chapter{Implementierung}
 \label{sec: Programmieren}
