@@ -50,7 +50,10 @@
 \newcommand{\klammer}[1]{\left(#1\right)}
 \newcommand{\diag}{\text{diag}}
 \newcommand{\rang}{\text{rang}}
+\newcommand{\tr}{\text{tr}}
 \newcommand{\AlamB}{A-\lambda\,B}
+\newcommand{\Cnn}{\C^{n\times n}}
+\newcommand{\inv}{^{-1}}
 
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
@@ -198,16 +201,18 @@ Tag der Einreichung: \datum
                   \lambda(A,B):=\{z\in\C:\ \det(A - zB) = 0\}
             \end{equation}
 
-            Zum Schluss folgt noch eine Definition, welche in Kapitel \ref{sec: Futamura} benötigt wird:
-            \begin{definition}
-                  Ein Pencil heißt regulär, falls $B$ invertierbar ist.
-            \end{definition}
-% Quelle einfügen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Def regulärer pencil mit Quelle fehlt %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-            Man beachte, dass für einen regulären Pencil gilt:
-            $$(\AlamB)x = 0 \Leftrightarrow (B^{-1}A - \lambda \In)x = 0$$
-            Weshalb $$\lambda(A,B) = \lambda(B^{-1}A,\In) = \lambda(B^{-1}A),$$
-            also kann man die Eigenwerte des regulären Pencils auf ein spezielles Eigenwertproblem zurückführen und die normalen Eigenwerte von $B^{-1}A$ sind genau die Eigenwerte des Pencils $\AlamB$.
+%             Zum Schluss folgt noch eine Definition, welche in Kapitel \ref{sec: Futamura} benötigt wird:
+%             \begin{definition}
+%                   Ein Pencil heißt regulär, falls $B$ invertierbar ist.
+%             \end{definition}
+% % Quelle einfügen
+
+%             Man beachte, dass für einen regulären Pencil gilt:
+%             $$(\AlamB)x = 0 \Leftrightarrow (B^{-1}A - \lambda \In)x = 0$$
+%             Weshalb $$\lambda(A,B) = \lambda(B^{-1}A,\In) = \lambda(B^{-1}A),$$
+%             also kann man die Eigenwerte des regulären Pencils auf ein spezielles Eigenwertproblem zurückführen und die normalen Eigenwerte von $B^{-1}A$ sind genau die Eigenwerte des Pencils $\AlamB$.
       \section{Die Schur-Zerlegung}
             In diesem Kapitel werden weitere wichtige Konzepte vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt werden.
 
@@ -392,7 +397,7 @@ Tag der Einreichung: \datum
             % Durch Lemma 7.1.1 aus \cite[S. 311]{matrixGolub} kann ferner gefolgert werden, dass die Diagonaleinträge genau die Eigenwerte sind.
 
             Nun wird eine weitere Schur-Zerlegung vorgestellt. Diese wird für den Beweis der Identität von Futamura in Kapitel \ref{sec: Futamura} benötigt.
-%hier kann noch viel mehr erzählt werden: die Eigenschaft der Eigenwerte ist von entscheideneer Relevanz
+%hier kann noch viel mehr erzählt werden: die Eigenschaft der Eigenwerte ist von entscheidender Relevanz
             \begin{theorem}(Generalized Schur Decompositon, \cite[S. 377]{matrixGolub})
                   \label{thrm: allg Schur Zerlegung}
                   Seien $A, B \in \C^{n\times n}$, dann existieren $Q$ und $Z$ unitär, sodass
@@ -415,6 +420,114 @@ Tag der Einreichung: \datum
       
       \section{Die Identität von Futamura}
       \label{sec: Futamura}
+
+            Nach den Vorbereitungen, die in diesem Kapitel gemacht wurden, kann nun die Identität von Futamura beschrieben und gezeigt werden.
+
+            Das folgende Theorem wird für das Finden einer Zielfunktion von entscheidender Relevanz,
+            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte und einem Integral über Matrizen gezeigt werden kann.
+
+            \begin{theorem}
+                  \label{thrm: IdentitätFutamura}(vgl. \cite[S. 127]{grundlageFutamura})
+                  Seien $A, B\in\Cnn, z\in \C$, sodass $(zB-A)$ ein regulärer Matrix pencil ist, dann gilt:
+                  \begin{equation}
+                        \label{eqn: Resultat_Futamura}
+                        \tr((zB-A)\inv B) = \sum_{j=1}^{n'} \frac{1}{z-\lambda_j},
+                  \end{equation}
+                  wobei $n'$ die Anzahl an von Null verschiedener Eigenwerte des pencils $(zB-A)$ und $\lambda_j$ die Eigenwerte des pencils sind.
+%ist es die Anzahl von Null verschiedener Eigenwerte?
+            \end{theorem}
+% warum zB-A? für Eigenwerte macht es keinen Unterschied
+            Beweis:
+            Nach Theorem \ref{thrm: allg Schur Zerlegung} gibt es unitäre Matrizen $Q$ und $U\in\Cnn$, sodass nach entsprechender Multiplikation gilt:
+            $$A=QTU^H,\quad B=QSU^H$$
+            mit $T,S\in\Cnn$ obere Dreiecksmatrizen.
+            
+            Man kann folgern:
+            \begin{align*}
+                  (zB-A)\inv B =& (z\,QSU^H-QTU^H)\inv QSU^H = (Q(zS-T)U^H)\inv QSU^H \\
+                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv
+            \end{align*}
+            wobei die Regel für Inverse von Matrixprodukten und die Definition von unitären Matrizen verwendet wurde.
+
+            Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.
+            Da die Spur invariant unter Ähnlichkeitstransformation ist, gilt
+% Quelle Spur invariant
+            \begin{equation}
+                  \label{eqn: Haltepunkt Bew Futamura}
+                  \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}
+            \end{equation}
+
+            Für die folgenden Beweisschritte benötigt man einige Aussagen über obere Dreiecksmatrizen, hierbei ist mit $X_{ij}$ der i-j-te Eintrag von X gemeint
+% i-j-te Eintrag?
+
+            \begin{lemma}
+                  \label{Hilfslemma_Futamura: Inv Dreieck}
+                  Die Inverse einer oberen Dreiecksmatrix $A$ ist eine obere Dreiecksmatrix
+            \end{lemma}
+            Beweis:
+            Anwenden des Gauß-Jordan-Algorithmus auf $A|\In$, wie in dem folgenden Schritten:
+            Sei $A:= \begin{pmatrix}
+                  a_{11} & a_{12} & ... & a_{1n}\\
+                  & a_{21} &\ddots&a_{2n}\\
+                   &  & \ddots &\vdots\\
+                  0 &  & &a_{nn}
+            \end{pmatrix}$
+
+            Betrachte nun $B:=(A\vert \In)$ und dividiere die n-te Spalte von $B$ durch $a_{nn}$, definiere anschließend die $(n-1)$-te Spalte wie folgt:
+            $B_{n-1}:=B_{n-1}-a_{n-1\, n}\ B_{n}$
+            Die letzten 2 Reihen der resultierende Matrix sehen anschließend wie folgt aus:
+            $$\left(\begin{array}{ccccc|cccccc}
+                  0 & \dots & 0 & a_{n-1\, n-1}& 0&0&\dots&0&1&-\frac{a_{n-1\, n}}{a_{nn}}\\
+                  0 & \dots & \dots & 0&1&0&\dots&\dots&0&(a_{nn})^{-1}
+                \end{array}\right)$$
+            Man sieht, dass die Inverse von $A$ ebenfalls eine obere Dreiecksmatrix wird. \qed
+% hier gibt es noch Verbesserungsbedarf
+
+            \begin{lemma}
+                  \label{Hilfslemma_Futamura: Prod Dreieck}
+                  Seien X und Y obere Dreiecksmatrizen, dann gilt:
+                  $$(XY)_{ii} = X_{ii}\, Y_{ii}$$
+            \end{lemma}
+            Beweis:
+            $$(XY)_{ii} = \sum_{k=1}^n X_{ik}Y_{ki} = \sum_{k=I}^{n}X_{ik}Y_{ki} = \sum_{k=I}^{i}X_{ik}Y_{ki} = X_{ii} Y_{ii}$$
+            wobei verwendet wurde, dass für eine obere Dreiecksmatrix $A$ nach Definition gilt:
+            $A_{ij} = 0 \text{ für }i>j$\qed
+
+            \begin{lemma}
+                  \label{Hilfslemma_Futamura: Diag Inv Dreieck}
+                  Für eine invertierbare obere Dreiecksmatrix X gilt:
+                  $$(X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
+            \end{lemma}
+            Beweis: Sei $i\in\{1,...,n\}$ fest, dann gilt
+            $$\In = X\,X\inv \Rightarrow 1 = X_{ii}(X\inv)_{ii} \Rightarrow (X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
+            Hier wurde Lemma \ref{Hilfslemma_Futamura: Prod Dreieck} und
+            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\ \forall k=\{1,...,n\}$$
+            verwendet.\qed
+
+            Mit den Lemmas \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
+% Lemmas/Lemmen?
+            \begin{align*}
+                  \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((zS-T)\inv)_{ii}\ S_{ii} = \sum_{i=1}^{n}((zS-T)_{ii})\inv\ S_{ii}\\
+                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i=1}^{n'}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
+                  =& \sum_{i=1}^{n'} \frac{1}{z-\lambda_i}
+            \end{align*}
+
+            mit $\lambda_i = \frac{t_{ii}}{s_{ii}}$.
+% jetzt wurde nicht erklärt: warum n' ersten Einträge s_ii ungleich 0, warum ist nicht auch t_ii =0 für i>n'
+
+
+            Beachte, dass nach Theorem \ref{thrm: allg Schur Zerlegung} gilt:
+
+            $$\lambda(A, B) = \{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\}$$
+            somit sind alle Eigenwerte des Matrix pencils Polstellen dieser Funktion.
+% das ist noch sehr doof gemacht, diese Funktion - welche?
+
+            Man kann somit mithilfe des Residuentheorems die Anzahl der Eigenwerte bestimmen, indem man über die Funktion $\tr((zB-A)\inv B)$ integriert.
+            Genau dies ist auch der Ansatz in \cite{grundlageFutamura,hauptteilTkachuk} und Kapitel \ref{sec: EW Zählung}.
+% hier noch entscheiden, was drin gelassen wird
+
+% falls man Schur-Zerlegung auf S anwendet, um die Eigenwerte zu sortieren, dann muss man auch gleiche Ähnlichkeitstransformation auf T anwenden, aber ist es dann noch eine obere Dreiecksmatrix?
+            
 \chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
       Um die Eigenfrequenzen und/oder Eigenkreisfrequenzen \w eines Systems zu bestimmen, benötigt man zuerst die Massenmatrix \M und die Steifigkeitsmatrix \K des Systems.
@@ -612,6 +725,7 @@ Tag der Einreichung: \datum
 
 \chapter{Zählung von Eigenwerten}
 \label{sec: EW Zählung}
+% vielleicht eher Finden der Zielfunktion nennen
 
       \section{Idee}
       \section{mathematische Formulierung}
