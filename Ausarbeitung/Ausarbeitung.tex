@@ -734,20 +734,21 @@ Tag der Einreichung: \datum
       Diese Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) abhängen und schlussendlich minimiert werden,
       um ein $s$ aus der zulässigen Menge $\Omega$ zu finden, für welches die Zielfunktion minimal ist, also kein Eigenwert in dem vorgegebenen Intervall liegt.
       \section{mathematische Formulierung}
+      Die in diesem Abschnitt erwähnten Schritte stammen aus \cite[S. 2-4]{hauptteilTkachuk}.
 
       Betrachte das Problem
       $$(K-\w^2 M)x = 0$$
-      Gesucht ist eine Familie $(\w_j)_j$, die diese Gleichung für ein $x_j \ne 0$ löst.
+      Falls man das Problem eigenständig betrachtet, so sucht man eine Familie $(\w_j)_j$, die diese Gleichung für ein $x_j \ne 0$ löst.
 
       Um auf die Form eines Matrix pencils und somit auf die normale Form eines verallgemeinerten Eigenwertproblems zu gelangen, definiere
       $$\lambda_j := \w_j^2$$
-      
+% zitat      
       Für das Lösen dieser Gleichung sucht man nun nicht mehr eine Familie $(\w_j)_j$, sondern genau die Eigenwerte des pencils, $\lambda(K,M)$.
       Man beachte aber, dass sich durch die Substitution auch die gegebenen Grenzen verändert haben:
-      man will nun keine Eigenwerte mehr in dem Intervall $[\w_a^2,\w^2_b] =: [\lambda_a, \lambda_b]$
+      man will nun, dass keine Eigenwerte des pencils $(\AlamB)$ in dem Intervall $[\lambda_a, \lambda_b]:=[\w_a^2,\w^2_b]$ liegen.
 
       Eine normale Massematrix, d.h. eine Diagonalmatrix mit ausschließlich positiven Einträgen, ist offenbar regulär.
-
+% warum wichtig
       Definiere nun die Funktion $h$ wie folgt:
       $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)$$
 
@@ -756,23 +757,37 @@ Tag der Einreichung: \datum
       $$\mu := \sum_{j=1}^{n'} h(\lambda_j)$$
 
       Obwohl diese Funktion korrekt ist, so gibt es doch einige Schwachstellen, sollte man diese Funktion minimieren wollen:
-      Die Funktion ist nicht stetig differenzierbar und entscheidender: sie ist eine Treppenfunktion, damit sind alle Ableitungen gleich 0, also unbrauchbar für Minimierungsalogrithmen.
+% wie kann eine Funktion korrekt sein?
+      Die Funktion ist nicht stetig differenzierbar und entscheidender: sie ist eine Treppenfunktion, damit sind alle Ableitungen gleich 0, also unbrauchbar für Minimierungsalogrithmen, die mit der Ableitung arbeiten.
 
       Diese Probleme kann man abfedern, indem man die Funktion auf dem Intervall $[\lambda_a, \lambda_b]$ gewichtet.
-
-      Nutze dazu eine Gewichtungsfunktion, die auf dem ganzen Intervall positiv ist und außerdem konkav, damit die Eigenwerte, die sich in dem Intervall befinden \zitat{herausgedrückt} werden.
-
-      Nach \cite[S. 3]{hauptteilTkachuk} empfielt sich die Funktion
+% abfedern
+      Nutze dazu eine Gewichtungsfunktion, die auf dem ganzen Intervall positiv und konkav ist.
+      Diese Funktion sorgt dafür, dass Eigenwerte in der Mitte des Intervalls stärker ins Gewicht fallen
+      Nach \cite[S. 3]{hauptteilTkachuk} sei die Funktion
       $$g(z) = -(z-((1+\alpha)\lambda_a -\alpha\lambda_b))(z-((1+\alpha)\lambda_b-\alpha\lambda_a))$$
-      wobei $\alpha$ der Inflations-Parameter (vgl. \cite[S. 3]{hauptteilTkachuk}) genannt wird.
+      sehr geeignet, man könnte aber auch zum Beispiel die Funktion
+      $$\Hat g(z) := -(z-(\lambda_a-\alpha))(z-(\lambda_b+\alpha))$$
+      nutzen, die die gleichen Eigenschaften besitzt.
+      In den Funktionen stellt $\alpha>0$ einen Parameter dar, der dafür sorgt, dass die Funktion auf dem Intervall positiv ist.
+      $\alpha$ wird auch \zitat{Inflationsparameter} (vgl. \cite[S. 3]{hauptteilTkachuk}) genannt.
+% Inflationsparameter
 
       Man findet so die erste Funktion, welche man mit Verfahren der Optimierung sinnvoll minimieren könnte:
       $$J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)$$
 
       Hier müsste man allerdings jeden Eigenwert zuerst berechnen, um dann diese Formel anzuwenden.
       Auch hängt weder $g$ noch $h$ explizit von $s$ ab, weshalb diese Funktion eher zur Ermittlung der gewichteten Anzahl von Eigenwerten gesehen werden kann, als die tatächliche Zielfunktion, die es zu minimieren gilt.
-% Inflationsparameter
+      Nutze daher die Identität von Futamura, wie sie in Theorem \ref{thrm: IdentitätFutamura} vorgestellt wurde.
+      
+      Um diese Identität anzuwenden, berachte die Funktion
+      $$f(z) = \sum_{j=1}^{n} \frac{1}{z-\lambda_j},$$
+      wobei die $\lambda_j$ die Eigenwerte des Matrix pencils $(\AlamB)$ sind.
 
+      Die Funktion besitzt somit eine Polstelle in jedem Eigenwert.
+
+      Nach dem Residuensatz gilt:
+      
 \chapter{Implementierung}
 \label{sec: Programmieren}
       \section{Erklärungen}
