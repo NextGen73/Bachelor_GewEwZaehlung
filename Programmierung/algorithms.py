@@ -3,28 +3,57 @@ import numpy as np
 def  Vorwaertsdifferenz(f, x, h):
     """
     :param f: Funktion, deren Ableitung mithilfe der Vorwaertsdifferenz approximiert werden soll.
-    :param x: Wert, an dem Ableitung approximiert werden soll.
+    :param x: Vektor als np.array, an dem Ableitung approximiert werden soll.
     :param h: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
     :raise ValueError: Wenn `h <= 0`.
     :return: Approximierung von `f'(x)` mithilfe der Vorwaertsdifferenz.
     """
+    # Prüfung, ob h positiv ist
     if(h<=0):
         raise ValueError('h muss positiv sein')
     
-    return (f(x+h)-f(x))/h
+    # Länge des Parameters ermitteln
+    l=len(x)
 
-def  Rueckwaertsdifferenz(f, x, h):
-    """
-    :param f: Funktion, deren Ableitung mithilfe der Rueckwaertsdifferenz approximiert werden soll.
-    :param x: Wert, an dem Ableitung approximiert werden soll.
-    :param h: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
-    :raise ValueError: Wenn `h <= 0`.
-    :return: Approximierung von `f'(x)` mithilfe der Rueckwaertsdifferenz.
-    """
-    if(h<=0):
-        raise ValueError()
+    # zuerst wird erste partielle Ableitung approximiert, sollte immer vorhandne sein, solange x ein np.array ist
+    xPlusH = x.copy()
+    xPlusH[0] += h
+    # result speichert immer eine partielle Ableitung ab
+    result = (f(xPlusH)-f(x))/h
+
+    # falls n>1, dann gibt es mehr als eine partielle Ableitung
+    if l>1:
+        # solange f ein np.array ausgibt, kann so bestimmt werden, wieviele Dimensionen es besitzt.
+        # Sei A der Raum, in den f abbildet, dann ist die ausgegebene Matrix von der Form: A \times IR^l
+
+        dimensionsF = np.ndim(result)
+        # hier wird nablaF, welches vorher ein Element in A war, auf ein Element in A \times IR erweitert,
+        # damit auch die anderen partiellen Ableitungen geordnet in nablaF gespeichert werden können
+        nablaF = np.expand_dims(result, axis=dimensionsF)
+
+        # wie oben für i=1 wird nun hier die i-te Ableitung bestimmt
+        for i in range(1, l):
+            xPlusH = x.copy()
+            xPlusH[i] += h
+            result = (f(xPlusH)-f(x))/h
+            # result wird wie nablaF oben zu einem Element in A \times IR, um es A \times IR^i hinzuzufügen
+            # danach ist nableF ein Element in A \times IR^{i+1}
+            nablaF = np.append(nablaF, np.expand_dims(result, axis=dimensionsF) ,dimensionsF)
+        # nach der Schleife liegt nablaF in der Form A \times IR^l vor, also genau in der Form, wie man es von der Ableitung einer Funktion f:IR^l -> A erwartet
+    return nablaF
+
+# def  Rueckwaertsdifferenz(f, x, h):
+#     """
+#     :param f: Funktion, deren Ableitung mithilfe der Rueckwaertsdifferenz approximiert werden soll.
+#     :param x: Wert, an dem Ableitung approximiert werden soll.
+#     :param h: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
+#     :raise ValueError: Wenn `h <= 0`.
+#     :return: Approximierung von `f'(x)` mithilfe der Rueckwaertsdifferenz.
+#     """
+#     if(h<=0):
+#         raise ValueError()
     
-    return (f(x)-f(x-h))/h
+#     return (f(x)-f(x-h))/h
 
 def gradientenverfahren_festeSchrittweite(nablaF, x0, schritt, epsilon):
     """
