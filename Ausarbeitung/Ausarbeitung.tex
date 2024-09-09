@@ -895,7 +895,7 @@ Tag der Einreichung: \datum
 % Zitat überprüfen/ übersetzen
             Beispiele für toy contours sind Rechtecke oder Kreisausschnitte (siehe \cite[S. 42]{complexAnalysisVL}).
 
-      \section{Anwendung des Residuensatzes}
+      \section{Anwendung des Residuensatzes und der Identität von Futamura}
             % Nach (\ref{hilfe: complexAnalysis_WindungNullEins}) gilt für einen Eigenwert, der nicht in dem Intervall liegt: 
 
             Mit dem Residuensatz \ref{thrm: Residuensatz} gilt folglich für (\ref{eqn: ZielfunktionMitPolstellen}):
@@ -934,12 +934,66 @@ Tag der Einreichung: \datum
             Die $m$ Quadraturpunkte $z_k$ und Gewichte $c_k$ sind in \cite[S. 128]{grundlageFutamura} gegeben durch:
             \begin{align}
                   z_k =& \widetilde{z_0}+ \widetilde{r}e^{\frac{2\pi i}{m}\klammer{k+\frac 1 2}},\quad k=0,\dots,m-1\\
-                  c_k =& \frac{z_k-\widetilde{z_0}}{m},\quad k=0,\dots,m-1
+                  c_k =& \frac{z_k-\widetilde{z_0}}{m} = \frac {\widetilde{r}} m e^{\frac{2\pi i}{m}\klammer{k+\frac 1 2}},\quad k=0,\dots,m-1
             \end{align}
             Die Gewichte verteilen sich somit gleichmäßig auf dem Kreis $\gamma$. Ferner wird die Quadraturregel nicht an den Punkten $\lambda_a$ und $\lambda_b$ ausgewertet, da es zu einem Fehler kommt, falls ein Eigenwert gerade einen der beiden Werte annehmen sollte.
 % das stimmt vielleicht, aber bis jetzt ist es nur hingerotzt
-            größer
+            
+            Durch Anwenden der Trapezregel gilt für $J$:
+            $$J(s) \approx \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \tr((z_kM-K)\inv M)\,c_k =:J^*(s)$$
 
+            Laut \cite[S. 4]{hauptteilTkachuk} sei dieser Ausdruck differenzierbar
+% in tkachuk ist aber das gewicht anders definiert, macht aber keinen unterschied
+            Da diese Funktion in Kapitel \ref{sec: Programmieren} mithilfe des Gradientenverfahrens minimiert wird, benötigt man zusätzlich die Ableitung von $J^*$. Diese ist gegeben durch:
+            \begin{equation}
+                  \label{eqn: AbleitungZielfunktion}
+                  \nabla J^*(s) = \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \nabla \klammer{\tr(\underbrace{(z_kM-K)\inv M}_{=:B_j(s)})}\,c_k
+            \end{equation}
+
+            und es gilt für $\nabla \klammer{\tr(B_j(s))}$:
+            $$\nabla \klammer{\tr(B_j(s))} = \nabla \klammer{\sum_{i=1}^n (B_j)_{ii}} = \sum_{i=1}^n \nabla (B_j)_{ii} = \tr(\nabla B_j)$$.
+
+            Beachte, dass für $s\in \R^l$ und $B_j \in \R^{n\times n}$ gilt:
+
+            $$B_j(s): \R^l \to \R^{n\times n}\Rightarrow \nabla B_j(s) : \R^l\to \R^{n\times n}\times \R^l \Rightarrow \tr(\nabla B_j(s)): \R^l \to \R^l$$
+
+            Man kann sich $\nabla B_j(s)$ als eine $n\times n$-Matrix vorstellen, in der jeder Eintrag ein Vektor in $\R^l$ ist.
+            Daher summiert man auch mit der Spur die Vektoren in $\R^l$ auf der Diagonalen auf und erhält selber wieder einen Vektor in $\R^l$.
+% könnte man auch weglassen
+            
+            Außerdem gilt für $\nabla B_j(s)$:
+            \begin{align*}
+                  \nabla B_j(s) =& \frac{dD_k}{ds} \ M + D_k \ \frac{dM}{ds}\\
+                  =& - D_k \frac{d}{ds}(z_kM-K) D_k + D_k \ \frac{dM}{ds}\\
+                  =& D_k \ \frac{dM}{ds} - D_k \klammer{z_k \frac{dM}{ds}-\frac{dK}{ds}} D_k
+            \end{align*}
+
+            Wobei der Lesbarkeit halber $D_k:=(z_kM-K)\inv$ gilt und im 2. Schritt die Formel
+            $$\nabla A\inv = -A\inv\ \nabla A\ A\inv$$
+            angewendet wurde.
+            Beweis (vgl. \cite{derivativeInverseMatrix}):
+            Seien $a_{ij}(t)$ die Elemente der Matrix $A(t)$ und $\widetilde{a}_{ij}(t)$ die Elemente von $A\inv(t)$.
+
+            Dann gilt für alle $t$:
+            $$\sum_{j=1}^{n} a_{ij}(t)\widetilde{a}_{jk}(t) =  \begin{cases}
+                        1 & \text{ :  }\, i=k \\
+                        0 & \text{ :  sonst } 
+                        \end{cases} = \text{kons. für }t $$
+            Folglich gilt für die Ableitung:
+            $$\frac{d}{dt}\sum_{j=1}^{n} a_{ij}(t)\widetilde{a}_{jk}(t) = \sum_{j=1}^{n} \frac{d}{dt}a_{ij}(t)\ \widetilde{a}_{jk}(t)+a_{ij}(t)\ \frac{d}{dt}\widetilde{a}_{jk}(t) = 0 \quad \forall i,k\in\{1,\dots,n\}$$
+            Diese Gleichungen kann man in eine Gleichung über Matrizen umformen:
+            $$frac{dA}{dt}\ A\inv + A\ frac{dA\inv}{dt} = 0$$
+            Nach Umstellen folgt damit die Behauptung.\qed
+% in Quelle wurde t auf ein Intervall beschränkt, A muss Inverse haben und stetig diffb. sein für alle t, das müsste man noch zeigen
+
+            Die endgültige Formel für die Ableitung der approximierten gewichteten Eigenwert-Zählung sieht folgendermaßen aus:
+            \begin{align}
+                  \label{eqn: vollständigeZielfunktion}
+                  \nabla J^*(s) =& \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \tr\klammer{D_k \ \frac{dM}{ds} - D_k \klammer{z_k \frac{dM}{ds}-\frac{dK}{ds}} D_k}\,c_k\\
+                  =& \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \klammer{\tr\klammer{D_k \ \frac{dM}{ds}} - \tr\klammer{D_k \klammer{z_k \frac{dM}{ds}-\frac{dK}{ds}} D_k}}\,c_k
+            \end{align}
+% man könnte noch auf die Wohldefiniertheit eingehen, da es mit den Dimensionen passt, aber es geht erstmal
+            
 \chapter{Implementierung}
 \label{sec: Programmieren}
       \section{Erklärungen}
