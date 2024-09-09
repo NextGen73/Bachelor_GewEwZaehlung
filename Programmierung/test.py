@@ -7,9 +7,9 @@ def M(s):
         return null
     a=1
     b=4
-    return np.array([[a,a],[a,0]])+np.array([[b,b],[b,a]])*s[0]+np.array([[0,1],[1,b]])*s[1]
+    return np.array([[a+s[0]*b,a+s[0]*b+s[1]],[a+s[0]*b+s[1],a*s[0]+b*s[1]]])
 
 # print(M(np.array([1,1])))
 x = np.array([0.0,0.0])
 # print(x[0])
-print(algorithms.Vorwaertsdifferenz(M, x, 0.1))
+print(np.trace(algorithms.Vorwaertsdifferenz(M, x, 0.1)))
