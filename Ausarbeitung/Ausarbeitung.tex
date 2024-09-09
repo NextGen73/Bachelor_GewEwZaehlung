@@ -410,7 +410,7 @@ Tag der Einreichung: \datum
                         Q^H\,AZ = T,\quad Q^H\, BZ = S
                   \end{equation}
                   mit $T$ und $S$ obere Dreiecksmatrizen.
-                  Falls für ein $k\in \{1,..., n\}\ t_{kk}=s_{kk}=0$, dann gilt $\lambda(A, B) = \C$, sonst
+                  Falls für ein $k\in \{1,\dots, n\}\ t_{kk}=s_{kk}=0$, dann gilt $\lambda(A, B) = \C$, sonst
                   \begin{equation}
                         \label{eqn: EW Pencil nach Schur}
                         \lambda(A, B) = \{t_{ii}/s_{ii}:\, s_{ii}\ne 0\}
@@ -471,7 +471,7 @@ Tag der Einreichung: \datum
             Beweis:
             Anwenden des Gauß-Jordan-Algorithmus auf $A|\In$, wie in dem folgenden Schritten:
             Sei $A:= \begin{pmatrix}
-                  a_{11} & a_{12} & ... & a_{1n}\\
+                  a_{11} & a_{12} & \dots & a_{1n}\\
                   & a_{21} &\ddots&a_{2n}\\
                    &  & \ddots &\vdots\\
                   0 &  & &a_{nn}
@@ -502,10 +502,10 @@ Tag der Einreichung: \datum
                   Für eine invertierbare obere Dreiecksmatrix X gilt:
                   $$(X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
             \end{lemma}
-            Beweis: Sei $i\in\{1,...,n\}$ fest, dann gilt
+            Beweis: Sei $i\in\{1,\dots,n\}$ fest, dann gilt
             $$\In = X\,X\inv \Rightarrow 1 = X_{ii}(X\inv)_{ii} \Rightarrow (X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
             Hier wurde Lemma \ref{Hilfslemma_Futamura: Prod Dreieck} und
-            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\ \forall k=\{1,...,n\}$$
+            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\ \forall k=\{1,\dots,n\}$$
             verwendet.\qed
 
             Mit den Lemmas \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
@@ -594,7 +594,7 @@ Tag der Einreichung: \datum
 
             Um die Schematas klarer zu gestalten, werden die Kraftpfeile hier immer in die entgegengesetzte Richtung eingezeichnet, dafür aber die Minuszeichen weggelassen,
             somit werden in den Kraftschemas keine negativen Richtungen verwendet.
-% Schemas, Kraftschemas, ...
+% Schemas, Kraftschemas, \dots
 
             Generell sind $\FL,\ \overrightarrow{s},\ \FT \text{ und } \overrightarrow{a}\in \R^n$, aber in dieser Ausarbeitung werden sie immer als Skalare verwendet. 
             Da in diesem Kapitel Feder-Masse-Systeme behandelt werden, kann man $\overrightarrow{s}$ und $\overrightarrow{a}$ auf die Verschiebungen der Massen $(\xk)_k$ zurückführen:
@@ -673,7 +673,7 @@ Tag der Einreichung: \datum
                   \label{eqn: System GDgl MK 1d}
                   \begin{cases}
                         m_1\ \ddot x_1 + (c_0+c_1)\,x_1 - c_1\,x_2 & = 0   \\
-                        m_i\ \ddot x_i - c_{i-1}\,x_{i-1} + (c_{i-1}+c_i)\,x_i -c_i\,x_{i+1} & = 0,\ i=2,...,n-1 \\
+                        m_i\ \ddot x_i - c_{i-1}\,x_{i-1} + (c_{i-1}+c_i)\,x_i -c_i\,x_{i+1} & = 0,\ i=2,\dots,n-1 \\
                         m_n\ \ddot x_n - c_{n-1}\,x_{n-1} + (c_{n-1}+c_n)\,x_n & = 0
                   \end{cases}
             \end{equation}
@@ -707,7 +707,7 @@ Tag der Einreichung: \datum
             Da in diesen Systemen die Massen um ihre Ruhelage schwingen und keine weiteren Kräfte wirken, schwingt jede einzelne Masse harmonisch.
             Nach \cite[S. 380]{maschinendynamikDresig} gilt daher mit $x$ statt $q$:
             $$x(t) = v\,\exp(i\w t),\ \ \ddot x(t) = -\w^2\,v \exp(i\w t)$$
-            mit $v=(v_1,...,v_n)$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfreqenz \w}\cite[S. 380]{maschinendynamikDresig}
+            mit $v=(v_1,\dots,v_n)$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfreqenz \w}\cite[S. 380]{maschinendynamikDresig}
             
             Diesen Ansatz kann man in (\ref{eqn: MK Gleichung in 1D}) einsetzen und erhält nach dividieren durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
             
@@ -731,7 +731,7 @@ Tag der Einreichung: \datum
 \label{sec: EW Zählung}
 % vielleicht eher Finden der Zielfunktion nennen
 % es fehlt noch: Einführung s und Erklärung, warum nun lambda statt w^2
-      
+% vorher war immer von n' die Rede, jetzt gibt es nur noch n?      
       Nun wende man sich dem Finden einer Zielfunktion zu, die die Anzahl der Eigenwerte auf einem Intervall beschreibt.
       Diese Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) abhängen und schlussendlich minimiert werden,
       um ein $s$ aus der zulässigen Menge $\Omega$ zu finden, für welches die Zielfunktion minimal ist, also kein Eigenwert in dem vorgegebenen Intervall liegt.
@@ -751,13 +751,13 @@ Tag der Einreichung: \datum
             man will nun, dass keine Eigenwerte des pencils $(\AlamB)$ in dem Intervall $[\lambda_a, \lambda_b]:=[\w_a^2,\w^2_b]$ liegen.
 
             Eine normale Massematrix, d.h. eine Diagonalmatrix mit ausschließlich positiven Einträgen, ist offenbar regulär.
-% warum wichtig
+% ???? warum hier so random
             Definiere nun die Funktion $h$ wie folgt:
             $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)$$
 
             Da man nur daran interessiert ist, ob ein Eigenwert in dem Intervall liegt oder nicht, definiere
 
-            $$\mu := \sum_{j=1}^{n'} h(\lambda_j)$$
+            $$\mu := \sum_{j=1}^{n} h(\lambda_j)$$
 
             Obwohl diese Funktion korrekt ist, so gibt es doch einige Schwachstellen, sollte man diese Funktion minimieren wollen:
 % wie kann eine Funktion korrekt sein?
@@ -797,8 +797,8 @@ Tag der Einreichung: \datum
 
             \begin{theorem}(Theorem 9.2 (Residue theorem)\cite[S. 141]{complexAnalysis})
                   \label{thrm: Residuensatz}
-                  Sei $f$ analytisch auf $\Omega$, mit Ausnahme der isolierten Singularitäten $a_1,...,a_n$. Wenn für einen Kreis $\gamma\subseteq\C$  $\gamma \sim 0$ und $a_j\notin \gamma,\ j=1,...,n$ gilt, dann
-                  $$\int_\gamma f(z)\ dz = \frac{1}{2\pi i}\sum_{k=1}^{n} n(\gamma, a_k)\Res_{a_k}f$$
+                  Sei $f$ analytisch auf $\Omega$, mit Ausnahme der isolierten Singularitäten $a_1,\dots,a_n$. Wenn für einen Kreis $\gamma\subseteq\C$ die Bedingungen $\gamma \sim 0$ und $a_j\notin \gamma,\ j=1,\dots,n$ erfüllt sind, dann
+                  $$\int_\gamma f(z)\ dz = 2\pi i\sum_{k=1}^{n} n(\gamma, a_k)\Res_{a_k}f$$
             \end{theorem}
             Beweis: siehe \cite[S. 142]{complexAnalysis}
 
@@ -806,7 +806,7 @@ Tag der Einreichung: \datum
             Die Resultate und Definitionen werden nur kurz angeschnitten, da man sie in dieser Ausarbeitung nur für den Residuensatz \ref{thrm: Residuensatz} verwendet.
             \begin{itemize}
 % nicht alle sind fett markiert
-                  \item $\mathbf{analytisch in z:}$ ist eine Eigenschaft von komplexen Funktionen, die besagt, dass man die Funktion als eine Potenzreihe um $z$ entwickeln kann.
+                  \item \textbf{analytisch in }$\mathbf{z:}$ ist eine Eigenschaft von komplexen Funktionen, die besagt, dass man die Funktion als eine Potenzreihe um $z$ entwickeln kann.
                         Für (\ref{eqn: ZielfunktionMitPolstellen}) reicht aber folgende Aussage (vgl. \cite[S. 24]{complexAnalysis}):
 % man müsste die Funktion referenzieren
                         Für Polynome $p(z)$ und $q(z)$ sei die rationale Funktion $r(z):=\frac{p(z)}{q(z)}$ analytisch auf $\{z\in\C: q(z)\ne 0\}$.
@@ -820,20 +820,20 @@ Tag der Einreichung: \datum
                               q(z) &= \prod_{i=1}^{n} z-\lambda_i
                         \end{align*}
 
-                        Offenbar sind $p$ und $q$ Polynome und $\{z: q(z)\ne 0\} = \C\setminus\{\lambda_i, i=1,...,n\}$
-                        Daher ist $L$ analytisch auf $\C$ bis auf $\lambda_1,...,\lambda_n$
-                  \item $\mathbf{b\text{ isolierte Singularität:}}$
+                        Offenbar sind $p$ und $q$ Polynome und $\{z: q(z)\ne 0\} = \C\setminus\{\lambda_i, i=1,\dots,n\}$
+                        Daher ist $L$ analytisch auf $\C$ bis auf $\lambda_1,\dots,\lambda_n$
+                  \item $\mathbf{b}$\textbf{ isolierte Singularität}:
                         Laut \cite[S. 74]{complexAnalysis} habe $f$ eine isolierte Singularität bei $b$, wenn $f(b)$ nicht definiert und$f$ analytisch für $0<|z-b|<\epsilon$ mit $\epsilon>0$ sei.
 
-                        Offenbar ist $L(\lambda_i)$ nicht definiert für $i=1,...,n$ und da $L$ nur eine endliche Anzahl an Singularitäten besitzt, gilt:
+                        Offenbar ist $L(\lambda_i)$ nicht definiert für $i=1,\dots,n$ und da $L$ nur eine endliche Anzahl an Singularitäten besitzt, gilt:
 
                         \begin{equation}
                               \label{hilfe: complexAnalysis_isolierteSingularitäten}
-                              f \text{ analytisch für } 0<|z-\lambda_i|<\widetilde{\epsilon},\quad i=1,...,n
+                              f \text{ analytisch für } 0<|z-\lambda_i|<\widetilde{\epsilon},\quad i=1,\dots,n
                         \end{equation}
                         mit
-                        $$\widetilde{\epsilon}:= \frac{1}{2}\,\min_{i,j\in\{1,...,n\}: \lambda_i\ne \lambda_j} |\lambda_i-\lambda_j|$$
-
+                        $$\widetilde{\epsilon}:= \frac{1}{2}\,\min_{i,j\in\{1,\dots,n\}: \lambda_i\ne \lambda_j} |\lambda_i-\lambda_j|$$
+% alternative: \min_{\lambda_i,\lambda_j\in\lambda(K,M): \lambda_i\ne\lambda_j}
                         Für den Fall, dass ein Eigenwert doppelt vorkommt, so ist der Eigenwert trotzdem eine isolierte Singularität, da die Definition dies zulässt.
 % aus den Fingern gesaugt
                   \item $\frac{1}{2\pi i}\int_{C} \frac 1 {z-a}\ dz:$
@@ -852,7 +852,7 @@ Tag der Einreichung: \datum
                         Nach Definition 5.4 aus \cite[S. 65]{complexAnalysis} ist die Windungsnummer $n(\gamma,a)$ von $\gamma$ über $a$ wie folgt definiert:
                         $$n(\gamma,a):= \frac{1}{2\pi i}\int_\gamma \frac{1}{\xi-a}\ d\xi$$
 
-                        Man erkennt, dass mit $\gamma = C$\footnote{$C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}) gemeint}  und (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}) gilt:
+                        Man erkennt, dass mit $\gamma = C$  und (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}) gilt\footnote{$C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}) gemeint}:
                         \begin{equation}
                               \label{hilfe: complexAnalysis_WindungNullEins}
                               n(\gamma,a) = \begin{cases}
@@ -861,7 +861,7 @@ Tag der Einreichung: \datum
       % ist klar was mit Inneren eines Pfadintegrals gemeint ist?
                               \end{cases}
                         \end{equation}
-                        Hierbei benötigt man das $C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}), damit der Kreis positiv orientiert ist und jeder Punkt des Kreises nur einmal durchlaufen wird.
+                        Hierbei benötigt man das $C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}), damit der Kreis in positive Richtung durchlaufen wird und kein Punkt (bis auf $z=z_0+1$) mehrmals vorkommt.
 % jetzt klingt es so, also könne kein anderes C dies vollbringen
                   \item $\gamma \sim 0$:
                         Sei $\gamma$ geschlossene Kurve und $\Omega$ ein Gebiet, durch Anwenden von Definition 5.5 aus \cite[S. 67]{complexAnalysis} folgt:
@@ -870,11 +870,14 @@ Tag der Einreichung: \datum
                         Mit obiger Theorie schließt man, dass gilt:
                         $$\gamma\subset \Omega \Rightarrow n(\gamma, a)=0$$
                         da sich $\gamma$ nicht um den Punkt $a$ winden kann.
-% das ist schlecht begründet
+% das ist falsch und schlecht begründet, Omega muss einfach zusammenhängend oder so sein(Omega zusammenhängend und Omega^C zusammenhängend), sonst könnte Omega wie Donut geformt sein
 
                   \item $\Res_af$:
                         Nach Beispiel 9.3 aus \cite[S. 142]{complexAnalysis} gilt für eine einfache Polstelle:
-                        $$\Res_af = \lim_{z\to a} (z-a)f(z)$$
+                        \begin{equation}
+                              \label{hilfe: complexAnalysis_Residuum}
+                              \Res_af = \lim_{z\to a} (z-a)f(z)
+                        \end{equation}
                         Anwenden auf $\Res_{\lambda_i}L$ ergibt:
                         \begin{align*}
                               \Res_{\lambda_i}L =& \lim_{z\to \lambda_i} \sum_{j=1}^{n} (z-\lambda_i)\frac{1}{z-\lambda_j} = \underbrace{\sum_{\underset{j\ne i}{j=1}}^{n} \frac{z-\lambda_i}{z-\lambda_j}}_{\to 0} + \frac{z-\lambda_I}{z-\lambda_i} \\
@@ -893,7 +896,7 @@ Tag der Einreichung: \datum
             Beispiele für toy contours sind Rechtecke oder Kreisausschnitte (siehe \cite[S. 42]{complexAnalysisVL}).
 
       \section{Anwendung des Residuensatzes}
-            Nach (\ref{hilfe: complexAnalysis_WindungNullEins}) gilt für einen Eigenwert, der nicht in dem Intervall liegt: 
+            % Nach (\ref{hilfe: complexAnalysis_WindungNullEins}) gilt für einen Eigenwert, der nicht in dem Intervall liegt: 
 
             Mit dem Residuensatz \ref{thrm: Residuensatz} gilt folglich für (\ref{eqn: ZielfunktionMitPolstellen}):
             $$\int_\gamma \sum_{j=1}^{n} \frac{1}{z-\lambda_j}\ dz = \mu$$
@@ -902,8 +905,40 @@ Tag der Einreichung: \datum
             $$\mu = \int_\gamma \tr((zM-K)\inv M)\ dz$$
 
             Man hat somit die ungewichtete Zählung der Eigenwerte als Integral darstellen können, analog kann auch die gewichtete Zählung umgeschrieben werden:
-            $$J(s) = \int_\gamma \sum_{j=1}^{n} g(z)\frac{1}{z-\lambda_j}\ dz$$
+            \begin{align*}
+                  \frac{1}{2\pi i}\int_\gamma \sum_{j=1}^{n} g(z)\frac{1}{z-\lambda_j} \ dz=& \sum_{j=1}^{n} n(\gamma, \lambda_j) \Res_{\lambda_j}K = \sum_{j=1}^n n(\gamma, \lambda_j) g(\lambda_j)\\
+                  =& \sum_{j=1}^{n} \1_{[\lambda_a,\lambda_b]}(\lambda_j) g(\lambda_j) = \sum_{j=1}^{n} h(\lambda_j) g(\lambda_j) \\
+                  =& J(s)
+            \end{align*}
 % nochmal schauen, ob alles passt
+% vorher muss definiert werden, welcher Kreis \gamma ist
+            wobei verwendet wurde, dass $\lambda_j\in\R\ \forall j=1,\dots,n$ und damit nach (\ref{hilfe: complexAnalysis_WindungNullEins}) gilt:
+            $$n(\gamma, \lambda_j) = \begin{cases}
+                  1& \text{ : }\lambda_j\in B_\frac{\lambda_b-\lambda_a}{2}(\frac{\lambda_a+\lambda_b}{2})\\
+                  0& \text{ : }\lambda_j\notin\overline {B_\frac{\lambda_b-\lambda_a}{2}(\frac{\lambda_a+\lambda_b}{2})}
+            \end{cases} = \begin{cases}
+                  1& \text{ : }\lambda_j\in (\lambda_a,\lambda_b)\\
+                  0& \text{ : }\lambda_j\notin[\lambda_a,\lambda_b]
+            \end{cases} = \1_{[\lambda_a,\lambda_b]}(\lambda_j)$$
+% ist nicht ganz richtig, was ist mit \lambda_j = \lambda_a?
+
+            und wie in (\ref{hilfe: complexAnalysis_Residuum}) gilt:
+
+            $$Res_{\lambda_j}K = \lim_{z\to\lambda_j} (z-\lambda_j)K(z) = \underbrace{\sum_{\underset{j\ne i}{j=1}}^{n} g(z)\frac{z-\lambda_i}{z-\lambda_j}}_{\to 0} + g(z)\frac{z-\lambda_I}{z-\lambda_i} = g(z)$$
+% vielleicht nicht das Resultat, sondern die Anwendung von Bsp 9.3 referenzieren
+
+            Man wende nun die Identität von Futamura aus Theorem \ref{thrm: IdentitätFutamura} an und erhalte
+            $$J(s) = \frac 1 {2\pi i}\int_\gamma g(z) \tr((zM-K)\inv M)\ dz$$
+
+            Zur numerischen Berechnung, approximiere $J(s)$ durch eine Quadraturregel, nehme hier die zusammengesetzte Trapezregel.
+            Die $m$ Quadraturpunkte $z_k$ und Gewichte $c_k$ sind in \cite[S. 128]{grundlageFutamura} gegeben durch:
+            \begin{align}
+                  z_k =& \widetilde{z_0}+ \widetilde{r}e^{\frac{2\pi i}{m}\klammer{k+\frac 1 2}},\quad k=0,\dots,m-1\\
+                  c_k =& \frac{z_k-\widetilde{z_0}}{m},\quad k=0,\dots,m-1
+            \end{align}
+            Die Gewichte verteilen sich somit gleichmäßig auf dem Kreis $\gamma$. Ferner wird die Quadraturregel nicht an den Punkten $\lambda_a$ und $\lambda_b$ ausgewertet, da es zu einem Fehler kommt, falls ein Eigenwert gerade einen der beiden Werte annehmen sollte.
+% das stimmt vielleicht, aber bis jetzt ist es nur hingerotzt
+            größer
 
 \chapter{Implementierung}
 \label{sec: Programmieren}
