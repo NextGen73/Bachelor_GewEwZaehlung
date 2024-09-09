@@ -50,3 +50,5 @@
 *.xdv
 *.xdy
 *.xlg
+
+Programmierung/__pycache__/
