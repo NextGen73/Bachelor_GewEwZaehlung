@@ -1,26 +1,38 @@
 import numpy as np
 
+# inflation parameter g(z)
 alpha = 0.1
-schrittweiteDiffverfahren = 0.01
-lamA: float
-lamB: float
+# Schrittweite Differenzenverfahren
+h = 0.01
+# Schrittweite Gradientenverfahren
+schrittGrad = 0.5
+# Fehlertoleranz
+eps= 1e-8
 
-def init(start, ende):
-    lamA = start
-    lamB = ende
+def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoleranz):
+    """
+    :param inflation: Parameter alpha, wird in Gewichtungsfunktion verwendet.
+    :param schrittweiteDifferenzen: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
+    :param schrittweiteGradienten: Schrittweite, die weit ein Schritt des Gradientenverfahrens geht.
+    :param fehlertoleranz: Falls gewichtete EW-Zaehlung darunter fällt, wird die Minimierung beendet.
+    """
+    global alpha
+    global h
+    global schrittGrad
+    global eps
+    alpha = inflation
+    h = schrittweiteDifferenzen
+    schrittGrad = schrittweiteGradienten
+    eps = fehlertoleranz
 
-def  Vorwaertsdifferenz(f, x, h):
+def  Vorwaertsdifferenz(f, x):
     """
     :param f: Funktion, deren Ableitung mithilfe der Vorwaertsdifferenz approximiert werden soll.
     :param x: Vektor als np.array, an dem Ableitung approximiert werden soll.
-    :param h: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
     :raise ValueError: Wenn `h <= 0`.
     :return: Approximierung von `f'(x)` mithilfe der Vorwaertsdifferenz.
     """
-    # Prüfung, ob h positiv ist
-    if(h<=0):
-        raise ValueError('h muss positiv sein')
-    
+
     # Länge des Parameters ermitteln
     l=len(x)
 
@@ -53,18 +65,13 @@ def  Vorwaertsdifferenz(f, x, h):
         nablaF = partAbl
     return nablaF
 
-def  Mitteldifferenz(f, x, h):
+def  Mitteldifferenz(f, x):
     """
     :param f: Funktion, deren Ableitung mithilfe der Mitteldifferenz approximiert werden soll.
     :param x: Vektor als np.array, an dem Ableitung approximiert werden soll.
-    :param h: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
     :raise ValueError: Wenn `h <= 0`.
     :return: Approximierung von `f'(x)` mithilfe der Mitteldifferenz.
     """
-    # Prüfung, ob h positiv ist
-    if(h<=0):
-        raise ValueError('h muss positiv sein')
-    
     # Länge des Parameters ermitteln
     l=len(x)
 
@@ -105,7 +112,7 @@ def  Mitteldifferenz(f, x, h):
         nablaF = partAbl
     return nablaF
 
-def schrittGradientenverfahren_festeSchrittweite(nablaF, x, schritt):
+def schrittGradientenverfahren_festeSchrittweite(nablaF, x):
     """
     :param nableF: Ableitung der Funktion, die minimiert werden soll.
     :param x: Startwert für das Gradientenverfahren.
@@ -114,7 +121,7 @@ def schrittGradientenverfahren_festeSchrittweite(nablaF, x, schritt):
     """
 
     abl_real = nablaF(x).real
-    return x-schritt*abl_real
+    return x-schrittGrad*abl_real
 
 # das beruht auf echter Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
 def quadratureContourIntegralCircleTrapez(f, gamma:complex, r:float, m:int, s) -> complex:
@@ -129,7 +136,7 @@ def quadratureContourIntegralCircleMittelpunkt(f, gamma:complex, r:float, m:int,
     return sum(f(zs[i], s)*np.exp(2*np.pi*1j*i/m) for i in range(m))*r*(np.exp(2*np.pi*1j/m)-1)
 
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsächliche gewichtete Eigenwert-Zaehlung, gibt alles aus
-def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, lambda_a, lambda_b, anzahlStuetzstellen:int, schrittweiteGradVerf:float, fehlertoleranz:float) -> np.ndarray:
+def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, lambda_a, lambda_b, anzahlStuetzstellen:int, bedingungen) -> np.ndarray:
     """
     :param M: Massematrix.
     :param K: Steifigkeitsmatrix.
@@ -171,10 +178,10 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     def nablaJ_Stern(s)->float:
         def nablaB(z:complex, s:np.ndarray)->np.ndarray[complex]:
             D = np.linalg.inv(z*M(s)-K(s))
-            dMds = Vorwaertsdifferenz(M, s, schrittweiteDiffverfahren)
-            dKds = Vorwaertsdifferenz(K, s, schrittweiteDiffverfahren)
+            dMds = Vorwaertsdifferenz(M, s)
+            dKds = Vorwaertsdifferenz(K, s)
 
-            return g(z)*(np.trace(D.dot(dMds))-np.trace(D.dot(z*dMds-dKds).dot(D)))
+            return g(z)*(np.trace(D.dot(dMds))-np.trace(((D.dot(z*dMds-dKds)).transpose(0,2,1).dot(D)).transpose(0,2,1)))
         return quadratureContourIntegralCircleTrapez(nablaB, z0Tilde, rTilde, anzahlStuetzstellen, s)/2/np.pi/1j
 
 ################## hier wird in jedem Schritt mehrmals M(s) und K(s) berechnet ##################
@@ -185,8 +192,15 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
 
     result = np.expand_dims(np.append(startpunkt, [gewichteteEWZaehlung_genau(startpunkt), J_Stern(startpunkt)]), 1)
 
-    while result[-1,-1]>=fehlertoleranz:
-        x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, np.array(result[0:len_s,-1]), schrittweiteGradVerf)
+    while result[-2,-1]>=eps:
+        x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, np.array(result[0:len_s,-1]))
+
+        bedingungen = np.array([[0,3],[0,3],[0.75,1.75]])
+        for i in range(3):
+            if(x_neu[i]<bedingungen[i,0]):
+                x_neu[i] = bedingungen[i,0]
+            elif(x_neu[i]>bedingungen[i,1]):
+                x_neu[i] = bedingungen[i,1]
 
         result = np.append(result, np.expand_dims(np.append(x_neu, [gewichteteEWZaehlung_genau(x_neu), J_Stern(x_neu)]), 1), axis=1)
 
@@ -194,8 +208,5 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
             print(result[-2,-1])
             if(np.size(result,1) == 500):
                 break
-
-
-        
 
     return result
