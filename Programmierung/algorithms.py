@@ -8,8 +8,18 @@ h = 0.01
 schrittGrad = 0.5
 # Fehlertoleranz
 eps= 1e-8
+# startIntervall
+lamA = 0
+# endeIntervall
+lamB = 1
+# Mittelpunkt Kreis
+gamma = 0.5
+# Radius Kreis
+r = .5
+# Bedingungen, die für Werte gelten müssen, das ist nur ein Platzhalter
+bedingung = np.empty
 
-def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoleranz):
+def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoleranz, startIntervall, endeIntervall, bedingungen):
     """
     :param inflation: Parameter alpha, wird in Gewichtungsfunktion verwendet.
     :param schrittweiteDifferenzen: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
@@ -20,10 +30,20 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     global h
     global schrittGrad
     global eps
+    global lamA
+    global lamB
+    global gamma
+    global r
+    global bedingung
     alpha = inflation
     h = schrittweiteDifferenzen
     schrittGrad = schrittweiteGradienten
     eps = fehlertoleranz
+    lamA = startIntervall
+    lamB = endeIntervall
+    gamma = (startIntervall+endeIntervall)/2
+    r = (endeIntervall-startIntervall)/2
+    bedingung = bedingungen
 
 def  Vorwaertsdifferenz(f, x):
     """
@@ -124,43 +144,41 @@ def schrittGradientenverfahren_festeSchrittweite(nablaF, x):
     return x-schrittGrad*abl_real
 
 # das beruht auf echter Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
-def quadratureContourIntegralCircleTrapez(f, gamma:complex, r:float, m:int, s) -> complex:
+def quadratureContourIntegralCircleTrapez(f, m:int, s) -> complex:
     # Berechne Stützstellen
     zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*(k+1/2)) for k in range(m+1)])
     return sum((f(zs[i+1], s)+f(zs[i], s))/2*(zs[i+1]-zs[i]) for i in range(m))
 
 # das ist eher die Mittelpunktsregel, wo man Funktion nur an einer Stelle auswerten muss, Differenz wurde explizit berechnet und rausgezogen
-def quadratureContourIntegralCircleMittelpunkt(f, gamma:complex, r:float, m:int, s) -> complex:
+def quadratureContourIntegralCircleMittelpunkt(f, m:int, s) -> complex:
     # Berechne Stützstellen
     zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*(k+1/2)) for k in range(m)])
     return sum(f(zs[i], s)*np.exp(2*np.pi*1j*i/m) for i in range(m))*r*(np.exp(2*np.pi*1j/m)-1)
 
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsächliche gewichtete Eigenwert-Zaehlung, gibt alles aus
-def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, lambda_a, lambda_b, anzahlStuetzstellen:int, bedingungen) -> np.ndarray:
+def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, anzahlStuetzstellen:int) -> np.ndarray:
     """
     :param M: Massematrix.
     :param K: Steifigkeitsmatrix.
-    :param lambda_a: untere Grenze des Intervalls.
-    :param lambda_b: obere Grenze des Intervalls.
+    :param lamA: untere Grenze des Intervalls.
+    :param lamB: obere Grenze des Intervalls.
     :anzahlStuetzstellen: Anzahl der Stützstellen in Quadraturformel.
     :param schrittweiteGradVerf: Schrittweite, wie weit ein Schritt des Gradientenverfahrens in die berechnete Richtung geht.
     :param fehlertoleranz: Grenze, wenn J(s) drunter fällt, dann wird Minimierungsverfahren beendet.
     :return: Vektor, 1. Spalte: berechneten Werte s, 2. Spalte: gewichtete Zählung (genau), 3. Spalte: gewichtete Zählung (approximiert).
     """
 
-    z0Tilde = (lambda_a+lambda_b)/2
-    rTilde = (lambda_b-lambda_a)/2
     len_s = len(startpunkt)
 
     # Gewichtungsfunktion g(z)
     def g(z: complex) -> complex:
-        return -(z-((1+alpha)*lambda_a-alpha*lambda_b))*(z-((1+alpha)*lambda_b-alpha*lambda_a))
+        return -(z-((1+alpha)*lamA-alpha*lamB))*(z-((1+alpha)*lamB-alpha*lamA))
     
     # berechnet die Eigenwerte mittels funktion np.linalg.eigvals, siehe Definition mu
     def gewichteteEWZaehlung_genau(s)->float:
-        # ist \1_{[\lambda_a,\lambda_b]}(z)
+        # ist \1_{[\lamA,\lamB]}(z)
         def h(z:float)->float:
-            if(z < lambda_b and z>lambda_a):
+            if(z < lamB and z>lamA):
                 return 1.
             return 0.
         
@@ -173,7 +191,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
             D = np.linalg.inv(z*M(s)-K(s))
             return g(z)*np.trace(D.dot(M(s)))
         
-        return quadratureContourIntegralCircleTrapez(B, z0Tilde, rTilde, anzahlStuetzstellen, s)/2/np.pi/1j
+        return quadratureContourIntegralCircleTrapez(B, anzahlStuetzstellen, s)/2/np.pi/1j
     
     def nablaJ_Stern(s)->float:
         def nablaB(z:complex, s:np.ndarray)->np.ndarray[complex]:
@@ -182,7 +200,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
             dKds = Vorwaertsdifferenz(K, s)
 
             return g(z)*(np.trace(D.dot(dMds))-np.trace(((D.dot(z*dMds-dKds)).transpose(0,2,1).dot(D)).transpose(0,2,1)))
-        return quadratureContourIntegralCircleTrapez(nablaB, z0Tilde, rTilde, anzahlStuetzstellen, s)/2/np.pi/1j
+        return quadratureContourIntegralCircleTrapez(nablaB, anzahlStuetzstellen, s)/2/np.pi/1j
 
 ################## hier wird in jedem Schritt mehrmals M(s) und K(s) berechnet ##################
 
@@ -195,12 +213,11 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     while result[-2,-1]>=eps:
         x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, np.array(result[0:len_s,-1]))
 
-        bedingungen = np.array([[0,3],[0,3],[0.75,1.75]])
         for i in range(3):
-            if(x_neu[i]<bedingungen[i,0]):
-                x_neu[i] = bedingungen[i,0]
-            elif(x_neu[i]>bedingungen[i,1]):
-                x_neu[i] = bedingungen[i,1]
+            if(x_neu[i]<bedingung[i,0]):
+                x_neu[i] = bedingung[i,0]
+            elif(x_neu[i]>bedingung[i,1]):
+                x_neu[i] = bedingung[i,1]
 
         result = np.append(result, np.expand_dims(np.append(x_neu, [gewichteteEWZaehlung_genau(x_neu), J_Stern(x_neu)]), 1), axis=1)
 
