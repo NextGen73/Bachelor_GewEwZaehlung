@@ -17,7 +17,9 @@ gamma = 0.5
 # Radius Kreis
 r = .5
 # Bedingungen, die fuer Werte gelten muessen, das ist nur ein Platzhalter
-bedingung = np.empty
+bedingung = np.zeros(1)
+# gibt an wie weit ein Schritt des Gradientenverfahrens maximal gehen darf
+maxSchrittweite = 0.3
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koenenn
 # man koennte es auch immer mit in der Funktion uebergeben, aber so ist es uebersichtlicher
@@ -25,8 +27,11 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     """
     :param inflation: Parameter alpha, wird in Gewichtungsfunktion verwendet.
     :param schrittweiteDifferenzen: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
-    :param schrittweiteGradienten: Schrittweite, die weit ein Schritt des Gradientenverfahrens geht.
+    :param schrittweiteGradienten: Faktor, mit dem die berechnete Richtung multipliziert wird.
     :param fehlertoleranz: Falls gewichtete EW-Zaehlung darunter faellt, wird die Minimierung beendet.
+    :param startIntervall: gibt untere Grenze des vorgegebenen Intervalls an.
+    :param endeIntervall: gibt obere Grenze des vorgegebenen Intervalls an.
+    :param bedingungen: gibt die gültigen Bedingungen an, die an das System gestellt werden
     """
     global alpha
     global h
@@ -169,8 +174,8 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
 
     # damit sinnvolle Werte erkannt werden, muss bedingung vorher definiert werden
     # das ist durch Aufruf der Funktion algorithms.init() moeglich
-    if(bedingung == np.empty):
-        ValueError("vorher init(...) aufrufen")
+    if(np.all(bedingung == 0)):
+        raise ValueError("vorher init(...) aufrufen")
 
     len_s = len(startpunkt)
 
@@ -192,7 +197,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     #berechnet, wie viele Eigenwerte sich in dem vorgegebenen Intervall befinden
     def ungewichteteEwZaehlung_genau(s)->int:
         eigvals = np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s)))
-        return sum(g(i) for i in eigvals)
+        return sum(h(i) for i in eigvals)
 
     # approximiert die gewichtete Anzahl an Eigenwerten im vorgegbenen Intervall
     def J_Stern(s)->float:
@@ -221,6 +226,12 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
             elif(x[i]>bedingung[i,1]):
                 x[i] = bedingung[i,1]
         return x
+    
+    def schrittweitePruefen(x_alt, x_neu)->np.ndarray:
+        norm = np.linalg.norm(x_neu-x_alt)
+        if(norm>maxSchrittweite):
+            return x_alt+(x_neu-x_alt)/norm*maxSchrittweite
+        return x_neu
 ################## hier wird in jedem Schritt mehrmals M(s) und K(s) berechnet ##################
 
     # result wird spaeter eine 2d-Matrix, jetzt ist es noch ein Vektor
@@ -232,19 +243,23 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
 
     # fuehre weiteren Schritt des Minimierungsverfahrens aus, wenn approximierte gew. Ew-Zaehlung nicht klein genug
     while result[-1,-1]>=eps:
+        x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
-        x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, np.array(result[0:len_s,-1]))
+        x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, x_alt)
         # Bedingungen pruefen, evtl. Projektion
         x_neu = bedingungenPruefen(x_neu)
+        # Schrittgröße des Schrittes prüfen, evtl. Verkürzung
+        x_neu = schrittweitePruefen(x_alt, x_neu)
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
-        result = np.append(result, np.expand_dims(np.append(x_neu, [ungewichteteEwZaehlung_genau(startpunkt), J(x_neu), J_Stern(x_neu)]), 1), axis=1)
+        result = np.append(result, np.expand_dims(np.append(x_neu, [ungewichteteEwZaehlung_genau(x_neu), J(x_neu), J_Stern(x_neu)]), 1), axis=1)
 
         # gibt aller hundert Durchlaeufe eine Ausgabe, wie groß der genaue gewichtete Eigenwert ist, bei 500 Durchlaeufen wird abgebrochen
         # da aber nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel in result gespeichert wurden, ist die erste Meldung bei dem 99. Druchlauf
         # nach 500 Durchlaeufen wird abgebrochen
         if(np.size(result,1)%100 == 0):
-            print(result[-2,-1])
-            if(np.size(result,1) == 501):
+            print("gewichtete EwZählung genau: ",result[-2,-1])
+            print("s: ",x_neu)
+            if(np.size(result,1) == 500):
                 break
 
     return result
