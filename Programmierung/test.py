@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plots
 import algorithms
+import math
 
 # Dimension der Masse- und Steifigkeitsmatrix, damit auch Anzahl an Massen in System
 n = 8
@@ -107,9 +108,9 @@ if __name__ == "__main__":
 
     result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
 
-    VerlaufS = result[0:len(s),:]
-    s=VerlaufS[:,-1]
-    print(s)
+    verlaufS = np.transpose(result[0:len(s),:],axes=(1,0))
+    s_last=verlaufS[-1,:]
+    print(s_last)
     EWgenau = result[-2,:]
     EWapprox = result[-1,:]
     EWungewichtet = result[-3,:].real
@@ -125,6 +126,16 @@ if __name__ == "__main__":
     plots.show()
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
-    # eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in VerlaufS])
+    colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
+    eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
+    plots.title("Entwicklung der Eigenwerte im Verlauf")
+    for i in range(n):
+        verlaufEinEigenwert = eigenwerte[:,i]
+        plots.plot(schritte, verlaufEinEigenwert, label="Eigenwert "+str(i+1), color=colors[i])
 
-    print("endgültige Verteilung der Eigenwerte: ",np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))))
+    plots.plot(schritte,np.full(anzSchritte,lambda_a), 'k', label="untere Grenze")
+    plots.plot(schritte,np.full(anzSchritte,lambda_b), 'k', label="obere Grenze")
+
+    plots.legend()
+    plots.show()
+    print("endgültige Verteilung der Eigenwerte: ",np.linalg.eigvals(np.linalg.inv(M(s_last)).dot(K(s_last))))

@@ -19,7 +19,7 @@ r = .5
 # Bedingungen, die fuer Werte gelten muessen, das ist nur ein Platzhalter
 bedingung = np.zeros(1)
 # gibt an wie weit ein Schritt des Gradientenverfahrens maximal gehen darf
-maxSchrittweite = 0.3
+maxSchrittweite = 0.5
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koenenn
 # man koennte es auch immer mit in der Funktion uebergeben, aber so ist es uebersichtlicher
@@ -220,7 +220,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
 
     # pruefe, ob Bedingungen von Wert erfuellt sind, sonst Projektion auf Intervallgrenze
     def bedingungenPruefen(x)->np.ndarray:
-        for i in range(3):
+        for i in range(len(x)):
             if(x[i]<bedingung[i,0]):
                 x[i] = bedingung[i,0]
             elif(x[i]>bedingung[i,1]):
