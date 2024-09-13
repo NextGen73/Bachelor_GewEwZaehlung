@@ -6,7 +6,7 @@ import time
 
 # Dimension der Masse- und Steifigkeitsmatrix, damit auch Anzahl an Massen in System
 n = 8
-# Anzahl der Quadraturstellen
+# Anzahl der Stuetzstellen der Quadratur
 m = 100
 # j gibt für System 1 an, ab welchem Index die Masse fest ist
 # für System 2 gibt es die Länge des Vektors s an
@@ -17,16 +17,24 @@ s = np.ones(j)
 lambda_a = 1
 # obere Grenze des Intervalls
 lambda_b = 2
+# gibt an, ob erstes oder zweites System verwendet wird
+system = 1
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # der Startwert s wird zwar hier definiert, aber erst in der Funktion algorithms.EigenwerteMinimierenAufIntervall() uebergeben
 # möchte man die anderen Werte verändern, so muss man algorithms.init() mit den entsprechenden Werten aufrufen
+# durch initSystem wird ferner die Anzahl der Stuetzstellen immer auf den Standard (m=100) zurueckgesetzt
 def initSystem(ausgewaehltesSystem):
     global s
     global lambda_a
     global lambda_b
+    global system
+    global m
+
+    m=100
 
     if(ausgewaehltesSystem == 1):
+        system = 1
         lambda_a = 1.5
         lambda_b = 2.5
         s = np.array([3.5])
@@ -34,6 +42,7 @@ def initSystem(ausgewaehltesSystem):
 
         algorithms.init(0.1, 0.1, 0.5, lambda_a, lambda_b, bedingungen, "vorwaerts")
     else:
+        system = 2
         lambda_a = 0.9
         lambda_b = 1.5
         s = np.concatenate((np.full(j-1, 0.7), [1.5]))
@@ -75,7 +84,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
 
             return result
 
-        if(ausgewaehltesSystem == 1):
+        if(system == 1):
             return K_System1(s.real)
         return K_System2(s.real)
 
@@ -94,7 +103,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
             np.fill_diagonal(result, diag)
             return result
         
-        if(ausgewaehltesSystem == 1):
+        if(system == 1):
             return M_System1(s.real)
         return M_System2(s.real)
 
@@ -149,13 +158,14 @@ def minimierenPlottenUndEckdatenAnzeigen():
     plots.show()
 
     # Angabe der wichtigsten Eckdaten 
-    print("Eckdaten für System "+str(ausgewaehltesSystem)+":")
+    print("Eckdaten für System "+str(system)+":")
     print("Startwert: "+str(verlaufS[0].real))
     print("Intervall: ["+str(lambda_a)+","+str(lambda_b)+"]")
     print("Eigenwerte am Anfang: "+str(eigenwerte[0,:]))
     print("Eigenwerte am Ende: "+str(eigenwerte[-1,:]))
     print("Anzahl Stützstellen Quadratur: "+str(m))
     print("für Minimierung vergangene Zeit in s: "+str(vergangeneZeit))
+    print("\n")
 
 if(__name__=='__main__'):
     # System 1 mit Standardwerten initialisieren
@@ -166,7 +176,9 @@ if(__name__=='__main__'):
     m=150
     minimierenPlottenUndEckdatenAnzeigen()
 
-
-
-
-
+    # System 2 mit Standardwerten
+    initSystem(2)
+    minimierenPlottenUndEckdatenAnzeigen()
+    # mehr Stuetzstellen verwenden
+    m=150
+    minimierenPlottenUndEckdatenAnzeigen()
