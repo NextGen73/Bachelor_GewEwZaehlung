@@ -109,10 +109,10 @@ def schrittGradientenverfahren_festeSchrittweite(nablaF, x):
     return x-schrittGrad*abl_real
 
 # das beruht auf echter Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
-def quadratureContourIntegralCircleTrapez(f, m:int, s) -> complex:
+def quadratureContourIntegralCircleTrapez(f, m:int, s) -> complex:    
     # Berechne Stuetzstellen
-    zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*k) for k in range(m+1)])
-    return sum((f(zs[i+1], s)+f(zs[i], s))/2*np.exp(2*np.pi*1j/m*i) for i in range(m))*r*(np.exp(2*np.pi*1j/m)-1)
+    z = np.array([gamma+r*np.exp(2j*np.pi*k/m) for k in range(m+1)])
+    return sum((f(z[k], s)+f(z[k+1], s)*np.exp(2*np.pi*1j/m))*np.exp(2*np.pi*1j*k/m) for k in range(m))*r*np.pi*1j/m
 
 # das ist eher die Mittelpunktsregel, wo man Funktion nur an einer Stelle auswerten muss, Differenz wurde explizit berechnet und rausgezogen
 def quadratureContourIntegralCircleMittelpunkt(f, m:int, s) -> complex:
@@ -198,7 +198,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     result = np.expand_dims(np.append(startpunkt, [ungewichteteEwZaehlung_genau(startpunkt), J(startpunkt), J_Stern(startpunkt)]), 1)
 
     # fuehre weiteren Schritt des Minimierungsverfahrens aus, wenn approximierte gew. Ew-Zaehlung nicht klein genug
-    while result[-1,-1]>=eps:
+    while result[-3,-1]>0:
         x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
         x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, x_alt)
