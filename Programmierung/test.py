@@ -128,13 +128,13 @@ if __name__ == "__main__":
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
     eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
-    plots.title("Entwicklung der Eigenwerte im Verlauf")
+    plots.title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        plots.plot(schritte, verlaufEinEigenwert, label="Eigenwert "+str(i+1), color=colors[i])
+        plots.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)
 
-    plots.plot(schritte,np.full(anzSchritte,lambda_a), 'k', label="untere Grenze")
-    plots.plot(schritte,np.full(anzSchritte,lambda_b), 'k', label="obere Grenze")
+    plots.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
+    plots.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
 
     plots.legend()
     plots.show()
