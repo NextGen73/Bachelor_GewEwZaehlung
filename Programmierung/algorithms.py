@@ -111,8 +111,8 @@ def schrittGradientenverfahren_festeSchrittweite(nablaF, x):
 # das beruht auf echter Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
 def quadratureContourIntegralCircleTrapez(f, m:int, s) -> complex:
     # Berechne Stuetzstellen
-    zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*(k+1/2)) for k in range(m+1)])
-    return sum((f(zs[i+1], s)+f(zs[i], s))/2*(zs[i+1]-zs[i]) for i in range(m))
+    zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*k) for k in range(m+1)])
+    return sum((f(zs[i+1], s)+f(zs[i], s))/2*np.exp(2*np.pi*1j/m*i) for i in range(m))*r*(np.exp(2*np.pi*1j/m)-1)
 
 # das ist eher die Mittelpunktsregel, wo man Funktion nur an einer Stelle auswerten muss, Differenz wurde explizit berechnet und rausgezogen
 def quadratureContourIntegralCircleMittelpunkt(f, m:int, s) -> complex:
