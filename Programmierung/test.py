@@ -31,7 +31,7 @@ def initAlgorithmen():
         bedingungen1 = np.array([[0,3]])
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1)
     else:
-        lambda_a = 0.9
+        lambda_a = 0.8
         lambda_b = 1.2
         s = np.concatenate((np.full(j-1, 1.0), [2.5]))
         bedingungen2 = np.concatenate((np.tile(np.array([0.3,1.3]),j-1),np.array([1.5,3.5])))
