@@ -2,16 +2,24 @@ import numpy as np
 import matplotlib.pyplot as plots
 import algorithms
 
+# Dimension der Masse- und Steifigkeitsmatrix, damit auch Anzahl an Massen in System
 n = 8
+# Anzahl der Quadraturstellen
 m = 100
+# j gibt für System 1 an, ab welchem Index die Masse fest ist
+# für System 2 gibt es die Länge des Vektors s an
 j = int(n/2)
+# Startwert der Minimierung
 s = np.ones(j)
+# untere Grenze des Intervalls
 lambda_a = 1
+# obere Grenze des Intervalls
 lambda_b = 2
 
 # hiermit ist gemeint, ob das erste oder das zweite System der Ausarbeitung untersucht wird
 ausgewaehltesSystem = 2
 
+# diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 def initAlgorithmen():
     global s
     global lambda_a
