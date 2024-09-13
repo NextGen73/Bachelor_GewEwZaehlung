@@ -18,7 +18,7 @@ lambda_a = 1
 lambda_b = 2
 
 # hiermit ist gemeint, ob das erste oder das zweite System der Ausarbeitung untersucht wird
-ausgewaehltesSystem = 2
+ausgewaehltesSystem = 1
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # das untersuchte Intervall und die Bedingungen können durch Aufruf von algorithms.init() veraendert werden
@@ -29,8 +29,8 @@ def initAlgorithmen():
     global lambda_b
 
     if(ausgewaehltesSystem == 1):
-        lambda_a = 0.5
-        lambda_b = 1.0
+        lambda_a = 0.6
+        lambda_b = 0.9
         s = np.array([1])
         bedingungen1 = np.array([[0.2,3]])
 
@@ -118,24 +118,24 @@ if __name__ == "__main__":
 
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
     eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
-
+    
+    fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
-    plots.title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
-    plots.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
-    plots.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
-    plots.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
-    plots.legend()
-    plots.show()
+    axo.set_title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
+    axo.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
+    axo.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
+    # plots.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
+    axo.legend()
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
-    plots.title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
-    plots.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
+    axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
+    # axu.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        plots.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)
+        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)
 
-    plots.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
-    plots.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
+    axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
+    axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
 
-    plots.legend()
+    axu.legend()
     plots.show()
