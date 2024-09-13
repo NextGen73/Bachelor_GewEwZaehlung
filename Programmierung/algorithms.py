@@ -198,7 +198,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     result = np.expand_dims(np.append(startpunkt, [ungewichteteEwZaehlung_genau(startpunkt), J(startpunkt), J_Stern(startpunkt)]), 1)
 
     # fuehre weiteren Schritt des Minimierungsverfahrens aus, wenn approximierte gew. Ew-Zaehlung nicht klein genug
-    while result[-3,-1]>0:
+    while result[-1,-1]>=eps:
         x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
         x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, x_alt)
