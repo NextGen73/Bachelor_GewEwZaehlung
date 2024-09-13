@@ -129,6 +129,7 @@ if __name__ == "__main__":
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
     eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
     plots.title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
+    plots.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.1))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
         plots.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)
