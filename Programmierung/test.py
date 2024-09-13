@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plots
 import algorithms
 import math
+import time
 
 # Dimension der Masse- und Steifigkeitsmatrix, damit auch Anzahl an Massen in System
 n = 8
@@ -102,28 +103,40 @@ if __name__ == "__main__":
     
     initAlgorithmen()
 
+    # mit startzeit und später vergangeneZeit wird nur die Zeit gemessen, die die Funktion EigenwerteMinimierenAufIntervall benötigt,
+    # also genau die Zeit, die das Minimierungsverfahren braucht
+    startzeit = time.time()
+
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
     result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
+    # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
+    vergangeneZeit = time.time()-startzeit
 
+    # gibt den Verlauf des Parameters s an, wird benötigt, um den Verlauf der Eigenwerte zu berechnen
     verlaufS = np.transpose(result[0:len(s),:],axes=(1,0))
+    # die drei Arrays werden für den oberen Plot benötigt. Sie geben an, wie sich die Eigenwert-Zaehlungen verändert haben
     EWgenau = result[-2,:]
     EWapprox = result[-1,:]
     EWungewichtet = result[-3,:].real
 
+    # anzSchritte und schritte werden definiert, damit die Plots eine gültige x-Achse erhalten
     anzSchritte = len(EWapprox)
     schritte = range(anzSchritte)
 
+    # gibt die Farben des unteren Plots an, damit das Array lang genug ist, wird es oft genug mit sich selbst verkettet
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
+    # wird für den unteren Plot benötigt, gibt den Verlauf aller Eigenwerte an
     eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
     
+    # der angezeigt Plot wird aus einem oberen und unteren Plot bestehen
     fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
     axo.set_title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
     axo.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
     axo.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
-    # plots.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
+    axo.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
     axo.legend()
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
@@ -135,6 +148,16 @@ if __name__ == "__main__":
 
     axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
     axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
-
     axu.legend()
+    
+    # Plot anzeigen
     plots.show()
+
+    # Angabe der wichtigsten Eckdaten 
+    print("Eckdaten für System "+str(ausgewaehltesSystem)+":")
+    print("Startwert: "+str(verlaufS[0].real))
+    print("Intervall: ["+str(lambda_a)+","+str(lambda_b)+"]")
+    print("Eigenwerte am Anfang: "+str(eigenwerte[0,:]))
+    print("Eigenwerte am Ende: "+str(eigenwerte[-1,:]))
+    print("Anzahl Stützstellen Quadratur: "+str(m))
+    print("für Minimierung vergangene Zeit in s: "+str(vergangeneZeit))
