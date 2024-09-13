@@ -209,13 +209,9 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
         result = np.append(result, np.expand_dims(np.append(x_neu, [ungewichteteEwZaehlung_genau(x_neu), J(x_neu), J_Stern(x_neu)]), 1), axis=1)
 
-        # gibt aller hundert Durchlaeufe eine Ausgabe, wie groß der genaue gewichtete Eigenwert ist, bei 500 Durchlaeufen wird abgebrochen
-        # da aber nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel in result gespeichert wurden, ist die erste Meldung bei dem 99. Druchlauf
-        # nach 499 Durchlaeufen wird abgebrochen
-        if(np.size(result,1)%100 == 0):
-            print("gewichtete EwZählung genau: ",result[-2,-1])
-            print("s: ",x_neu)
-            if(np.size(result,1) == 500):
-                break
+        # nach 500 Durchlaeufen wird abgebrochen
+        # da nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel (Anfangsdaten und Daten nach erstem Durchlauf) in result gespeichert wurden
+        if(np.size(result,1) == 501):
+            break
 
     return result
