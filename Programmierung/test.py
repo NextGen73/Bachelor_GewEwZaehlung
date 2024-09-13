@@ -139,4 +139,3 @@ if __name__ == "__main__":
 
     plots.legend()
     plots.show()
-    print("endgültige Verteilung der Eigenwerte: ",np.linalg.eigvals(np.linalg.inv(M(s_last)).dot(K(s_last))))
