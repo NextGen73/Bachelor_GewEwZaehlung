@@ -18,7 +18,7 @@ lambda_a = 1
 lambda_b = 2
 
 # hiermit ist gemeint, ob das erste oder das zweite System der Ausarbeitung untersucht wird
-ausgewaehltesSystem = 1
+ausgewaehltesSystem = 2
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # das untersuchte Intervall und die Bedingungen können durch Aufruf von algorithms.init() veraendert werden
@@ -32,9 +32,9 @@ def initAlgorithmen():
         lambda_a = 0.5
         lambda_b = 1.0
         s = np.array([1])
-        bedingungen1 = np.array([[0,3]])
+        bedingungen1 = np.array([[0.2,3]])
 
-        algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1)
+        algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1, "vorwaerts")
     else:
         lambda_a = 0.8
         lambda_b = 1.2
@@ -42,7 +42,7 @@ def initAlgorithmen():
         bedingungen2 = np.concatenate((np.tile(np.array([0.3,1.3]),j-1),np.array([1.5,3.5])))
         bedingungen2 = np.reshape(bedingungen2, (j,2))
 
-        algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen2)
+        algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen2, "vorwaerts")
 
 def K(s: float)->np.ndarray:
     def K_System1(s:np.ndarray, c):
@@ -109,14 +109,16 @@ if __name__ == "__main__":
     result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
 
     verlaufS = np.transpose(result[0:len(s),:],axes=(1,0))
-    s_last=verlaufS[-1,:]
-    print(s_last)
     EWgenau = result[-2,:]
     EWapprox = result[-1,:]
     EWungewichtet = result[-3,:].real
 
     anzSchritte = len(EWapprox)
     schritte = range(anzSchritte)
+
+    colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
+    eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
+
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
     plots.title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
     plots.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
@@ -126,8 +128,6 @@ if __name__ == "__main__":
     plots.show()
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
-    colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
-    eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
     plots.title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
     plots.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):

@@ -20,10 +20,12 @@ r = .5
 bedingung = np.zeros(1)
 # gibt an wie weit ein Schritt des Gradientenverfahrens maximal gehen darf
 maxSchrittweite = 0.5
+# Differenzenverfahren
+diffVerfahren = "vorwaerts"
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koenenn
 # man koennte es auch immer mit in der Funktion uebergeben, aber so ist es uebersichtlicher
-def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoleranz, startIntervall, endeIntervall, bedingungen):
+def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoleranz, startIntervall, endeIntervall, bedingungen, differenzenVerfahren):
     """
     :param inflation: Parameter alpha, wird in Gewichtungsfunktion verwendet.
     :param schrittweiteDifferenzen: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
@@ -31,7 +33,8 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     :param fehlertoleranz: Falls gewichtete EW-Zaehlung darunter faellt, wird die Minimierung beendet.
     :param startIntervall: gibt untere Grenze des vorgegebenen Intervalls an.
     :param endeIntervall: gibt obere Grenze des vorgegebenen Intervalls an.
-    :param bedingungen: gibt die gültigen Bedingungen an, die an das System gestellt werden
+    :param bedingungen: gibt die gültigen Bedingungen an, die an das System gestellt werden.
+    :param differenzenVerfahren: gibt an, ob Vorwaertsdifferenz oder symmetrische Differenz verwendet werden soll.
     """
     global alpha
     global h
@@ -42,6 +45,7 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     global gamma
     global r
     global bedingung
+    global diffVerfahren
     alpha = inflation
     h = schrittweiteDifferenzen
     schrittGrad = schrittweiteGradienten
@@ -51,88 +55,45 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     gamma = (startIntervall+endeIntervall)/2
     r = (endeIntervall-startIntervall)/2
     bedingung = bedingungen
+    diffVerfahren = differenzenVerfahren
 
-# approximiert Ableitung mittels Vorwaertsdifferenz
-def  Vorwaertsdifferenz(f, x):
+# approximiert Ableitung mittels Differenzenverfahren
+def  ableitungDurchDifferenz(f, x):
     """
-    :param f: Funktion, deren Ableitung mithilfe der Vorwaertsdifferenz approximiert werden soll.
+    :param f: Funktion, deren Ableitung mithilfe des Differenzenverfahren approximiert werden soll.
     :param x: Vektor als np.array, an dem Ableitung approximiert werden soll.
-    :return: Approximierung von `f'(x)` mithilfe der Vorwaertsdifferenz.
+    :return: Approximierung von `f'(x)` mithilfe eines Differenzenverfahrens.
     """
-
-    # Laenge des Parameters ermitteln
+    # Laenge des Arguments ermitteln
     l=len(x)
-
-    # zuerst wird erste partielle Ableitung approximiert, sollte immer vorhandne sein, solange x ein np.array ist
-    xPlusH = x.copy()
-    xPlusH[0] += h
-    # partAbl speichert immer eine partielle Ableitung ab
-    partAbl = (f(xPlusH)-f(x))/h
 
     # solange f ein np.array ausgibt, kann so bestimmt werden, wieviele Dimensionen es besitzt.
-    # Sei A der Raum, in den f abbildet, dann ist die ausgegebene Matrix von der Form: A \times IR^l
+    dimensionsF = np.ndim(f(x))
+    # nablaF wird als leere Matrix initialisiert, da die Maße noch nicht klar sind
+    nablaF = np.empty
+    # es wird für jedes Element von x die partielle Ableitung approximiert
+    for i in range(0, l):
+        if (diffVerfahren=="vorwaerts"):
+            # für Vorwaertsdifferenz wird Ableitung durch (f(x+h)-f(x))/h approximiert
+            xPlusH = x.copy()
+            xPlusH[i] += h
 
-    dimensionsF = np.ndim(partAbl)
-    # hier wird nablaF, welches vorher ein Element in A war, auf ein Element in A \times IR erweitert,
-    # damit auch die anderen partiellen Ableitungen geordnet in nablaF gespeichert werden koennen
-    nablaF = np.expand_dims(partAbl, axis=dimensionsF)
-
-    # wie oben fuer i=1 wird nun hier die i-te Ableitung bestimmt
-    for i in range(1, l):
-        xPlusH = x.copy()
-        xPlusH[i] += h
-        partAbl = (f(xPlusH)-f(x))/h
-        # partAbl wird wie nablaF oben zu einem Element in A \times IR, um es A \times IR^i hinzuzufuegen
-        # danach ist nableF ein Element in A \times IR^{i+1}
-        nablaF = np.append(nablaF, np.expand_dims(partAbl, axis=dimensionsF) ,dimensionsF)
-    # nach der Schleife liegt nablaF in der Form A \times IR^l vor, also genau in der Form, wie man es von der Ableitung einer Funktion f:IR^l -> A erwartet
-    return nablaF
-
-# approximiert Ableitung mittels symmetrischer Differenz
-def  symmetrischeDifferenz(f, x):
-    """
-    :param f: Funktion, deren Ableitung mithilfe der symmetrischen Differenz approximiert werden soll.
-    :param x: Vektor als np.array, an dem Ableitung approximiert werden soll.
-    :return: Approximierung von `f'(x)` mithilfe der Mitteldifferenz.
-    """
-    # Laenge des Parameters ermitteln
-    l=len(x)
-
-    # zuerst wird erste partielle Ableitung approximiert, sollte immer vorhandne sein, solange x ein np.array ist
-    xPlusHHalbe = x.copy()
-    xPlusHHalbe[0] += h/2
-
-    xMinusHHalbe = x.copy()
-    xMinusHHalbe[0] -= h/2
-    # partAbl speichert immer eine partielle Ableitung ab
-    partAbl = (f(xPlusHHalbe)-f(xMinusHHalbe))/h
-
-    # falls n>1, dann gibt es mehr als eine partielle Ableitung
-    if l>1:
-        # solange f ein np.array ausgibt, kann so bestimmt werden, wieviele Dimensionen es besitzt.
-        # Sei A der Raum, in den f abbildet, dann ist die ausgegebene Matrix von der Form: A \times IR^l
-
-        dimensionsF = np.ndim(partAbl)
-        # hier wird nablaF, welches vorher ein Element in A war, auf ein Element in A \times IR erweitert,
-        # damit auch die anderen partiellen Ableitungen geordnet in nablaF gespeichert werden koennen
-        nablaF = np.expand_dims(partAbl, axis=dimensionsF)
-
-        # wie oben fuer i=1 wird nun hier die i-te Ableitung bestimmt
-        for i in range(1, l):
-            # wie oben nun fuer i-te part. Abl
+            partAbl = (f(xPlusH)-f(x))/h
+        else:
+            # für symmetrische Differenz wird Ableitung durch (f(x+h/2)-f(x-h/2))/h approximiert
             xPlusHHalbe = x.copy()
             xPlusHHalbe[i] += h/2
-
             xMinusHHalbe = x.copy()
             xMinusHHalbe[i] -= h/2
 
             partAbl = (f(xPlusHHalbe)-f(xMinusHHalbe))/h
-            # partAbl wird wie nablaF oben zu einem Element in A \times IR, um es A \times IR^i hinzuzufuegen
-            # danach ist nableF ein Element in A \times IR^{i+1}
+        # für i>0 wird nableF durch die (i+1)-te partielle Ableitung erweitert
+        if(i>0):
             nablaF = np.append(nablaF, np.expand_dims(partAbl, axis=dimensionsF) ,dimensionsF)
-        # nach der Schleife liegt nablaF in der Form A \times IR^l vor, also genau in der Form, wie man es von der Ableitung einer Funktion f:IR^l -> A erwartet
-    else:
-        nablaF = partAbl
+        else:
+            # für i=0 muss nablaF eine Matrix in A\times \R werden, damit die anderen partiellen Ableitungen mit angehaengt werden koennen
+            nablaF = np.expand_dims(partAbl, axis=dimensionsF)
+    # nach der Schleife liegt nablaF in der Form A \times IR^l vor, also genau in der Form, wie man es von der Ableitung einer Funktion f:IR^l -> A erwartet
     return nablaF
 
 # ein Schritt des Gradientenverfahrens
@@ -208,8 +169,8 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     def nablaJ_Stern(s)->float:
         def nablaF(z:complex, s:np.ndarray)->np.ndarray[complex]:
             D = np.linalg.inv(z*M(s)-K(s))
-            dMds = Vorwaertsdifferenz(M, s)
-            dKds = Vorwaertsdifferenz(K, s)
+            dMds = ableitungDurchDifferenz(M, s)
+            dKds = ableitungDurchDifferenz(K, s)
 
             return g(z)*(np.trace(D.dot(dMds))-np.trace(((D.dot(z*dMds-dKds)).transpose(0,2,1).dot(D)).transpose(0,2,1)))
         return quadratureContourIntegralCircleTrapez(nablaF, anzahlStuetzstellen, s)/2/np.pi/1j
@@ -228,7 +189,6 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
         if(norm>maxSchrittweite):
             return x_alt+(x_neu-x_alt)/norm*maxSchrittweite
         return x_neu
-################## hier wird in jedem Schritt mehrmals M(s) und K(s) berechnet ##################
 
     # result wird spaeter eine 2d-Matrix, jetzt ist es noch ein Vektor
     # result[0:j,i] ist Wert, der in i-tem Schritt berechnet wurde
@@ -238,7 +198,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
     result = np.expand_dims(np.append(startpunkt, [ungewichteteEwZaehlung_genau(startpunkt), J(startpunkt), J_Stern(startpunkt)]), 1)
 
     # fuehre weiteren Schritt des Minimierungsverfahrens aus, wenn approximierte gew. Ew-Zaehlung nicht klein genug
-    while result[-1,-1]>=eps:
+    while result[-3,-1]>0:
         x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
         x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, x_alt)
@@ -251,7 +211,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
 
         # gibt aller hundert Durchlaeufe eine Ausgabe, wie groß der genaue gewichtete Eigenwert ist, bei 500 Durchlaeufen wird abgebrochen
         # da aber nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel in result gespeichert wurden, ist die erste Meldung bei dem 99. Druchlauf
-        # nach 500 Durchlaeufen wird abgebrochen
+        # nach 499 Durchlaeufen wird abgebrochen
         if(np.size(result,1)%100 == 0):
             print("gewichtete EwZählung genau: ",result[-2,-1])
             print("s: ",x_neu)
