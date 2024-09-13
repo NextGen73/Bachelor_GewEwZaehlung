@@ -18,7 +18,7 @@ lambda_a = 1
 lambda_b = 2
 
 # hiermit ist gemeint, ob das erste oder das zweite System der Ausarbeitung untersucht wird
-ausgewaehltesSystem = 1
+ausgewaehltesSystem = 2
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # das untersuchte Intervall und die Bedingungen können durch Aufruf von algorithms.init() veraendert werden
@@ -36,10 +36,10 @@ def initAlgorithmen():
 
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1, "vorwaerts")
     else:
-        lambda_a = 0.8
-        lambda_b = 1.2
-        s = np.concatenate((np.full(j-1, 1.0), [2.5]))
-        bedingungen2 = np.concatenate((np.tile(np.array([0.3,1.3]),j-1),np.array([1.5,3.5])))
+        lambda_a = 0.9
+        lambda_b = 1.5
+        s = np.concatenate((np.full(j-1, 0.5), [1.0]))
+        bedingungen2 = np.concatenate((np.tile(np.array([0.1,2.0]),j-1),np.array([.5,3.5])))
         bedingungen2 = np.reshape(bedingungen2, (j,2))
 
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen2, "vorwaerts")
