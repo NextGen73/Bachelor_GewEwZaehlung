@@ -31,8 +31,8 @@ def initAlgorithmen():
     if(ausgewaehltesSystem == 1):
         lambda_a = 1.5
         lambda_b = 2.5
-        s = np.array([2.5])
-        bedingungen1 = np.array([[2.5,5]])
+        s = np.array([3.5])
+        bedingungen1 = np.array([[2,5]])
 
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1, "vorwaerts")
     else:
