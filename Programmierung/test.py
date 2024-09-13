@@ -44,14 +44,15 @@ def initAlgorithmen():
 
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen2, "vorwaerts")
 
+# berechnet K abhaenig vom verwendeten System
 def K(s: float)->np.ndarray:
-    def K_System1(s:np.ndarray, c):
+    def K_System1(s:np.ndarray):
         result = np.zeros((n,n))
 
-        diag=np.concatenate((np.full(j-1,2*s[0]), [s[0]+c], np.full(n-j,2*c)))
+        diag=np.concatenate((np.full(j-1,2*s[0]), [s[0]+1.5], np.full(n-j,3)))
         np.fill_diagonal(result, diag)
 
-        nebendiag= np.concatenate((np.full(j-1,-s[0]), np.full(n-j, -c)))
+        nebendiag= np.concatenate((np.full(j-1,-s[0]), np.full(n-j, -1.5)))
         result += np.diag(nebendiag, 1)
         result += np.diag(nebendiag, -1)
 
@@ -76,13 +77,13 @@ def K(s: float)->np.ndarray:
         return result
 
     if(ausgewaehltesSystem == 1):
-        return K_System1(s.real, 1.5)
+        return K_System1(s.real)
     return K_System2(s.real)
 
 def M(s: float)->np.ndarray:
-    def M_System1(s:np.ndarray, m):
+    def M_System1(s:np.ndarray):
         result = np.zeros((n,n))
-        diag = np.concatenate((np.full(j,m), np.full(n-j, s[0]+1)))
+        diag = np.concatenate((np.full(j,4), np.full(n-j, s[0]+1)))
         np.fill_diagonal(result, diag)
         return result
 
@@ -94,7 +95,7 @@ def M(s: float)->np.ndarray:
         return result
     
     if(ausgewaehltesSystem == 1):
-        return M_System1(s.real, 4)
+        return M_System1(s.real)
     return M_System2(s.real)
 
 if __name__ == "__main__":
