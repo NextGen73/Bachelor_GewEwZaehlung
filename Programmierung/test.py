@@ -32,7 +32,7 @@ def initSystem(ausgewaehltesSystem):
         s = np.array([3.5])
         bedingungen = np.array([[2,5]])
 
-        algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen, "vorwaerts")
+        algorithms.init(0.1, 0.1, 0.5, lambda_a, lambda_b, bedingungen, "vorwaerts")
     else:
         lambda_a = 0.9
         lambda_b = 1.5
@@ -40,7 +40,7 @@ def initSystem(ausgewaehltesSystem):
         bedingungen = np.concatenate((np.tile(np.array([0.1,2.0]),j-1),np.array([.5,3.5])))
         bedingungen = np.reshape(bedingungen, (j,2))
 
-        algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen, "vorwaerts")
+        algorithms.init(0.1, 0.1, 0.5, lambda_a, lambda_b, bedingungen, "vorwaerts")
 
 def minimierenPlottenUndEckdatenAnzeigen():
     # berechnet K abhaengig vom verwendeten System
