@@ -1,6 +1,6 @@
 import numpy as np
 
-# inflation parameter g(z)
+# inflation parameter von g(z)
 alpha = 0.1
 # Schrittweite Differenzenverfahren
 h = 0.01
