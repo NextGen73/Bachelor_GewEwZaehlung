@@ -6,8 +6,6 @@ alpha = 0.1
 h = 0.01
 # Schrittweite Gradientenverfahren
 schrittGrad = 0.5
-# Fehlertoleranz
-eps= 1e-8
 # startIntervall
 lamA = 0
 # endeIntervall
@@ -25,12 +23,11 @@ diffVerfahren = "vorwaerts"
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koenenn
 # man koennte es auch immer mit in der Funktion uebergeben, aber so ist es uebersichtlicher
-def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoleranz, startIntervall, endeIntervall, bedingungen, differenzenVerfahren):
+def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, startIntervall, endeIntervall, bedingungen, differenzenVerfahren):
     """
     :param inflation: Parameter alpha, wird in Gewichtungsfunktion verwendet.
     :param schrittweiteDifferenzen: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
     :param schrittweiteGradienten: Faktor, mit dem die berechnete Richtung multipliziert wird.
-    :param fehlertoleranz: Falls gewichtete EW-Zaehlung darunter faellt, wird die Minimierung beendet.
     :param startIntervall: gibt untere Grenze des vorgegebenen Intervalls an.
     :param endeIntervall: gibt obere Grenze des vorgegebenen Intervalls an.
     :param bedingungen: gibt die gültigen Bedingungen an, die an das System gestellt werden.
@@ -39,7 +36,6 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     global alpha
     global h
     global schrittGrad
-    global eps
     global lamA
     global lamB
     global gamma
@@ -49,7 +45,6 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, fehlertoler
     alpha = inflation
     h = schrittweiteDifferenzen
     schrittGrad = schrittweiteGradienten
-    eps = fehlertoleranz
     lamA = startIntervall
     lamB = endeIntervall
     gamma = (startIntervall+endeIntervall)/2
