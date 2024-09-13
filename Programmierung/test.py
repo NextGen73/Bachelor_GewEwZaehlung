@@ -20,15 +20,19 @@ lambda_b = 2
 ausgewaehltesSystem = 2
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
+# das untersuchte Intervall und die Bedingungen können durch Aufruf von algorithms.init() veraendert werden
+# der Startwert s wird in der Funktion algorithms.EigenwerteMinimierenAufIntervall() uebergeben
 def initAlgorithmen():
     global s
     global lambda_a
     global lambda_b
+
     if(ausgewaehltesSystem == 1):
         lambda_a = 1.5
         lambda_b = 3.0
         s = np.array([1])
         bedingungen1 = np.array([[0,3]])
+
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1)
     else:
         lambda_a = 0.8
@@ -38,8 +42,6 @@ def initAlgorithmen():
         bedingungen2 = np.reshape(bedingungen2, (j,2))
 
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen2)
-
-initAlgorithmen()
 
 def K(s: float)->np.ndarray:
     def K_System1(s:np.ndarray, c, j:int):
@@ -99,26 +101,30 @@ def M(s: float)->np.ndarray:
         return M_System1(s.real, 3, 4, 1)
     return M_System2(s.real)
 
-result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
+if __name__ == "__main__":
+    
+    initAlgorithmen()
 
-VerlaufS = result[0:len(s),:]
-s=VerlaufS[:,-1]
-print(s)
-EWgenau = result[-2,:]
-EWapprox = result[-1,:]
-EWungewichtet = result[-3,:].real
+    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
 
-anzSchritte = len(EWapprox)
-schritte = range(anzSchritte)
-# dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
-plots.title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
-plots.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
-plots.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
-plots.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
-plots.legend()
-plots.show()
+    VerlaufS = result[0:len(s),:]
+    s=VerlaufS[:,-1]
+    print(s)
+    EWgenau = result[-2,:]
+    EWapprox = result[-1,:]
+    EWungewichtet = result[-3,:].real
 
-# dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
-# eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in VerlaufS])
+    anzSchritte = len(EWapprox)
+    schritte = range(anzSchritte)
+    # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
+    plots.title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
+    plots.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
+    plots.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
+    plots.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
+    plots.legend()
+    plots.show()
 
-print("endgültige Verteilung der Eigenwerte: ",np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))))
+    # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
+    # eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in VerlaufS])
+
+    print("endgültige Verteilung der Eigenwerte: ",np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))))
