@@ -18,7 +18,7 @@ lambda_a = 1
 lambda_b = 2
 
 # hiermit ist gemeint, ob das erste oder das zweite System der Ausarbeitung untersucht wird
-ausgewaehltesSystem = 2
+ausgewaehltesSystem = 1
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # das untersuchte Intervall und die Bedingungen können durch Aufruf von algorithms.init() veraendert werden
@@ -29,8 +29,8 @@ def initAlgorithmen():
     global lambda_b
 
     if(ausgewaehltesSystem == 1):
-        lambda_a = 1.5
-        lambda_b = 3.0
+        lambda_a = 0.5
+        lambda_b = 1.0
         s = np.array([1])
         bedingungen1 = np.array([[0,3]])
 
@@ -45,7 +45,7 @@ def initAlgorithmen():
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen2)
 
 def K(s: float)->np.ndarray:
-    def K_System1(s:np.ndarray, c, j:int):
+    def K_System1(s:np.ndarray, c):
         result = np.zeros((n,n))
 
         diag=np.ones(n)*s[0].real
@@ -81,13 +81,13 @@ def K(s: float)->np.ndarray:
         return result
 
     if(ausgewaehltesSystem == 1):
-        return K_System1(s.real, 1.3, 3)
+        return K_System1(s.real, 1.3)
     return K_System2(s.real)
 
 def M(s: float)->np.ndarray:
-    def M_System1(s:np.ndarray, m1, m2, j):
+    def M_System1(s:np.ndarray):
         result = np.zeros((n,n))
-        diag = np.append(np.full(j-1, m1*s[0]), np.full(n-j+1, m2*s[0]))
+        diag = np.append(np.full(j-1, 3*s[0]), np.full(n-j+1, 4*s[0]))
         np.fill_diagonal(result, diag)
         return result
 
@@ -99,7 +99,7 @@ def M(s: float)->np.ndarray:
         return result
     
     if(ausgewaehltesSystem == 1):
-        return M_System1(s.real, 3, 4, 1)
+        return M_System1(s.real)
     return M_System2(s.real)
 
 if __name__ == "__main__":
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
     eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
     plots.title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
-    plots.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.1))
+    plots.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
         plots.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)

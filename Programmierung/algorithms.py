@@ -69,27 +69,23 @@ def  Vorwaertsdifferenz(f, x):
     # partAbl speichert immer eine partielle Ableitung ab
     partAbl = (f(xPlusH)-f(x))/h
 
-    # falls n>1, dann gibt es mehr als eine partielle Ableitung
-    if l>1:
-        # solange f ein np.array ausgibt, kann so bestimmt werden, wieviele Dimensionen es besitzt.
-        # Sei A der Raum, in den f abbildet, dann ist die ausgegebene Matrix von der Form: A \times IR^l
+    # solange f ein np.array ausgibt, kann so bestimmt werden, wieviele Dimensionen es besitzt.
+    # Sei A der Raum, in den f abbildet, dann ist die ausgegebene Matrix von der Form: A \times IR^l
 
-        dimensionsF = np.ndim(partAbl)
-        # hier wird nablaF, welches vorher ein Element in A war, auf ein Element in A \times IR erweitert,
-        # damit auch die anderen partiellen Ableitungen geordnet in nablaF gespeichert werden koennen
-        nablaF = np.expand_dims(partAbl, axis=dimensionsF)
+    dimensionsF = np.ndim(partAbl)
+    # hier wird nablaF, welches vorher ein Element in A war, auf ein Element in A \times IR erweitert,
+    # damit auch die anderen partiellen Ableitungen geordnet in nablaF gespeichert werden koennen
+    nablaF = np.expand_dims(partAbl, axis=dimensionsF)
 
-        # wie oben fuer i=1 wird nun hier die i-te Ableitung bestimmt
-        for i in range(1, l):
-            xPlusH = x.copy()
-            xPlusH[i] += h
-            partAbl = (f(xPlusH)-f(x))/h
-            # partAbl wird wie nablaF oben zu einem Element in A \times IR, um es A \times IR^i hinzuzufuegen
-            # danach ist nableF ein Element in A \times IR^{i+1}
-            nablaF = np.append(nablaF, np.expand_dims(partAbl, axis=dimensionsF) ,dimensionsF)
-        # nach der Schleife liegt nablaF in der Form A \times IR^l vor, also genau in der Form, wie man es von der Ableitung einer Funktion f:IR^l -> A erwartet
-    else:
-        nablaF = partAbl
+    # wie oben fuer i=1 wird nun hier die i-te Ableitung bestimmt
+    for i in range(1, l):
+        xPlusH = x.copy()
+        xPlusH[i] += h
+        partAbl = (f(xPlusH)-f(x))/h
+        # partAbl wird wie nablaF oben zu einem Element in A \times IR, um es A \times IR^i hinzuzufuegen
+        # danach ist nableF ein Element in A \times IR^{i+1}
+        nablaF = np.append(nablaF, np.expand_dims(partAbl, axis=dimensionsF) ,dimensionsF)
+    # nach der Schleife liegt nablaF in der Form A \times IR^l vor, also genau in der Form, wie man es von der Ableitung einer Funktion f:IR^l -> A erwartet
     return nablaF
 
 # approximiert Ableitung mittels symmetrischer Differenz
