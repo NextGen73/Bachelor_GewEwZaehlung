@@ -29,10 +29,10 @@ def initAlgorithmen():
     global lambda_b
 
     if(ausgewaehltesSystem == 1):
-        lambda_a = 0.6
-        lambda_b = 0.9
-        s = np.array([1])
-        bedingungen1 = np.array([[0.2,3]])
+        lambda_a = 1.5
+        lambda_b = 2.5
+        s = np.array([2.5])
+        bedingungen1 = np.array([[2.5,5]])
 
         algorithms.init(0.1, 0.1, 0.5, 1e-6, lambda_a, lambda_b, bedingungen1, "vorwaerts")
     else:
@@ -48,18 +48,13 @@ def K(s: float)->np.ndarray:
     def K_System1(s:np.ndarray, c):
         result = np.zeros((n,n))
 
-        diag=np.ones(n)*s[0].real
-        diag[range(j)] += 2
-        diag[j]+=c
-        diag[range(j+1,n)] += 2*c 
-
+        diag=np.concatenate((np.full(j-1,2*s[0]), [s[0]+c], np.full(n-j,2*c)))
         np.fill_diagonal(result, diag)
 
-        nebendiag = np.ones(n-1)*-s[0].real
-        nebendiag[range(j,n-1)] += -c
-
+        nebendiag= np.concatenate((np.full(j-1,-s[0]), np.full(n-j, -c)))
         result += np.diag(nebendiag, 1)
         result += np.diag(nebendiag, -1)
+
         return result
 
     def K_System2(s:np.ndarray):
@@ -81,13 +76,13 @@ def K(s: float)->np.ndarray:
         return result
 
     if(ausgewaehltesSystem == 1):
-        return K_System1(s.real, 1.3)
+        return K_System1(s.real, 1.5)
     return K_System2(s.real)
 
 def M(s: float)->np.ndarray:
-    def M_System1(s:np.ndarray):
+    def M_System1(s:np.ndarray, m):
         result = np.zeros((n,n))
-        diag = np.append(np.full(j-1, 3*s[0]), np.full(n-j+1, 4*s[0]))
+        diag = np.concatenate((np.full(j,m), np.full(n-j, s[0]+1)))
         np.fill_diagonal(result, diag)
         return result
 
@@ -99,13 +94,16 @@ def M(s: float)->np.ndarray:
         return result
     
     if(ausgewaehltesSystem == 1):
-        return M_System1(s.real)
+        return M_System1(s.real, 4)
     return M_System2(s.real)
 
 if __name__ == "__main__":
     
     initAlgorithmen()
 
+    # Minimierungsverfahren auf Problem anwenden.
+    # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
+    # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
     result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
 
     verlaufS = np.transpose(result[0:len(s),:],axes=(1,0))
