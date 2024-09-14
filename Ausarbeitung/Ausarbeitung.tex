@@ -528,7 +528,6 @@ Tag der Einreichung: \datum
       Es kommt daher zu keiner Interferenz und Überlagerung, was für große mechanische Systeme katastrophal sein kann.
 
       In dieser Ausarbeitung werden die folgenden Systeme untersucht:
-% Erklärung x und anderes einfügen, auch Def Schwingersysteme
       \begin{figure}[ht]
             \centering
             \begin{minipage}[ht]{0.49\linewidth}
@@ -546,54 +545,67 @@ Tag der Einreichung: \datum
             \end{minipage}
       \end{figure}
 
-      Diese Systeme werden \zitat{Schwingerketten}\cite[S. 236]{maschinendynamikDresig} genannt, da sie aus starren Massen und masselosen Federn bestehen, die linear miteinander verbunden sind.
+      Der Vektor $x = (x_1,\dots,x_n)^T$ enthält hier die Auslenkungen der Massen aus ihrer Ruhelage und $s\in\R^l$ wird Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt, da die Eigenschaften des Systems, wie die Eigenkreisfrequenzen, von ihm abhängen.
+
+      Die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} werden \zitat{Schwingerketten}\cite[S. 236]{maschinendynamikDresig} genannt, da sie aus starren Massen und masselosen Federn bestehen, die linear miteinander verbunden sind.
       Es existieren zudem in diesen Systemen keine Dämpfung.
-
-      Der Vektor $x = (x_1,\dots,x_n)^T$ enthält hier die Auslenkungen der Massen aus ihrer Ruhelage und $s\in\R^l$ wird Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt, da er 
       
+      Laut \cite[S. 362-365]{maschinendynamikDresig} könne man für diese Systeme die \zitat{Differentialgleichung der freien Schwingungen}\cite[S. 365]{maschinendynamikDresig} erhalten, wenn man für jede Masse ein Kräftegleichgewicht aufstellt.
+      Diese Differentialgleichung besitzt folgende Form:
+      \begin{equation}
+            \label{eqn: Dgl freie Schwingungen}
+            Kx+M\ddot x = 0
+      \end{equation}
 
+      wobei $K$ die Steifigkeitsmatrix und $M$ die Massenmatrix des Systems sind.
+% bin ich genug auf d
+      Da genau diese Matrizen benötigt werden, um die Eigenkreisfrequenzen zu berechnen, ist das Ziel dieses Kapitels die Systeme von Kräftegleichgewichten aufzustellen und anschließend so umzuformen, dass eine Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) entsteht.
+      Anhand dieser Gleichung werden die Matrizen abgelesen.
+
+      Dafür wird der erste Abschnitt die im System wirkenden Kräfte und die Anwendung des Prinzips von d'Alembert behandeln.
+      Im zweiten Abschnitt werden die Matrizen der Systeme bestimmt und anschließend wird in Abschnitt \ref{sec: Formel EW} die Formel für die Berechnung der Eigenkreisfrequenzen hergeleitet. 
       
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
 
-            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
+            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in eine Gleichung über Matrizen umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
 % In Maschinendynamik war von Koeffizientenvgl die Rede, könnte man auch einbauen
-            Die erhaltene Gleichung muss die Form $M\,\ddot x+K\,x = 0$ besitzen. Dadurch können die gesuchten Matrizen an der Gleichung abgelesen werden.
 % Es muss irgendwo eine Quelle geben, die genau das sagt
             Da diese Herleitung auf Kräftegleichgewichten beruht, werden nun die agierenden Kräfte kurz erläutert:
 
-            Die Federkraft \FL wird laut \cite{federkraft} berechnet durch:
+            Die Federkraft \FL wird laut \cite{federkraft} durch
             \begin{equation}
                   \label{eqn: Federkraft}
-                  \FL = -c\cdot \overrightarrow s,
+                  \FL = -c\cdot s,
             \end{equation}
-            wobei $c$ die Federkonstante ist und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
+            berechnet, wobei $c$ die Federkonstante und $s$ die Auslenkung der Feder aus der Ruhelage ist.
 
-            Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei positiver Auslenkung die Feder sich zusammenziehen will, die Kraft also in die entgegengesetzte Richtung wirkt.
+            Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei Auslenkung die Feder in die Ruhelage zurückkehren will.
 % Quelle finden
                   
-            Die Trägheitskraft \FT ist definiert durch:
-% Quelle
+            Die Trägheitskraft \FT ist nach \cite{trägheitskraft} definiert durch:
             \begin{equation}
                   \label{eqn: Trägheitskraft}
-                  \FT = -m\cdot \overrightarrow{a}
+                  \FT = -m\cdot a
             \end{equation}
-            mit Masse $m$ und Beschleunigungsvektor $\overrightarrow{a}$.                  
+            mit Masse $m$ und Beschleunigungsvektor $a$.    
+            
+            Auch hier wirkt die Kraft wieder der Beschleunigung entgegen.
 
-            Um die Schematas klarer zu gestalten, werden die Kraftpfeile hier immer in die entgegengesetzte Richtung eingezeichnet, dafür aber die Minuszeichen weggelassen,
-            somit werden in den Kraftschemas keine negativen Richtungen verwendet.
-% Schemas, Kraftschemas, \dots
-
-            Generell sind $\FL,\ \overrightarrow{s},\ \FT \text{ und } \overrightarrow{a}\in \R^n$, aber in dieser Ausarbeitung werden sie immer als Skalare verwendet. 
-            Da in diesem Kapitel Feder-Masse-Systeme behandelt werden, kann man $\overrightarrow{s}$ und $\overrightarrow{a}$ auf die Verschiebungen der Massen $(\xk)_k$ zurückführen:
-            Im Allgemeinen wird hier $\overrightarrow{s}$ durch $(x_{k+1}-\xk)$ und $\overrightarrow{a}$ durch die zweite Ableitung $\ddot \xk$ ersetzt.
+            Um das Schemas der Kräfte klarer zu gestalten, werden die Kraftpfeile immer in die der Auslengung entgegengesetzte Richtung gezeichnet und die Minuszeichen weggelassen,
+            somit werden in den Kraftschemas keine negativen Beträge verwendet.
+% Schemas, Kraftschemas,...
             Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht.
 
-            \bild{Federkraft und Trägheitskraft.png}{0.4}{wirkende Kräfte an Masse mit Feder \cite{federkraft}}{\label{fig: KräfteAnFeder}}
-            
-            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und $F_L$ ist als $c\cdot z$ definiert (vgl. \cite{federkraft}).
+            \bild{Federkraft und Trägheitskraft.png}{0.3}{wirkende Kräfte an Masse mit Feder}{\label{fig: KräfteAnFeder}}
+
+            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und demnach gilt $F_L = c\cdot z$ (vgl. \cite{federkraft}).
+
+            Da in dieser Ausarbeitung nur Feder-Masse-Systeme behandelt werden, kann man $s$ und $a$ auf die Auslenkungen $(\xk)_k$ zurückführen:
+            Im Allgemeinen wird hier $s$ durch $(x_{k+1}-\xk)$ und $a$, wie schon in Abb. \ref{fig: KräfteAnFeder}, durch die zweite Ableitung $\ddot \xk$ ersetzt.
 % Man könnte es auch umschreiben
-            Betrachte nun einen Ausschnitt von Abb. \ref{fig: Längsschwinger 1d}: Die Massen $m_{k-1},\ m_k\text{ und }m_{k+1}$, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
+            Betrachte nun ein System mit 3 Massen, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
+            Anhand dieses Systems soll eine allgemeines Kräftegleichgewicht aufgestellt werden.
 
             \begin{figure}[ht]
                   \centering
@@ -612,32 +624,23 @@ Tag der Einreichung: \datum
                   \end{minipage}
             \end{figure}
 
-            Betrachtet man nur die $k$-te Masse, so erhält man die wirkenden Kräfte, wie sie in Abb. \ref{fig: Kräfte Masse 1D} dargestellt wurden.
+            Für $m_2$ erhält man die wirkenden Kräfte, wie sie in Abb. \ref{fig: Kräfte Masse 1D} dargestellt wurden.
 
             Mit dem Prinzip von d'Alembert führt dies auf die Gleichung
             \begin{equation}
-                  \label{eqn: Gl für kte Masse}
-                  m_k\,\ddot x_k + c_{k-1}\,(x_k-x_{k-1}) - c_k\,(x_{k+1}-x_k) = 0
+                  \label{eqn: Gl für Masse}
+                  m_2\,\ddot x_2 + a\,(x_2-x_1) - b\,(x_3-x_2) = 0
             \end{equation}
 
-            Man beachte, dass für unbewegliche Masse $m_{k-1}$, also für den Fall, dass
-            $$x_{k-1} \equiv 0$$
-            (\ref{eqn: Gl für kte Masse}) sich zu
-            \begin{equation}
-                  \label{eqn: Gl für kte Masse mit Rand links}
-                  m_k\,\ddot x_k + c_{k-1}\,x_k - c_k\,(x_{k+1}-x_k) = m_k\,\ddot x_k + (c_{k-1}+c_k)\,x_k -c_k\,x_{k+1} = 0
-            \end{equation}
-            reduziert.
-
-            In diesem Fall kann die $(k-1)$-te Masse als Rand betrachtet werden, für $k=1$ entspricht (\ref{eqn: Gl für kte Masse mit Rand links}) also genau der Gleichung für die Masse $m_1$ in Abb. \ref{fig: Längsschwinger 1d}.
-
-            Falls man diese Gleichungen für alle n Massen aufstellt, dann können diese zu einer Gleichung der Art
+            Nehme man an, man hat Dirichlet-Randbedingungen, also es gelte zum Beispiel $x_1 \equiv 0$, dann würde man die Gleichung
 
             \begin{equation}
-                  \label{eqn: MK Gleichung in 1D}
-                  M\,\ddot x + K\,x = 0,\quad M,\ K\in\R^{n\times n}
+                  \label{eqn: Gl für Masse mit Rand links}
+                  m_2\,\ddot x_2 + a\,x_2 - b\,(x_3-x_2) = m_2\,\ddot x_2 + (a+b)\,x_2 -b\,x_3 = 0
             \end{equation}
-            zusammengefasst werden. Anhand der gewonnenen Gleichung werden die Massen- und Steifigkeitsmatrix abgelesen.
+            erhalten.
+
+            In (\ref{eqn: Gl für Masse mit Rand links}) kann die erste Masse als Rand betrachtet werden und in den Systemen aus Abb. \ref{fig: System 1} und \ref{fig: System 2} werden die linken Massen genau eine Gleichung dieser Art erfüllen.
 
             % Man sieht, dass hier M eine Diagonalmatrix ist, die nur positive Einträge auf der Hauptdiagonalen besitzt.
             % Sie ist somit insbesondere positiv definit, da alle Minoranten positiv sind.
@@ -646,58 +649,83 @@ Tag der Einreichung: \datum
             % Somit existieren $2\,n^2$ Einträge in $x$, aber jede Masse besitzt nur 2 Verbindungen mehr, somit wird die Steifigkeitsmatrix \K viel größer, aber auch viel schwächer besetzt.
             
       \section{Ermittlung der Matrizen der Modellprobleme}
-            % Nun werden die Massen- und Steifigkeitsmatrix der obigen Systeme berechnet.
-            Beginne dazu mit dem System aus Abb. \ref{fig: Längsschwinger 1d}
+            Berechne nun die Matrizen der Systeme.
+            Während die Systeme der Gleichungen allgemein gehalten werden, verwende für die endgültige Definition der Matrizen $K$ und $M$
+            $$n=8, j=n/2$$ 
+            Beginne dazu mit dem System aus Abb. \ref{fig: System 1}.
 
-            Die Gleichung für $m_1$ ist durch (\ref{eqn: Gl für kte Masse mit Rand links}) mit $k=1$ gegeben.
-            Für $k=2,\dots, n-1$ gilt (\ref{eqn: Gl für kte Masse}).
+            Die Form der Gleichung für die linke Masse ist durch (\ref{eqn: Gl für Masse mit Rand links}) gegeben.
+            Für $k=2,\dots, n-1$ gilt eine Gleichung der Form (\ref{eqn: Gl für Masse}).
             
-            Da die Masse $m_n$ durch die rechte Feder mit dem Rand verbunden ist, gilt analog zu oben $x_{n+1} \equiv 0$.
-            Man erhält
-            $$m_n\,\ddot x_n + c_{n-1}\,(x_n-x_{n-1}) + c_n\,x_n = 0.$$  
+            Da die letzte Masse durch die rechte Feder mit dem Rand verbunden ist, gilt also $x_{n+1} \equiv 0$.
+            Und analog zu (\ref{eqn: Gl für Masse mit Rand links}) erhält man
+            $$(s+1)\,\ddot x_n + c\,(x_n-x_{n-1}) + c\,x_n = 0.$$  
 
-            Nach Umstellen folgt:
-            \begin{equation}
-                  \label{eqn: System GDgl MK 1d}
-                  \begin{cases}
-                        m_1\ \ddot x_1 + (c_0+c_1)\,x_1 - c_1\,x_2 & = 0   \\
-                        m_i\ \ddot x_i - c_{i-1}\,x_{i-1} + (c_{i-1}+c_i)\,x_i -c_i\,x_{i+1} & = 0,\ i=2,\dots,n-1 \\
-                        m_n\ \ddot x_n - c_{n-1}\,x_{n-1} + (c_{n-1}+c_n)\,x_n & = 0
-                  \end{cases}
-            \end{equation}
+            Falls man nun alle Massen, Federkonstanten und Auslenkungen einsetzt, so erhält man nach Umstellen das Gleichungssystem
 
-            Dieses System kann man zusammenfassen zu:
-            $$M\,\ddot x + K\,x = 0,$$
-            % damit wird die folgende Matrix quadratischer
-            \renewcommand{\arraystretch}{1.5}
-            wobei $$M= \text{diag}(m_1,\dots,m_n),\ 
-            K = \begin{pmatrix}
-                  c_0+c_1 & -c_1 &  &  & 0 \\
-                  -c_1 & c_1+c_2 & -c_2 &  &  \\
-                   & -c_2 & c_2+c_3 & \ddots &  \\
-                    &  & \ddots & \ddots  & -c_{n-1} \\
-                   0&  & & -c_{n-1} & c_{n-1}+c_n \\
-                  \end{pmatrix}$$
+            
+            $$\begin{cases}
+                  m\ \ddot x_1 + 2s\,x_1 - s\,x_2 & = 0   \\
+                  m\,\ddot x_k -s\,x_{k-1} + 2s\,x_k -s\,x_{k+1} & = 0,\quad k=2,\dots,j-1\\
+                  (s+1)\,\ddot x_j -s\,x_{j-1} + (s+c)\,x_j -c\,x_{j+1} & = 0\\
+                  (s+1)\,\ddot x_k -c\,x_{k-1} + 2c\,x_k -c\,x_{k+1} & = 0,\quad k=j+1,\dots,n-1\\
+                  (s+1)\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
+            \end{cases}$$
+            
 
+            Dieses System kann man zusammenfassen zu der Gleichung (\ref{eqn: Dgl freie Schwingungen}),
+            wobei \begin{align*}
+                  M &= \diag(m, m, m, s+1, s+1,s+1, s+1,  s+1),\\
+                  K &= \begin{pmatrix}
+                        2s & -s &  &  &  &  &  &  \\
+                        -s &  2s& -s &  &  &  &0  &  \\
+                         & -s & 2s & -s &  &  &  &  \\
+                         &  & -s & s+c & -c &  &  &  \\
+                         &  &  & -c & 2c & -c &  &  \\
+                         &  &  &  & -c & 2c & -c &  \\
+                         & 0 &  &  &  & -c & 2c &  -c\\
+                         &  &  &  &  &  & -c & 2c \\
+                        \end{pmatrix}
+            \end{align*}\\
+
+            Wende dieses Vorgehen auch für das System aus Abb. \ref{fig: System 2} an und erhalte
+
+            
+            $$\begin{cases}
+                  m\ \ddot x_1 + (s_1+s_2)\,x_1 - s_2\,x_2 & = 0   \\
+                  m\,\ddot x_k -s_k\,x_{k-1} + (s_k+s_{k+1})\,x_k -s_{k+1}\,x_{k+1} & = 0,\quad k=2,\dots,j-2\\
+                  s_j\,\ddot x_{j-1} -s_{j-1}\,x_{j-2} + (s_{j-1}+c)\,x_{j-1} -c\,x_{j+1} & = 0\\
+                  s_j\,\ddot x_k -c\,x_{k-1} + 2c\,x_k -c\,x_{k+1} & = 0,\quad k=j,\dots,n-1\\
+                  s_j\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
+            \end{cases}$$
+            
+
+            Dieses System kann man analog zu oben zu der Gleichung (\ref{eqn: Dgl freie Schwingungen}) umformen.
+            Hier gilt nun aber\begin{align*}
+                  M &= \diag(m, m, s_4, s_4, s_4, s_4, s_4, s_4)\\
+                  K &= \begin{pmatrix}
+                        s_1+s_2 & -s_2 &  &  &  &  &  &  \\
+                        -s_2 &  s_2+s_3& -s_3 &  &  &  &0  &  \\
+                              & -s_3 & s_3+c & -c &  &  &  &  \\
+                              &  & -c & 2c & -c &  &  &  \\
+                              &  &  & -c & 2c & -c &  &  \\
+                              &  &  &  & -c & 2c & -c &  \\
+                              & 0 & &  &  & -c & 2c &  -c\\
+                              &  &  &  &  &  & -c & 2c \\
+                        \end{pmatrix}
+            \end{align*}
                   
-            % wird wieder auf Standard zurückgesetzt
-            \renewcommand{\arraystretch}{1}
-% Erklärung x? Oder kennt das jeder
-
 % hier muss was über die Eigenschaften gesagt werden
-            
-            % Für das zwei-dimensionale System kann dieses Verfahren analog angewendet werden. 
-
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
-            Nach der Ermittlung der zugehörigen Matrizen, werden nun die Eigenfrequenzen des Systems bestimmt.
-% Eigenkreisfrequenzen?
+            \label{sec: Formel EW}      
+            Nach der Ermittlung der zugehörigen Matrizen bestimme nun die Formel für die Eigenkreisfrequenzen eines Systems.
 
             Da in diesen Systemen die Massen um ihre Ruhelage schwingen und keine weiteren Kräfte wirken, schwingt jede einzelne Masse harmonisch.
             Nach \cite[S. 380]{maschinendynamikDresig} gilt daher mit $x$ statt $q$:
             $$x(t) = v\,\exp(i\w t),\ \ \ddot x(t) = -\w^2\,v \exp(i\w t)$$
-            mit $v=(v_1,\dots,v_n)$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfreqenz \w}\cite[S. 380]{maschinendynamikDresig}
+            mit $v=(v_1,\dots,v_n)^T$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfrequenz \w}\cite[S. 380]{maschinendynamikDresig}
             
-            Diesen Ansatz kann man in (\ref{eqn: MK Gleichung in 1D}) einsetzen und erhält nach dividieren durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
+            Diesen Ansatz kann man in (\ref{eqn: Dgl freie Schwingungen}) einsetzen und erhält nach dividieren durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
             
             \begin{equation}
                   \label{eqn: allg EW Problem mit w}
