@@ -415,7 +415,7 @@ Tag der Einreichung: \datum
             Nach den Vorbereitungen, die in vorherigen Abschnitten gemacht wurden, kann nun die Identität von Futamura beschrieben und gezeigt werden.
 
             Das folgende Theorem wird für das Finden einer Zielfunktion von entscheidender Relevanz sein,
-            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte auf einem Intervall und einem Pfadintegral über Matrizen gezeigt werden kann.
+            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte auf einem Intervall und einem Kurvenintegral über Matrizen gezeigt werden kann.
 
             \begin{theorem}
                   \label{thrm: IdentitätFutamura}(vgl. \cite[S. 127]{grundlageFutamura})\\
@@ -511,9 +511,9 @@ Tag der Einreichung: \datum
             $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\} = \{\lambda_i: i\in N\}$$
             somit sind die Eigenwerte des Matrix-Pencils genau die Polstellen der Funktion $\tr((zB-A)\inv B)$.
 
-            In Kapitel \ref{sec: EW Zählung} werden daher mithilfe des Residuentheorems die Anzahl der Eigenwerte bestimmt,
-            indem man über die Funktion $\tr((zB-A)\inv B)$ integriert.
-            Genau dies ist auch der Ansatz in \cite{grundlageFutamura,hauptteilTkachuk}.
+            In Kapitel \ref{sec: EW Zählung} wird daher das Residuentheorem auf ein Kurvenintegral\\
+            über $\tr((zB-A)\inv B)$ angewendet, um die Anzahl der Eigenwerte zu bestimmen.
+            Genau dies ist auch die Grundidee in \cite{grundlageFutamura,hauptteilTkachuk}.
 % hier noch entscheiden, was drin gelassen wird
 
 % falls man Schur-Zerlegung auf S anwendet, um die Eigenwerte zu sortieren, dann muss man auch gleiche Ähnlichkeitstransformation auf T anwenden, aber ist es dann noch eine obere Dreiecksmatrix?
@@ -844,7 +844,7 @@ Tag der Einreichung: \datum
                               n(\gamma,a) = \begin{cases}
                                     1& \text{ : }a\in B_r(z_0)\\
                                     0& \text{ : }a\notin\overline {B_r(z_0)}
-      % ist klar was mit Inneren eines Pfadintegrals gemeint ist?
+      % ist klar was mit Inneren eines Kurvenintegrals gemeint ist?
                               \end{cases}
                         \end{equation}
                         Hierbei benötigt man das $C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}), damit der Kreis in positive Richtung durchlaufen wird und kein Punkt (bis auf $z=z_0+1$) mehrmals vorkommt.
