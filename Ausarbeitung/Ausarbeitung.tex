@@ -434,7 +434,7 @@ Tag der Einreichung: \datum
             
             Hierbei sind zwar $S$ und $T$ obere Dreiecksmatrizen, und es gilt:
             $$\lambda(B)=\lambda(S) = \{s_{ii}:i=1,\dots,n\},$$
-            aber diese Eigenwerte sind noch ungeordnet und somit gilt noch nicht:
+            aber diese Eigenwerte sind noch ungeordnet und somit gilt nicht wie in \cite{grundlageFutamura}:
             \begin{align*}
                   s_{ii} = \begin{cases}
                         \ne 0 & : i\le n'\\
@@ -443,33 +443,25 @@ Tag der Einreichung: \datum
             \end{align*}
             für $n':=|\{i\in\{1,\dots,n\}: s_{ii}\ne 0\}|$
 
-            Das kann aber durch Theorem \ref{thrm: Schur Zerlegung} erreicht werden:
-            Wähle $V\in\Cnn$ unitär so, dass für $\Tilde S:= V^H S V$ gilt:
-            $$\Tilde s_{ii} = \begin{cases}
-                  \ne 0 & : i\le n'\\
-                  0 & : i>n'
+            Das kann aber mithilfe einer Definition umgangen werden:
+            $$N:=\{i=1,\dots,n: s_{ii}\ne 0\}$$
+            Es gilt:
+            $$s_{ii} = \begin{cases}
+                  \ne 0 & : i\in N\\
+                  0 & : i\in N^C
             \end{cases}$$
-            mit $n'$ wie oben.
 
-            Betrachte daher statt $S$ und $T$ die Matrizen $\Tilde S:=V^HSV$ und $\Tilde T:= V^H T V$.\\
-            Da $S$ und $T$ beide obere Dreiecksmatrizen sind, werden durch diese
-            Ähnlichkeitstransformation die Diagonaleinträge parallel vertauscht. 
-%%%%%%%%%%%% ich habe keinen Beweis
             Man kann folgern:
             \begin{align*}
                   (zB-A)\inv B =& (z\,QSU^H-QTU^H)\inv QSU^H = (Q(zS-T)U^H)\inv QSU^H \\
-                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv\\
-                  =& U(zV \Tilde S V^H-V \Tilde T V^H)\inv V \Tilde S V^H U\inv = UV (z\Tilde S-\Tilde T)\inv \Tilde S V\inv U\inv\\
-                  =& W (z\Tilde S-\Tilde T)\inv \Tilde S W\inv
+                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv
             \end{align*}
-            wobei $W:=UV$ und die Regel für Inverse von Matrixprodukten sowie die Definition von unitären Matrizen verwendet wurde.
-            Da $U$ und $V$ beide unitär und somit insbesondere regulär sind, so ist auch $W$ regulär (siehe auch \cite[S. 50]{matrixGolub}).
 
-            Man sieht, dass $(zB-A)\inv B$ und  $(z\Tilde S-\Tilde T)\inv \Tilde S$ ähnlich zueinander sind.\\
+            Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.\\
             Da die Spur invariant unter Ähnlichkeitstransformation ist\footnote{vgl. 3. Exercise unter Example 1.3.5 in \cite{matrixSpur}}, gilt
             \begin{equation}
                   \label{eqn: Haltepunkt Bew Futamura}
-                  \tr((zB-A)\inv B) = \tr((z\Tilde S-\Tilde T)\inv \Tilde S) = \sum_{i=1}^{n}((z\Tilde S-\Tilde T)\inv \Tilde S)_{ii}
+                  \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}
             \end{equation}
 
             Für die folgenden Beweisschritte benötigt man einige Aussagen über obere Dreiecksmatrizen, hierbei ist mit $X_{ij}$ der Eintag von X in Zeile $i$ und Spalte $j$ gemeint.
@@ -504,28 +496,24 @@ Tag der Einreichung: \datum
             verwendet.\qed\\
 
             Nun kann man den Beweis für Theorem \ref{thrm: IdentitätFutamura} vervollständigen:
-            Mit den Lemmas \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
-% Lemmas/Lemmen?
+            Mit den Lemmata \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
             \begin{align*}
-                  \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((z\Tilde S-\Tilde T)\inv)_{ii}\ \Tilde S_{ii} = \sum_{i=1}^{n}((z\Tilde S-\Tilde T)_{ii})\inv\ \Tilde S_{ii}\\
-                  =& \sum_{i=1}^{n}\frac{\Tilde s_{ii}}{z\,\Tilde s_{ii}-\Tilde t_{ii}} = \sum_{i=1}^{n'}\frac{\Tilde s_{ii}}{\Tilde s_{ii}(z-\Tilde t_{ii}\, \Tilde s_{ii}\inv)}\\
-                  =& \sum_{i=1}^{n'} \frac{1}{z-\lambda_i}
+                  \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((zS-T)\inv)_{ii}\ S_{ii} = \sum_{i=1}^{n}((zS-T)_{ii})\inv\ S_{ii}\\
+                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i\in N}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
+                  =& \sum_{i\in N} \frac{1}{z-\lambda_i}
             \end{align*}
 
             mit
-            $$\lambda_i = \frac{\Tilde t_{ii}}{\Tilde s_{ii}},\quad i=1,\dots,n'.$$
+            $$\lambda_i = \frac{t_{ii}}{s_{ii}},\quad i\in N.$$
 
-            Da die Diagonaleinträge von $S$ und $T$ parallel zu $\Tilde S$ und $\Tilde T$ vertauscht wurden, gilt:
-            $$\{\lambda_i, i=1,\dots,n'\} = \{\frac{\Tilde t_{ii}}{\Tilde s_{ii}}, i=1,\dots,n'\} = \{\frac{t_{ii}}{s_{ii}}, s_{ii}\ne 0\}$$
+            Nach Theorem \ref{thrm: allg Schur Zerlegung} und der Definition von $N$ gilt:
 
-            Beachte, dass nach Theorem \ref{thrm: allg Schur Zerlegung} gilt:
+            $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\} = \{\lambda_i: i\in N\}$$
+            somit sind die Eigenwerte des Matrix-Pencils genau die Polstellen der Funktion $\tr((zB-A)\inv B)$.
 
-            $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\}$$
-            somit sind alle Eigenwerte des Matrix-Pencils Polstellen dieser Funktion.
-% das ist noch sehr doof gemacht, diese Funktion - welche?
-
-            Man kann somit mithilfe des Residuentheorems die Anzahl der Eigenwerte bestimmen, indem man über die Funktion $\tr((zB-A)\inv B)$ integriert.
-            Genau dies ist auch der Ansatz in \cite{grundlageFutamura,hauptteilTkachuk} und Kapitel \ref{sec: EW Zählung}.
+            In Kapitel \ref{sec: EW Zählung} werden daher mithilfe des Residuentheorems die Anzahl der Eigenwerte bestimmt,
+            indem man über die Funktion $\tr((zB-A)\inv B)$ integriert.
+            Genau dies ist auch der Ansatz in \cite{grundlageFutamura,hauptteilTkachuk}.
 % hier noch entscheiden, was drin gelassen wird
 
 % falls man Schur-Zerlegung auf S anwendet, um die Eigenwerte zu sortieren, dann muss man auch gleiche Ähnlichkeitstransformation auf T anwenden, aber ist es dann noch eine obere Dreiecksmatrix?
