@@ -520,14 +520,15 @@ Tag der Einreichung: \datum
             
 \chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
-      Um die Eigenfrequenzen und/oder Eigenkreisfrequenzen \w eines Systems zu bestimmen, benötigt man zuerst die Massenmatrix \M und die Steifigkeitsmatrix \K des Systems.
+      Die Berechnung von Eigenkreisfrequenzen hat in der Mechanik einen besonderen Stand:
+      Durch die Betrachtung von Systemen und der Berechnung von Eigenfrequenzen, kann vorhergesagt werden, mit welchen Frequenzen das System schwingen wird.
 
-      Laut \cite[S. 366]{maschinendynamikDresig} könne man für einfache Systeme das Prinzip von d'Alembert anwenden, es sei aber ungeeignet für komplexere Probleme.
-            
+      Durch das kontrollierte Verändern eines Design-Parameters $s$ kann sichergestellt werden, dass keine Eigenfrequenz des Systems in einem vorgegebenen Intervall liegt.
+      Durch die Eliminierung von allen Eigenwerten aus diesem Intervall wird garantiert, dass keine Frequenz in diesem Intervall das System anregt.
+      Es kommt daher zu keiner Interferenz und Überlagerung, was für große mechanische Systeme katastrophal sein kann.
 
+      In dieser Ausarbeitung werden die folgenden Systeme untersucht:
 % Erklärung x und anderes einfügen, auch Def Schwingersysteme
-      Hier folgen nun Bilder, um die Systeme zu veranschaulichen:
-
       \begin{figure}[ht]
             \centering
             \begin{minipage}[ht]{0.49\linewidth}
@@ -545,9 +546,13 @@ Tag der Einreichung: \datum
             \end{minipage}
       \end{figure}
 
-% in maschinendy gibt es def, was schwingersysteme sind 
-      Hierbei haben die Federn keine Massen und es existieren weder Dämpfung noch Gewichtskraft.
+      Diese Systeme werden \zitat{Schwingerketten}\cite[S. 236]{maschinendynamikDresig} genannt, da sie aus starren Massen und masselosen Federn bestehen, die linear miteinander verbunden sind.
+      Es existieren zudem in diesen Systemen keine Dämpfung.
 
+      Der Vektor $x = (x_1,\dots,x_n)^T$ enthält hier die Auslenkungen der Massen aus ihrer Ruhelage und $s\in\R^l$ wird Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt, da er 
+      
+
+      
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
 
