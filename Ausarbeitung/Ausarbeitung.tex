@@ -47,7 +47,7 @@
 }
 \newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
-\newcommand{\zitat}[1]{\glqq #1 \grqq}
+\newcommand{\zitat}[1]{\glqq #1\grqq}
 \newcommand{\klammer}[1]{\left(#1\right)}
 \newcommand{\diag}{\text{diag}}
 \newcommand{\rang}{\text{rang}}
@@ -139,7 +139,7 @@ Tag der Einreichung: \datum
 % hier muss noch einiges getan werden
       Damit kann sichergestellt werden, dass die Eigenfrequenzen des Systems nicht so liegen, dass es zu einer Selbsterregung kommt.
 
-      % Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
+      % Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix-Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
       % in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
       % Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt.
       % Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
@@ -151,7 +151,7 @@ Tag der Einreichung: \datum
       % In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt, um sicherzustellen,
       % dass bei einem vorgegebenem mechanischem System keine Eigenwerte in einem bestimmten festen Intervall liegen.
       % Dazu wird in den ersten Kapiteln die nötige Theorie anhand der Quellen \cite{grundlageFutamura} und \cite{hauptteilTkachuk} beschrieben.
-      % Hier werden Matrix Pencil und das verallgemeinerte Eigenwertproblem verwendet, um 
+      % Hier werden Matrix-Pencil und das allgemeinerte Eigenwertproblem verwendet, um 
       % Hierzu nutzt man die Identität von Futamura, um die Zählung der Eigenwerte auf die zugrundeliegenden Matrizen zurückzuführen.
 
 
@@ -161,34 +161,33 @@ Tag der Einreichung: \datum
 
       Ferner werden in Kapitel \ref{sec: Verbesserungen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
 
-\chapter{Das verallgemeinerte Eigenwert-Problem und die Identität von Futamura}
+\chapter{Das allgemeine Eigenwertproblem und die Identität von Futamura}
 \label{sec: EW Problem_Futamura}
 
       Zu Beginn der Ausarbeitung werden einige Resultate über Matrizen und lineare Algebra behandelt.
-      Diese werden in Kapitel \ref{sec: EW Zählung} verwendet, um die Zählung der Eigenwerte zu einer differenzierbaren Funktion umzustellen.
+      Diese werden in Kapitel \ref{sec: EW Zählung} verwendet, um die Zählung der Eigenwerte zu einer differenzierbaren Funktion umzuformen.
       
-      \section{Der Matrix Pencil}
-            Betrachte zunächst das Konzept des Matrix Pencil, welches in dieser Ausarbeitung eine entscheidende Rolle spielt.
+      \section{Der Matrix-Pencil}
+            Betrachte zunächst das Konzept des \zitat{Matrix-Pencils} \cite[S. 32]{matrixPencilDeutsch}, welches in dieser Ausarbeitung eine entscheidende Rolle spielt.
             \begin{definition}(pencil, \cite[S. 375]{matrixGolub})
                   \label{def: pencil}
                   Seien $A$ und $B$ Matrizen in $\C^{n\times n}$, dann wird die Menge aller Matrizen der Form
-                  $\AlamB, \lambda \in \C$ pencil genannt.
+                  $\AlamB, \lambda \in \C$ Matrix-Pencil genannt.
             \end{definition}
 
             Laut \cite[S. 375]{matrixGolub} seien die Eigenwerte von $\AlamB$ diejenigen $\lambda \in\C$, für die gelte:
             \begin{equation}
-                  \label{eqn: verallg EW Problem}
+                  \label{eqn: allg EW Problem}
                   (\AlamB)x=0,\quad x\ne 0
             \end{equation}
             
             Hier wird $x\in\C^n$ Eigenvektor genannt.
-            Man beachte, dass für $B=\In$ Gleichung (\ref{eqn: verallg EW Problem}) die folgende Form annimmt:
+            Man beachte, dass für $B=\In$ Gleichung (\ref{eqn: allg EW Problem}) die folgende Form annimmt:
             $$(A-\lambda\In)x=0 \Leftrightarrow Ax = \lambda x,$$
-            also genau die Definition des Eigenwert-Problems.
-% gibt es ein Eigenwert-Problem und wenn ja, gibt es eine Definition? oder ist es einfach eine Gleichung?
-            Daher wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: verallg EW Problem}) erfüllen auch verallgemeinertes Eigenwert-Problem genannt, da sie eine allgemeine Form des speziellen Eigenwertproblems darstellen.
-
-            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: verallg EW Problem}) das lineare homogene Gleichungssystem
+            also genau die Form des speziellen Eigenwertproblems.
+% gibt es ein Eigenwertproblem und wenn ja, gibt es eine Definition? oder ist es einfach eine Gleichung?
+            Daher wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: allg EW Problem}) erfüllen, auch \zitat{allgemeines Eigenwertproblem}\cite[S. 380]{maschinendynamikDresig} genannt, da sie eine allgemeine Form des speziellen Eigenwertproblems darstellen.
+            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: allg EW Problem}) das lineare homogene Gleichungssystem
             $$Cx=0,\quad x\ne 0$$
 
             Nach einem Resultat aus der linearen Algebra gilt:
@@ -197,26 +196,36 @@ Tag der Einreichung: \datum
             Durch Negation folgt:
             $$\det(C)=0 \Leftrightarrow \exists x\ne 0: Cx=0$$
 
-            Somit sucht man die Eigenwerte des Pencils, in dem man die Nullstellen des Polynoms $\det(\AlamB)$ berechnet\footnote{Man könnte das Polynom $\det(\AlamB)$ als eine Art charakteristisches Polynom des Pencils $\AlamB$ betrachten, ähnlich dem charakteristischen Polynom $f(A)$ einer Matrix $A$}.
+            Somit sucht man die Eigenwerte des Matrix-Pencils, in dem man die Nullstellen des Polynoms $\det(\AlamB)$ berechnet\footnote{Man könnte das Polynom $\det(\AlamB)$ als eine Art charakteristisches Polynom des Matrix-Pencils $\AlamB$ betrachten, ähnlich dem charakteristischen Polynom $f(A)$ einer Matrix $A$}.
             
-            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Pencils $\AlamB$ wie folgt definiert:
+            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Matrix-Pencils $\AlamB$ wie folgt definiert:
             \begin{equation}
                   \label{def: EW Pencil}
                   \lambda(A,B):=\{z\in\C:\ \det(A - zB) = 0\}
             \end{equation}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Def regulärer pencil mit Quelle fehlt %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            Laut \cite[S. 375]{matrixGolub} gelte zudem:
+            \begin{equation}
+                  \label{eqn: n EW äquiv rang B n}
+                  \AlamB \text{ hat }n\text{ Eigenwerte}\Leftrightarrow \rang(B)=n
+            \end{equation}
+            Dieses Resultat wird für Kapitel \ref{sec: EW Zählung} relevant werden und kann mithilfe von Theorem \ref{thrm: allg Schur Zerlegung} gezeigt werden.
 
-%             Zum Schluss folgt noch eine Definition, welche in Kapitel \ref{sec: Futamura} benötigt wird:
-%             \begin{definition}
-%                   Ein Pencil heißt regulär, falls $B$ invertierbar ist.
-%             \end{definition}
-% % Quelle einfügen
+            Man benötigt für die Identität von Futamura aus Theorem \ref{thrm: IdentitätFutamura} zudem eine weitere Definition:
+            \begin{definition}(Regulärer Matrix-Pencil, vgl. \cite[S. 784]{regularMatrixPencil})
+                  \label{def: regulärer Pencil}
+                  Ein Matrix-Pencil $A+\lambda B$ wird regulär genannt, wenn $A,B\in \Cnn$ und
+                  $$\det(A+\lambda B)\ne 0$$ 
+            \end{definition}
 
-%             Man beachte, dass für einen regulären Pencil gilt:
-%             $$(\AlamB)x = 0 \Leftrightarrow (B^{-1}A - \lambda \In)x = 0$$
-%             Weshalb $$\lambda(A,B) = \lambda(B^{-1}A,\In) = \lambda(B^{-1}A),$$
-%             also kann man die Eigenwerte des regulären Pencils auf ein spezielles Eigenwertproblem zurückführen und die normalen Eigenwerte von $B^{-1}A$ sind genau die Eigenwerte des Pencils $\AlamB$.
+            Beachte, dass hier zwar der Matrix-Pencil mit $+$ statt $-$ angegeben wurde, aber diese Definitionen sind gleichwertig, da man $\tilde \lambda := -\lambda$ in den Matrix-Pencil einsetzen kann.
+            Diese Definition bedeutet insbesondere, dass der Matrix-Pencil regulär ist, falls B regulär ist, denn es gilt:
+            \begin{align*}
+                  B\text{ regulär} \Leftrightarrow & \rang(B)=n\Leftrightarrow |\lambda(A,B)| = n<\infty\\
+                  \Rightarrow & \exists z\in\C\setminus\lambda(A,B): \det(A+zB) \ne 0 \Leftrightarrow \AlamB \text{ regulär}
+            \end{align*}
+            Wobei (\ref{eqn: n EW äquiv rang B n}) und die Überabzählbarkeit von $\C$ verwendet wurde.
+% man kann auch noch Korollar 2.3.11 (LinAlg Werner, S. 50) ansprechen
       \section{Die Schur-Zerlegung}
             In diesem Kapitel werden weitere wichtige Konzepte vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt werden.
 
@@ -225,11 +234,10 @@ Tag der Einreichung: \datum
                   $$Q^HQ = QQ^H=\In$$
             \end{definition}
 
-            Hier ist $Q^H := \Bar{Q^T}$ die Adjungierte von $Q$, also die skalar komplex konjugierte Transponierte von $Q$.
-% hier gibt es noch Verbesserungsmöglichkeiten
+            Hier ist $Q^H$ die Adjungierte von $Q$, also die Matrix, die durch komplexe Konjugation und Transponierung von $Q$ entsteht, siehe auch \cite[S. 14]{matrixGolub}.
 
             Mithilfe dieser Definition können nun folgende Resultate behandelt werden:
-            \begin{theorem}(Theorem 7.1.3 (Schur Decomposition)\cite[S. 313]{matrixGolub})
+            \begin{theorem}(vgl. Theorem 7.1.3 (Schur Decomposition)\cite[S. 313]{matrixGolub})\\
                   \label{thrm: Schur Zerlegung}
                   Wenn $A \in \C^{n\times n}$, dann existiert eine unitäre Matrix $Q\in\C^{n\times n}$, sodass
                   \begin{equation}
@@ -240,19 +248,18 @@ Tag der Einreichung: \datum
                   Ferner kann $Q$ so gewählt werden, dass die Eigenwerte $\lambda_i$ in beliebiger Reihenfolge auf der Diagonalen auftauchen.
             \end{theorem}
 
-% bessere Erlärung, warum spezielleres Lemma
             Um dieses Theorem zu beweisen, benötigt man ein Hilfslemma aus \cite[S.312]{matrixGolub}.
-            Das Resultat wird hier in dem speziellen Fall vorgestellt, wie er für den Beweis von Theorem \ref{thrm: Schur Zerlegung} benötigt wird.
+            Das folgende Resultat wird einfachheitshalber in dem speziellen Fall vorgestellt, wie es für den Beweis von Theorem \ref{thrm: Schur Zerlegung} benötigt wird.
 
             \begin{lemma}(vgl. Lemma 7.1.2\cite[S. 312]{matrixGolub})
-                  \label{lemma: Hilfe Schur}
-                  Falls für $A\in\C^{n\times n}, \lambda\in \C \text{ Eigenwert von }A\text{ und }X\in \C^{n}$
+                  \label{lemma: Hilfe Schur}\\
+                  Falls ein $A\in\C^{n\times n}, \lambda\in \C$ Eigenwert von $A$ und $X\in \C^{n}$
                   \begin{equation}
                         \label{eqn: Hilfslemma Schur_Bed}
                         AX = X\lambda,\qquad \rang(X)=1
                   \end{equation}
                   
-                  gilt, dann existiert ein $Q\in \C^{n\times n}$ unitär, sodass
+                  erfüllen, dann existiert ein $Q\in \C^{n\times n}$ unitär, sodass
                   $$Q^H\,AQ = T =  \begin{bmatrix}
                         \lambda & T_{12} \\
                         0 & T_{22} \\
@@ -262,30 +269,15 @@ Tag der Einreichung: \datum
 
             Beweis:
             Erhalte mit \cite[S. 233]{matrixGolub} eine komplexe QR-Zerlegung für $X$. Es gilt dann
-            $$X = Q\ \begin{bmatrix}
-                  r\\
-                  0\\
-                  \vdots\\
-                  0
-            \end{bmatrix}$$
-            mit $Q\in \C^{n \times n}$ unitär und $r\in \C$.
+            $$X = Q\,R$$
+            mit $Q\in \C^{n \times n}$ unitär und $R = [r,0,\dots,0]^\top\in \C^n$.
             Durch Einsetzen in (\ref{eqn: Hilfslemma Schur_Bed}) und Multiplikation mit $Q^H$ folgt
             \begin{equation}
                   \label{eqn: Hilfslemma_Schur_Gl}
-                  \underbrace{Q^H\,AQ}_{=:T}\ \begin{bmatrix}
-                        r\\
-                        0\\
-                        \vdots\\
-                        0
-                  \end{bmatrix} = Q^H\,Q\ \begin{bmatrix}
-                        r\\
-                        0\\
-                        \vdots\\
-                        0
-                  \end{bmatrix}\ \lambda
+                  \underbrace{Q^H\,AQ}_{=:T}\ R = Q^H\,Q\ R\ \lambda
             \end{equation}
 % man könnte hier R statt dem Vektor nutzen, dann wäre es kompakter
-            mit $T:=\begin{matrix}
+            hier ist noch $T:=\begin{matrix}
                   \begin{bmatrix}
                         T_{11} & T_{12}\\
                         T_{21} & T_{22}\\
@@ -297,7 +289,6 @@ Tag der Einreichung: \datum
                   \end{matrix} &  \\
                   \end{matrix}$\\
 
-                  
             Durch Ausmultiplizieren von (\ref{eqn: Hilfslemma_Schur_Gl}) folgen die Gleichungen\\
 
             $$\begin{aligned}
@@ -305,19 +296,20 @@ Tag der Einreichung: \datum
                   T_{21}\,r =& 0
             \end{aligned}$$
 
-            mit $\rang(X)=1 \Rightarrow X\ne 0 \Rightarrow r\ne 0$ folgt $T_{11} = \lambda,\ T_{21} = 0$.\qed
-% irgendwo muss erklärt werden, dass lam(A) = lam vereinigt lam(T_22)
+            und mit $\rang(X)=1 \Rightarrow X\ne 0 \Rightarrow r\ne 0$ folgt $T_{11} = \lambda,\ T_{21} = 0$.\qed
+
+            Nach \cite[S. 312]{matrixGolub} gelte ferner $\lambda(A) = \lambda(T) = \{\lambda\}\cup\lambda(T_{22})$.\\
             
 
             Nun können wir Theorem \ref{thrm: Schur Zerlegung} beweisen.
 
+            Beweis Theorem \ref{thrm: Schur Zerlegung} (vgl. \cite[S. 313]{matrixGolub}):
 
-            Beweis Theorem \ref{thrm: Schur Zerlegung}(vgl. \cite[S. 313]{matrixGolub}):
-
-            Offenbar gilt für $n=1$: $A$ ist ein Skalar, wodurch (\ref{eqn: Schur_Resultat}) für alle $Q$ unitär erfüllt ist.
-            Sei nun $n>1$ und (\ref{eqn: Schur_Resultat}) gelte für alle $k<n$, dann gilt für einen beliebigen Eigenwert $\lambda$ von $A$:
+            Offenbar gilt für $n=1$:\\
+            $A$ ist ein Skalar, wodurch (\ref{eqn: Schur_Resultat}) für alle $Q$ unitär erfüllt ist.\\
+            Sei nun $n>1$ und (\ref{eqn: Schur_Resultat}) gelte für alle $k<n$, dann gilt für einen beliebigen Eigenwert $\lambda$ von $A$ und zugehörigen Eigenvektor $X$:
             $$AX = \lambda X = X \lambda,\quad X\in \C^n, X\ne 0$$
-            Nach Lemma \ref{lemma: Hilfe Schur} existiert $U\in \C^{n\times n}$, sodass
+            Nach Lemma \ref{lemma: Hilfe Schur} existiert $U\in \C^{n\times n}$ unitär, sodass
             $$U^H\, AU = \begin{bmatrix}
                   \lambda & T_{12} \\
                   0 & T_{22} \\
@@ -374,10 +366,9 @@ Tag der Einreichung: \datum
                         0&R
                   \end{bmatrix}
             \end{aligned}$$
-            Wobei verwendet wurde, dass die komplex konjugierte skalar wirkt, also es gilt:
-% vllt. Bullshit, am besten Beweis/Quelle finden
+            Wobei verwendet wurde, dass nach Definition die komplex Konjugation skalar angewendet wird\footnote{siehe \cite[S. 14]{matrixGolub}}, also es gilt:
            
-           \begin{equation}
+            \begin{equation}
             \label{eqn: Adjungierte reinziehen}
                   \begin{bmatrix}
                         1&0\\
@@ -392,15 +383,15 @@ Tag der Einreichung: \datum
                         1&0\\
                         0&\widetilde U^H
                   \end{bmatrix}
-           \end{equation}
+            \end{equation}
 
             Damit ist gezeigt, dass $Q^H\,AQ$ eine rechte obere Dreiecksmatrix ist.
-            Es fehlt noch zu zeigen, dass $Q$ unitär ist, dass kann aber mit (\ref{eqn: Produkt Adjungierter}) und (\ref{eqn: Adjungierte reinziehen}) einfach gezeigt werden.
-            Die Beliebigkeit der Anordnung der Eigenwerte auf der Diagonalen folgt durch rekursives Anwenden von Theorem \ref{thrm: Schur Zerlegung} auf die Matrix $T_{22}$. \qed
 
-            % Durch Lemma 7.1.1 aus \cite[S. 311]{matrixGolub} kann ferner gefolgert werden, dass die Diagonaleinträge genau die Eigenwerte sind.
+            $D = \diag(\lambda_1,\dots,\lambda_n)$ folgt mit Korollar 4.2.3 aus \cite[S. 80]{LinAlgWerner}.
+            Die Beliebigkeit der Anordnung der Eigenwerte auf der Diagonalen erhält man durch rekursives Anwenden von Theorem \ref{thrm: Schur Zerlegung} auf die Matrix $T_{22}$.
+            Es fehlt noch zu zeigen, dass $Q$ unitär ist, was aber mit (\ref{eqn: Produkt Adjungierter}) und (\ref{eqn: Adjungierte reinziehen}) einfach gezeigt werden kann. \qed\\
 
-            Nun wird eine weitere Schur-Zerlegung vorgestellt. Diese wird für den Beweis der Identität von Futamura in Kapitel \ref{sec: Futamura} benötigt.
+            Es wird eine weitere Schur-Zerlegung vorgestellt. Diese wird ebenfalls für den Beweis der Identität von Futamura in Kapitel \ref{sec: Futamura} benötigt.
 %hier kann noch viel mehr erzählt werden: die Eigenschaft der Eigenwerte ist von entscheidender Relevanz
             \begin{theorem}(Generalized Schur Decompositon, \cite[S. 377]{matrixGolub})
                   \label{thrm: allg Schur Zerlegung}
@@ -417,28 +408,23 @@ Tag der Einreichung: \datum
                   \end{equation}
             \end{theorem}
             Beweis: siehe \cite[S. 377]{matrixGolub}\qed
-
-            
-
-% k.A. ob das so stimmt
       
       \section{Die Identität von Futamura}
       \label{sec: Futamura}
 
-            Nach den Vorbereitungen, die in diesem Kapitel gemacht wurden, kann nun die Identität von Futamura beschrieben und gezeigt werden.
+            Nach den Vorbereitungen, die in vorherigen Abschnitten gemacht wurden, kann nun die Identität von Futamura beschrieben und gezeigt werden.
 
-            Das folgende Theorem wird für das Finden einer Zielfunktion von entscheidender Relevanz,
-            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte und einem Integral über Matrizen gezeigt werden kann.
+            Das folgende Theorem wird für das Finden einer Zielfunktion von entscheidender Relevanz sein,
+            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte auf einem Intervall und einem Pfadintegral über Matrizen gezeigt werden kann.
 
             \begin{theorem}
-                  \label{thrm: IdentitätFutamura}(vgl. \cite[S. 127]{grundlageFutamura})
-                  Seien $A, B\in\Cnn, z\in \C$, sodass $(zB-A)$ ein regulärer Matrix pencil ist, dann gilt:
+                  \label{thrm: IdentitätFutamura}(vgl. \cite[S. 127]{grundlageFutamura})\\
+                  Seien $A, B\in\Cnn, z\in \C$, sodass $(zB-A)$ ein regulärer Matrix-Pencil ist, dann gilt:
                   \begin{equation}
                         \label{eqn: Resultat_Futamura}
                         \tr((zB-A)\inv B) = \sum_{j=1}^{n'} \frac{1}{z-\lambda_j},
                   \end{equation}
-                  wobei $n'$ die Anzahl an von Null verschiedener Eigenwerte des pencils $(zB-A)$ und $\lambda_j$ die Eigenwerte des pencils sind.
-%ist es die Anzahl von Null verschiedener Eigenwerte?
+                  wobei $n'$ die Anzahl der Eigenwerte des Matrix-Pencils $(zB-A)$ und $\lambda_j$ die Eigenwerte selbst sind.
             \end{theorem}
 % warum zB-A? für Eigenwerte macht es keinen Unterschied
             Beweis:
@@ -446,45 +432,54 @@ Tag der Einreichung: \datum
             $$A=QTU^H,\quad B=QSU^H$$
             mit $T,S\in\Cnn$ obere Dreiecksmatrizen.
             
+            Hierbei sind zwar $S$ und $T$ obere Dreiecksmatrizen, und es gilt:
+            $$\lambda(B)=\lambda(S) = \{s_{ii}:i=1,\dots,n\},$$
+            aber diese Eigenwerte sind noch ungeordnet und somit gilt noch nicht:
+            \begin{align*}
+                  s_{ii} = \begin{cases}
+                        \ne 0 & : i\le n'\\
+                        0 & : i>n'
+                  \end{cases}
+            \end{align*}
+            für $n':=|\{i\in\{1,\dots,n\}: s_{ii}\ne 0\}|$
+
+            Das kann aber durch Theorem \ref{thrm: Schur Zerlegung} erreicht werden:
+            Wähle $V\in\Cnn$ unitär so, dass für $\Tilde S:= V^H S V$ gilt:
+            $$\Tilde s_{ii} = \begin{cases}
+                  \ne 0 & : i\le n'\\
+                  0 & : i>n'
+            \end{cases}$$
+            mit $n'$ wie oben.
+
+            Betrachte daher statt $S$ und $T$ die Matrizen $\Tilde S:=V^HSV$ und $\Tilde T:= V^H T V$.\\
+            Da $S$ und $T$ beide obere Dreiecksmatrizen sind, werden durch diese
+            Ähnlichkeitstransformation die Diagonaleinträge parallel vertauscht. 
+%%%%%%%%%%%% ich habe keinen Beweis
             Man kann folgern:
             \begin{align*}
                   (zB-A)\inv B =& (z\,QSU^H-QTU^H)\inv QSU^H = (Q(zS-T)U^H)\inv QSU^H \\
-                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv
+                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv\\
+                  =& U(zV \Tilde S V^H-V \Tilde T V^H)\inv V \Tilde S V^H U\inv = UV (z\Tilde S-\Tilde T)\inv \Tilde S V\inv U\inv\\
+                  =& W (z\Tilde S-\Tilde T)\inv \Tilde S W\inv
             \end{align*}
-            wobei die Regel für Inverse von Matrixprodukten und die Definition von unitären Matrizen verwendet wurde.
+            wobei $W:=UV$ und die Regel für Inverse von Matrixprodukten sowie die Definition von unitären Matrizen verwendet wurde.
+            Da $U$ und $V$ beide unitär und somit insbesondere regulär sind, so ist auch $W$ regulär (siehe auch \cite[S. 50]{matrixGolub}).
 
-            Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.
-            Da die Spur invariant unter Ähnlichkeitstransformation ist, gilt
-% Quelle Spur invariant
+            Man sieht, dass $(zB-A)\inv B$ und  $(z\Tilde S-\Tilde T)\inv \Tilde S$ ähnlich zueinander sind.\\
+            Da die Spur invariant unter Ähnlichkeitstransformation ist\footnote{vgl. 3. Exercise unter Example 1.3.5 in \cite{matrixSpur}}, gilt
             \begin{equation}
                   \label{eqn: Haltepunkt Bew Futamura}
-                  \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}
+                  \tr((zB-A)\inv B) = \tr((z\Tilde S-\Tilde T)\inv \Tilde S) = \sum_{i=1}^{n}((z\Tilde S-\Tilde T)\inv \Tilde S)_{ii}
             \end{equation}
 
-            Für die folgenden Beweisschritte benötigt man einige Aussagen über obere Dreiecksmatrizen, hierbei ist mit $X_{ij}$ der i-j-te Eintrag von X gemeint
-% i-j-te Eintrag?
+            Für die folgenden Beweisschritte benötigt man einige Aussagen über obere Dreiecksmatrizen, hierbei ist mit $X_{ij}$ der Eintag von X in Zeile $i$ und Spalte $j$ gemeint.
 
             \begin{lemma}
                   \label{Hilfslemma_Futamura: Inv Dreieck}
                   Die Inverse einer oberen Dreiecksmatrix $A$ ist eine obere Dreiecksmatrix
             \end{lemma}
-            Beweis:
-            Anwenden des Gauß-Jordan-Algorithmus auf $A|\In$, wie in dem folgenden Schritten:
-            Sei $A:= \begin{pmatrix}
-                  a_{11} & a_{12} & \dots & a_{1n}\\
-                  & a_{21} &\ddots&a_{2n}\\
-                   &  & \ddots &\vdots\\
-                  0 &  & &a_{nn}
-            \end{pmatrix}$
-
-            Betrachte nun $B:=(A\vert \In)$ und dividiere die n-te Spalte von $B$ durch $a_{nn}$, definiere anschließend die $(n-1)$-te Spalte wie folgt:
-            $B_{n-1}:=B_{n-1}-a_{n-1\, n}\ B_{n}$
-            Die letzten 2 Reihen der resultierende Matrix sehen anschließend wie folgt aus:
-            $$\left(\begin{array}{ccccc|cccccc}
-                  0 & \dots & 0 & a_{n-1\, n-1}& 0&0&\dots&0&1&-\frac{a_{n-1\, n}}{a_{nn}}\\
-                  0 & \dots & \dots & 0&1&0&\dots&\dots&0&(a_{nn})^{-1}
-                \end{array}\right)$$
-            Man sieht, dass die Inverse von $A$ ebenfalls eine obere Dreiecksmatrix wird. \qed
+            Beweis: Anwenden des Gauß-Jordan-Algorithmus zur Bestimmung der Inversen auf $(A|\In)$ mit $A$ rechte obere Dreiecksmatrix\qed
+% man könnte auch mit Gramerschen Regel argumentieren, aber da ist es schwer zu beweisen, dass die Kofaktoren null sind
 % hier gibt es noch Verbesserungsbedarf
 
             \begin{lemma}
@@ -505,25 +500,28 @@ Tag der Einreichung: \datum
             Beweis: Sei $i\in\{1,\dots,n\}$ fest, dann gilt
             $$\In = X\,X\inv \Rightarrow 1 = X_{ii}(X\inv)_{ii} \Rightarrow (X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
             Hier wurde Lemma \ref{Hilfslemma_Futamura: Prod Dreieck} und
-            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\ \forall k=\{1,\dots,n\}$$
-            verwendet.\qed
+            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\quad \forall k=1,\dots,n$$
+            verwendet.\qed\\
 
+            Nun kann man den Beweis für Theorem \ref{thrm: IdentitätFutamura} vervollständigen:
             Mit den Lemmas \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
 % Lemmas/Lemmen?
             \begin{align*}
-                  \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((zS-T)\inv)_{ii}\ S_{ii} = \sum_{i=1}^{n}((zS-T)_{ii})\inv\ S_{ii}\\
-                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i=1}^{n'}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
+                  \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((z\Tilde S-\Tilde T)\inv)_{ii}\ \Tilde S_{ii} = \sum_{i=1}^{n}((z\Tilde S-\Tilde T)_{ii})\inv\ \Tilde S_{ii}\\
+                  =& \sum_{i=1}^{n}\frac{\Tilde s_{ii}}{z\,\Tilde s_{ii}-\Tilde t_{ii}} = \sum_{i=1}^{n'}\frac{\Tilde s_{ii}}{\Tilde s_{ii}(z-\Tilde t_{ii}\, \Tilde s_{ii}\inv)}\\
                   =& \sum_{i=1}^{n'} \frac{1}{z-\lambda_i}
             \end{align*}
 
-            mit $\lambda_i = \frac{t_{ii}}{s_{ii}}$.
-% jetzt wurde nicht erklärt: warum n' ersten Einträge s_ii ungleich 0, warum ist nicht auch t_ii =0 für i>n'
+            mit
+            $$\lambda_i = \frac{\Tilde t_{ii}}{\Tilde s_{ii}},\quad i=1,\dots,n'.$$
 
+            Da die Diagonaleinträge von $S$ und $T$ parallel zu $\Tilde S$ und $\Tilde T$ vertauscht wurden, gilt:
+            $$\{\lambda_i, i=1,\dots,n'\} = \{\frac{\Tilde t_{ii}}{\Tilde s_{ii}}, i=1,\dots,n'\} = \{\frac{t_{ii}}{s_{ii}}, s_{ii}\ne 0\}$$
 
             Beachte, dass nach Theorem \ref{thrm: allg Schur Zerlegung} gilt:
 
-            $$\lambda(A, B) = \{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\}$$
-            somit sind alle Eigenwerte des Matrix pencils Polstellen dieser Funktion.
+            $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\}$$
+            somit sind alle Eigenwerte des Matrix-Pencils Polstellen dieser Funktion.
 % das ist noch sehr doof gemacht, diese Funktion - welche?
 
             Man kann somit mithilfe des Residuentheorems die Anzahl der Eigenwerte bestimmen, indem man über die Funktion $\tr((zB-A)\inv B)$ integriert.
@@ -712,7 +710,7 @@ Tag der Einreichung: \datum
             Diesen Ansatz kann man in (\ref{eqn: MK Gleichung in 1D}) einsetzen und erhält nach dividieren durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
             
             \begin{equation}
-                  \label{eqn: verallg EW Problem mit w}
+                  \label{eqn: allg EW Problem mit w}
                   (K-\w^2\,M)\,v = 0
             \end{equation}
 
@@ -722,7 +720,7 @@ Tag der Einreichung: \datum
 
 
 % braucht man wohl hier noch nicht
-            Um (\ref{eqn: verallg EW Problem mit w}) mit $v\ne 0$ zu erfüllen, muss
+            Um (\ref{eqn: allg EW Problem mit w}) mit $v\ne 0$ zu erfüllen, muss
             $$\det\klammer{K-\w^2\,M} = 0$$
             erfüllt sein.
 % nachschlagen, warum das so ist
@@ -743,12 +741,12 @@ Tag der Einreichung: \datum
             $$(K-\w^2 M)x = 0$$
             Falls man das Problem eigenständig betrachtet, so sucht man eine Familie $(\w_j)_j$, die diese Gleichung für ein $x_j \ne 0$ löst.
 
-            Um auf die Form eines Matrix pencils und somit auf die normale Form eines verallgemeinerten Eigenwertproblems zu gelangen, definiere
+            Um auf die Form eines Matrix-Pencils und somit auf die normale Form eines allgemeinen Eigenwertproblems zu gelangen, definiere
             $$\lambda_j := \w_j^2$$
 % zitat      
-            Für das Lösen dieser Gleichung sucht man nun nicht mehr eine Familie $(\w_j)_j$, sondern genau die Eigenwerte des pencils, $\lambda(K,M)$.
+            Für das Lösen dieser Gleichung sucht man nun nicht mehr eine Familie $(\w_j)_j$, sondern genau die Eigenwerte des Matrix-Pencils, $\lambda(K,M)$.
             Man beachte aber, dass sich durch die Substitution auch die gegebenen Grenzen verändert haben:
-            man will nun, dass keine Eigenwerte des pencils $(\AlamB)$ in dem Intervall $[\lambda_a, \lambda_b]:=[\w_a^2,\w^2_b]$ liegen.
+            man will nun, dass keine Eigenwerte des Matrix-Pencils $(\AlamB)$ in dem Intervall $[\lambda_a, \lambda_b]:=[\w_a^2,\w^2_b]$ liegen.
 
             Eine normale Massematrix, d.h. eine Diagonalmatrix mit ausschließlich positiven Einträgen, ist offenbar regulär.
 % ???? warum hier so random
