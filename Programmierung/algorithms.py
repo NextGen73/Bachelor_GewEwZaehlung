@@ -21,9 +21,8 @@ diffVerfahren = "vorwaerts"
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koenenn
 # man koennte es auch immer mit in der Funktion uebergeben, aber so ist es uebersichtlicher
-def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, startIntervall, endeIntervall, bedingungen, differenzenVerfahren):
+def init(schrittweiteDifferenzen, schrittweiteGradienten, startIntervall, endeIntervall, bedingungen, differenzenVerfahren):
     """
-    :param inflation: Parameter alpha, wird in Gewichtungsfunktion verwendet.
     :param schrittweiteDifferenzen: Schrittweite, aufgrund deren der Differenzenquotient gebildet wird.
     :param schrittweiteGradienten: Faktor, mit dem die berechnete Richtung multipliziert wird.
     :param startIntervall: gibt untere Grenze des vorgegebenen Intervalls an.
@@ -31,7 +30,6 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, startInterv
     :param bedingungen: gibt die gültigen Bedingungen an, die an das System gestellt werden.
     :param differenzenVerfahren: gibt an, ob Vorwaertsdifferenz oder symmetrische Differenz verwendet werden soll.
     """
-    global alpha
     global h
     global schrittGrad
     global lamA
@@ -40,7 +38,6 @@ def init(inflation, schrittweiteDifferenzen, schrittweiteGradienten, startInterv
     global r
     global bedingung
     global diffVerfahren
-    alpha = inflation
     h = schrittweiteDifferenzen
     schrittGrad = schrittweiteGradienten
     lamA = startIntervall
