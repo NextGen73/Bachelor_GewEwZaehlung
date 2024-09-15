@@ -5,7 +5,7 @@ alpha = 0.1
 # Schrittweite Differenzenverfahren
 h = 0.01
 # Schrittweite Gradientenverfahren
-schrittGrad = 0.5
+schrittGrad = 0.05
 # startIntervall
 lamA = 0
 # endeIntervall
@@ -16,8 +16,6 @@ gamma = 0.5
 r = .5
 # Bedingungen, die fuer Werte gelten muessen, das ist nur ein Platzhalter
 bedingung = np.zeros(1)
-# gibt an wie weit ein Schritt des Gradientenverfahrens maximal gehen darf
-maxSchrittweite = 0.5
 # Differenzenverfahren
 diffVerfahren = "vorwaerts"
 
@@ -179,12 +177,6 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
                 x[i] = bedingung[i,1]
         return x
     
-    def schrittweitePruefen(x_alt, x_neu)->np.ndarray:
-        norm = np.linalg.norm(x_neu-x_alt)
-        if(norm>maxSchrittweite):
-            return x_alt+(x_neu-x_alt)/norm*maxSchrittweite
-        return x_neu
-
     # result wird spaeter eine 2d-Matrix, jetzt ist es noch ein Vektor
     # result[0:j,i] ist Wert, der in i-tem Schritt berechnet wurde
     # result[-3,i] ungewichtete Ew-Zaehlung mit Wert aus i-tem Schritt
@@ -199,13 +191,11 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
         x_neu = schrittGradientenverfahren_festeSchrittweite(nablaJ_Stern, x_alt)
         # Bedingungen pruefen, evtl. Projektion
         x_neu = bedingungenPruefen(x_neu)
-        # Schrittgröße des Schrittes prüfen, evtl. Verkürzung
-        x_neu = schrittweitePruefen(x_alt, x_neu)
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
         result = np.append(result, np.expand_dims(np.append(x_neu, [ungewichteteEwZaehlung_genau(x_neu), J(x_neu), J_Stern(x_neu)]), 1), axis=1)
 
         # nach 500 Durchlaeufen wird abgebrochen
-        # da nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel (Anfangsdaten und Daten nach erstem Durchlauf) in result gespeichert wurden
+        # nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel (Anfangsdaten und Daten nach erstem Durchlauf) in result gespeichert wurden
         if(np.size(result,1) == 501):
             break
 
