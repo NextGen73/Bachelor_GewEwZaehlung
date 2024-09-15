@@ -1,4 +1,3 @@
-% !TeX spellcheck = de_DE
 \documentclass[a4paper,12pt]{report}
 % es wurde leqno entfernt, da damit die Nummern von Gleichungen links standen
 \usepackage{inputenc,fontenc}
@@ -13,6 +12,8 @@
 \usepackage[backend=biber, urldateusetime=true, sorting=none]{biblatex} %% Literature citing engine
 \usepackage{subcaption}
 \usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{dsfont} % für charakteristische 1
 
 %%
@@ -75,6 +76,11 @@
 
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Bermerkung}
+
+% diese Befehle werden verwendet, um den Algorithmus 
+\floatname{algorithm}{Algorithmus}
+\renewcommand{\algorithmicrequire}{\textbf{Eingabe:}}
+\renewcommand{\algorithmicensure}{\textbf{Ausgabe:}}
 
 % Symbolverzeichnis
 \renewcommand{\symheadingname}{Symbolverzeichnis}
@@ -233,6 +239,7 @@ Tag der Einreichung: \datum
             \end{remark}
             
 % man kann auch noch Korollar 2.3.11 (LinAlg Werner, S. 50) ansprechen
+
       \section{Die Schur-Zerlegung}
             In diesem Kapitel werden weitere wichtige Konzepte vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt werden.
 
@@ -521,8 +528,6 @@ Tag der Einreichung: \datum
             über $\tr((zB-A)\inv B)$ angewendet, um die Anzahl der Eigenwerte zu bestimmen.
             Genau dies ist auch die Grundidee in \cite{grundlageFutamura,hauptteilTkachuk}.
 % hier noch entscheiden, was drin gelassen wird
-
-% falls man Schur-Zerlegung auf S anwendet, um die Eigenwerte zu sortieren, dann muss man auch gleiche Ähnlichkeitstransformation auf T anwenden, aber ist es dann noch eine obere Dreiecksmatrix?
             
 \chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
@@ -652,7 +657,10 @@ Tag der Einreichung: \datum
       \section{Ermittlung der Matrizen der Modellprobleme}
             Berechne nun die Matrizen der Systeme.
             Während die Systeme der Gleichungen allgemein gehalten werden, verwende für die endgültige Definition der Matrizen $K$ und $M$
-            $$n=8, j=n/2$$ 
+            \begin{equation}
+                  \label{def: nUndJ explizit}
+                  n=8, j=n/2
+            \end{equation}
             Beginne dazu mit dem System aus Abb. \ref{fig: System 1}.
 
             Die Form der Gleichung für die linke Masse ist durch (\ref{eqn: Gl für Masse mit Rand links}) gegeben.
@@ -716,6 +724,7 @@ Tag der Einreichung: \datum
             \end{align}
                   
 % hier muss was über die Eigenschaften gesagt werden
+
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
             \label{sec: Formel EW}      
             Nach der Ermittlung der zugehörigen Matrizen bestimme nun die Formel für die Eigenkreisfrequenzen eines Systems.
@@ -754,9 +763,12 @@ Tag der Einreichung: \datum
             Für reguläre Massenmatrizen gelte nach \cite[S. 376]{matrixGolub} für (\ref{eqn: allg EW Problem mit lam}):
             $$(K-\lambda\,M)\,v = 0 \Leftrightarrow (M\inv K-\lambda\In)\,v=0$$
             und folglich
-            $$\lambda(K, M) =\lambda(M\inv K,\In) = \lambda(M\inv K)$$
+            \begin{equation}
+                  \label{eqn: Ew Pencil gleich Ew Matrix}
+                  \lambda(K, M) =\lambda(M\inv K,\In) = \lambda(M\inv K)
+            \end{equation}
 
-            Somit sind die Eigenwerte des Matrix-Pencils $K-\lambda M$ und der Matrix $M\inv K$ äquivalent.
+            Somit sind die Eigenwerte des Matrix-Pencils $K-\lambda M$ und der Matrix $M\inv K$ gleich.
 
             Da auch $M\inv$ eine Diagonalmatrix ist, so ist $M\inv K$ für die vorgestellten Systeme symmetrisch.
             Es gilt daher für die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2}
@@ -804,7 +816,10 @@ Tag der Einreichung: \datum
 % Inflationsparameter
 
             Man findet so die erste Funktion, welche man mit Verfahren der Optimierung sinnvoll minimieren könnte:
-            $$J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)$$
+            \begin{equation}
+                  \label{def: J original}
+                  J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)
+            \end{equation}
 
             Hier müsste man allerdings jeden Eigenwert zuerst berechnen, um dann diese Formel anzuwenden.
             Auch hängen weder $g$ noch $h$ explizit von $s$ ab, weshalb diese Funktion eher zur Bestimmung der aktuellen gewichteten Anzahl von Eigenwerten gesehen werden kann, als die tatächliche Zielfunktion, die es zu minimieren gilt.
@@ -826,6 +841,7 @@ Tag der Einreichung: \datum
             Da alle Eigenwerte auf der reellen Achse liegen, sei $\gamma$ einfachheitshalber ein Kreis $C$.
 
             Allerdings muss zunächst gezeigt werden, dass diese Gleichung tatsächlich die Eigenwerte in dem Intervall zählt, dafür benötigt man den Residuensatz, welcher im nächsten Abschnitt vorgestellt wird.
+
       \section{Komplexe Analysis und der Residuensatz}
             Dieses Kapitel behandelt ausschließlich den Residuensatz und die Argumente, warum man ihn auf (\ref{eqn: IntZielfunktionMitPolstellen}) anwenden kann.
             Obwohl $L$ durch die Verteilung der Eigenwerte auch von dem Design-Parameter $s$ abhängt, vernachlässige diese Abhängigkeit in diesem Abschnitt.
@@ -935,7 +951,7 @@ Tag der Einreichung: \datum
             $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} n(\gamma, \lambda_k) \Res_{\lambda_k}L = \sum_{k=1}^{n} n(\gamma, \lambda_k) g(\lambda_k)$$
 
             mit \begin{align}
-                  \gamma =& \{\Tilde{z_0} + \Tilde r\exp(i t): t\in [0,2\pi]\},\label{def: Kreis}\\
+                  \gamma =& \{\Tilde{z_0} + \Tilde r\exp(i t): t\in [0,2\pi]\},\label{def: gamma}\\
                   \Tilde{z_0} =& \frac {\lambda_a+\lambda_b} {2},\quad\Tilde r = \frac {\lambda_b-\lambda_a} {2}\nonumber
             \end{align}
 
@@ -1003,12 +1019,93 @@ Tag der Einreichung: \datum
 \chapter{Implementierung}
 \label{sec: Programmieren}
       \section{Erklärungen}
-            Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens aus \cite[S. 285]{optimierungBurkhard}:
-            Die Schrittweite $\lambda_*$ sei immer 
+            Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens aus \cite[S. 285]{optimierungBurkhard} an:
+            \begin{algorithm}
+                  \caption{Verfahren des steilsten Abstiegs (vgl. \cite[S. 285]{optimierungBurkhard})}
+                  \label{alg: steilster Abstieg}
+
+                  \begin{algorithmic}
+                        \Require $J(s), \nabla J(s)$
+                        \Ensure $s^*$ mit $J(s^*)=0$
+                        \State wähle $s\in \R^n;$
+                        \Repeat
+                              \State $d:=-\nabla J(s);$
+                              \State $s:=s+\lam_*d;$
+                        \Until{$J(s)=0;$}
+                        \State $s^*:=s;$
+                  \Return $s^*;$
+                  \end{algorithmic}
+            \end{algorithm}
+
+            Die Schrittweite $\lambda_*$ sei hier fest und da man das Minimum der gewichteten Eigenwertzählung kennt,
+            benötigt man keine Information über $\nabla J(s)$, um zu erkennen, wann man bei einem Minimum angelangt ist.
+
+            Allerdings werden für einen Schritt des Verfahrens $\nabla J(s)$ und $J(s)$ benötigt.
+            Man beachte, dass mithilfe von (\ref{eqn: Ew Pencil gleich Ew Matrix}) die Eigenwerte des Matrix-Pencils $K-\lambda M$ einfach bestimmt werden können.
+            Somit kann $J(s)$ durch (\ref{def: J original}) explizit berechnet werden.
+
+            Da aber keine einfache Vorschrift zur Berechnung von $\nabla J(s)$ existiert, approximiere $J(s)$ zunächst durch eine Quadraturformel.
+            Betrachte zunächst eine allgemeine Funktion $f$, über die entlang der Kurve $\gamma$ aus (\ref{def: gamma}) integriert wird.
+
+            Teile dazu $\gamma = \{\Tilde{z_0}+\Tilde r\exp(it): t\in [0,2\pi]\}$ in $m$ Teile auf:
+            $$\gamma_k = \left\{\Tilde{z_0}+\Tilde r\exp(it): t\in \left[ 2\pi \frac k m, 2\pi \frac {k+1} m\right]\right\},\quad k=0,\dots,m-1$$
+
+            Es folgt
+            \begin{align*}
+                  \int_{\gamma_k} f(z)\ dz =& \int_{2 \pi \frac k m}^{2\pi \frac {k+1} m} f(\Tilde{z_0}+\Tilde r\exp(it))\,i\Tilde r\exp(it)\ dz\\
+                  \approx& \frac{f(z_k)\,i\Tilde r\exp(\frac{2\pi i k}{m})+f(z_{k+1})\,i\Tilde r\exp(\frac{2\pi i (k+1)}{m})}{2} \frac{2\pi} m\\
+                  =& \klammer{f(z_k)+f(z_{k+1})\,\exp\klammer{\frac{2\pi i}{m}}}\frac{\pi i \Tilde r} m \,\exp(\frac{2\pi i k}{m})
+            \end{align*}
+            wobei $z_k:=\Tilde{z_0}+\Tilde r\exp\klammer{\frac {2\pi ik} m}, \quad k=0,\dots,m$.
+            Es wurde hier eine Transformation verwendet, wie sie immer verwendet wird, um Kurvenintegrale auszurechnen.
+            Ferner wurde in der zweiten Zeile die Trapezregel angewendet, wie sie in \cite[S. 498]{numerikHermann} vorgestellt wird.
             
+            Es gilt daher
+            \begin{align}
+                  J(s) =& \frac{1}{2\pi i}\sum_{k=0}^{m-1}\int_{\gamma_k} L(z,s)\ dz\nonumber\\
+                  \approx& \frac{1}{2\pi i}\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\left[\klammer{L(z_k, s)+L(z_{k+1}, s)\,\exp\klammer{\frac{2\pi i}{m}}}\,\exp\klammer{\frac{2\pi i k}{m}}\right]\label{def: JStern}\\
+                  =&:J^*(s)\nonumber
+            \end{align}
 
+            Man kann leicht sehen, dass mit der Summen- und Faktorregel für Ableitungen
+            $$\nabla J^*(s) = \frac{1}{2\pi i}\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\left[\klammer{\partial_s L(z_k, s)+\partial_s L(z_{k+1}, s)\,\exp\klammer{\frac{2\pi i}{m}}}\,\exp\klammer{\frac{2\pi i k}{m}}\right]$$
+            gilt.
+
+            Die Faktoren vor $J^*(s)$ und $\nabla J^*(s)$ wurde nicht zusammengefasst, da in der Implementierung eine Funktion die Trapezregel auf eine Funktion anwendet,
+            $\frac 1 {2\pi i}$ gehört aber nicht zur Quadraturformel dazu, sondern ist wegen der Anwendung des Residuensatzes vorhanden.
+
+            Die Funktionen $\partial_s L(z, s)$ wurden schon in Kapitel \ref{sec: EW Zählung} in Gleichung (\ref{eqn: AbleitungZielfunktion}) definiert.
+
+            Die Ableitungen $\frac{d M}{d s}$ und $\frac{d K}{d s}$ werden durch eine Differenz, wie sie in \cite[S. 16 f.]{numerikGrossmann} vorgestellt wird, approximiert.
+
+            Wähle hier die Vorwärtsdifferenz $$(D^+u)(x):=[u(x+h)-u(x)]/h $$mit $h=0.1$.
+
+            Da im Allgemeinen $s\in \R^l$, werden hier aber partielle Ableitungen approximiert.
+            Es gilt für die $i$-te partielle Ableitung
+            $$\frac{\partial M}{\partial s_i}\approx \frac{M(s+h e_i)-M(s)}{h}$$
+            wobei $e_i$ der $i$-te Einheitsvektor ist.
       \section{Implementation}
+            Die folgenden Programme wurden mit Python geschrieben. Hauptsächlich wird das Paket \zitat{numpy} genutzt,
+            mit welchem Berechnungen von Matrizen sehr vereinfacht werden.
 
+            Die verschiedenen übergreifenden Funktionen, die von allen Programmen verwendet werden, findet man in \cite{github}
+            unter {\textit{./Programmierung/algorithms.py}}
+
+            In Kapitel \ref{sec: Programmieren} wird ausschließlich die Datei {\textit{./Programmierung/erste Implementierung.py}} behandelt.
+            Verbesserungen aus Kapitel \ref{sec: Verbesserungen} werden in den anderen Dateien zu finden sein.
+
+            Wie schon in (\ref{def: nUndJ explizit}) erwähnt, gilt für beide Systeme aus Kapitel \ref{sec: MS Matrizen}
+            $$n=8,\quad j=4$$
+            Es gibt aber noch mehr Parameter, die definiert werden müssen:
+            \begin{itemize}
+                  \item für System aus Abb. \ref{fig: System 2} gelte
+                  \begin{itemize}
+                        \item $\lambda_a = 0.9$
+                        \item $\lambda_b = 1.5$
+                        \item $s_0 = (0.7, 0.7, 0.7, 1.5)^T$
+                  \end{itemize}
+                        
+            \end{itemize}
       \section{Grafiken}
 
 \chapter{Verbesserungen}
