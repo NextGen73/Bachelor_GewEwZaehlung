@@ -47,6 +47,11 @@ def init(schrittweiteDifferenzen, schrittweiteGradienten, startIntervall, endeIn
     bedingung = bedingungen
     diffVerfahren = differenzenVerfahren
 
+# verändert nur die Schrittweite, die beim Gradientenverfahren verwendet wird
+def schrittweiteGradAendern(neueSchrittweite):
+    global schrittGrad
+    schrittGrad = neueSchrittweite
+
 # approximiert Ableitung mittels Differenzenverfahren
 def  ableitungDurchDifferenz(f, x):
     """
