@@ -1018,6 +1018,37 @@ Tag der Einreichung: \datum
             
 \chapter{Implementierung}
 \label{sec: Programmieren}
+
+      Man wende sich nun der Implementierung des Minimierungsverfahrens zu.
+      Wie schon in (\ref{def: nUndJ explizit}) erwähnt, gilt für beide Systeme aus Kapitel \ref{sec: MS Matrizen}
+      $$n=8,\quad j=4$$
+      Es gibt aber noch mehr Parameter, die definiert werden müssen:
+      \begin{itemize}
+            \item für System 1 aus Abb. \ref{fig: System 1} gelte
+            \begin{itemize}
+                  \item $\lambda_a = 1.5$
+                  \item $\lambda_b = 2.5$
+                  \item $s_0 = 3.5$
+                  \item $\Omega = [2,5]$
+                  \item $m = 4$
+                  \item $c = 1.5$
+            \end{itemize}
+            \item für System 2 aus Abb. \ref{fig: System 2} gelte
+            \begin{itemize}
+                  \item $\lambda_a = 0.9$
+                  \item $\lambda_b = 1.5$
+                  \item $s_0 = (0.7, 0.7, 0.7, 1.5)^T$
+                  \item $\Omega = [1,2]^3\times [0.5,3.5]$
+                  \item $m = 2$
+                  \item $c = 0.75$
+            \end{itemize}
+      \end{itemize}
+
+      Hierbei ist $\Omega$ die zulässige Menge des Design-Parameters $s$ und $s_0$ der Startwert der Minimierung.
+
+      Nach Einsetzen dieser Parameter in die obigen Matrizen und Gleichungen werden diese beiden Systeme genutzt, um als Beispiele zu dienen.
+
+      Zunächst wird aber noch der zu verwendende Minimierungsalgorithmus erläutert.
       \section{Erklärungen}
             Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens aus \cite[S. 285]{optimierungBurkhard} an:
             \begin{algorithm}
@@ -1084,28 +1115,46 @@ Tag der Einreichung: \datum
             Es gilt für die $i$-te partielle Ableitung
             $$\frac{\partial M}{\partial s_i}\approx \frac{M(s+h e_i)-M(s)}{h}$$
             wobei $e_i$ der $i$-te Einheitsvektor ist.
+ 
       \section{Implementation}
             Die folgenden Programme wurden mit Python geschrieben. Hauptsächlich wird das Paket \zitat{numpy} genutzt,
             mit welchem Berechnungen von Matrizen sehr vereinfacht werden.
 
             Die verschiedenen übergreifenden Funktionen, die von allen Programmen verwendet werden, findet man in \cite{github}
-            unter {\textit{./Programmierung/algorithms.py}}
+            unter {\textit{./Programmierung/algorithms.py}}.
 
             In Kapitel \ref{sec: Programmieren} wird ausschließlich die Datei {\textit{./Programmierung/erste Implementierung.py}} behandelt.
             Verbesserungen aus Kapitel \ref{sec: Verbesserungen} werden in den anderen Dateien zu finden sein.
+            
+            Falls bei einem Schritt des Minimierungsverfahrens $s$ die Menge $\Omega$ der zulässigen Werte verlässt,
+            so wird der Design-Parameter mithilfe einer Projektion wie in \cite[S. 314]{optimierungJarreProjektion} wieder auf $\Omega$ zurückgeführt.
+            
+            Bei der jetzigen Datei gibt es eine Begrenzung für die Anzahl an Schritten pro Durchlauf der Minimierung.
+            Falls ein Durchlauf mehr als 500 Schritte benötigen sollte, um zu einem Ergebnis zu kommen, wird er abgebrochen, damit ein einzelner Durchlauf nicht zu viel Zeit beansprucht.
+            Diese Begrenzung kann man umgehen, indem man in Zeile 
 
-            Wie schon in (\ref{def: nUndJ explizit}) erwähnt, gilt für beide Systeme aus Kapitel \ref{sec: MS Matrizen}
-            $$n=8,\quad j=4$$
-            Es gibt aber noch mehr Parameter, die definiert werden müssen:
-            \begin{itemize}
-                  \item für System aus Abb. \ref{fig: System 2} gelte
-                  \begin{itemize}
-                        \item $\lambda_a = 0.9$
-                        \item $\lambda_b = 1.5$
-                        \item $s_0 = (0.7, 0.7, 0.7, 1.5)^T$
-                  \end{itemize}
-                        
-            \end{itemize}
+            Es folgt nun eine Auflistung der 6 Durchläufe, die in diesem Programm durchgeführt werden.
+            Dabei sind die Durchläufe 1-4 von System 1 und die Durchläufe 5 und 6 behandeln System 2.
+
+            Es gehören immer 2 nacheinander folgende Durchläufe zusammen, da sie sich immer nur in der Anzahl der Stützstellen in der Quadraturformel unterscheiden.
+            Hierbei wird in den ersten und letzten beiden Durchläufen eine kurze Schrittweite des Gradientenverfahrens gewählt. In diesen Durchläufen gilt
+            $$\lambda_* = 0.05$$.
+            Die beiden mittleren Durchläufe werden mit einer Schrittweite $\lambda_* = 0.5$ verwendet.
+
+            \begin{tabular}{lllll}
+                 System & $m$ & $\lambda_*$ & Iterationen & Zeit\\
+                 \hline
+                 1 & 100 & 0.05 & - & - \\
+                 1 & 150 & 0.05 & - & - \\
+                 \hline
+                 1 & 100 & 0.5 & - & - \\
+                 1 & 150 & 0.5 & - & - \\
+                 \hline
+                 2 & 100 & 0.05 & - & - \\
+                 2 & 150 & 0.05 & - & - \\
+                 \hline
+            \end{tabular}
+
       \section{Grafiken}
 
 \chapter{Verbesserungen}
