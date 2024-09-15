@@ -47,7 +47,7 @@
 }
 \newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
-\newcommand{\zitat}[1]{\glqq #1 \grqq}
+\newcommand{\zitat}[1]{\glqq #1\grqq}
 \newcommand{\klammer}[1]{\left(#1\right)}
 \newcommand{\diag}{\text{diag}}
 \newcommand{\rang}{\text{rang}}
@@ -85,10 +85,13 @@
       \newsym[Steifigkeitsmatrix]{K}{K}
       \newsym[Federkraft]{FL}{\overrightarrow{F_L}}
       \newsym[Trägheitskraft]{FT}{\overrightarrow{F_T}}
-      \newsym[Verschiebung des k-ten Massepunktes aus der Ruhelage]{xk}{x_k}
+      \newsym[Auslenkung des k-ten Massepunktes aus der Ruhelage]{xk}{x_k}
       \newsym[Eigenkreisfrequenz]{w}{\omega}
+      \newsym[vorgegebenes Intervall]{wAwB}{[\omega_a,\omega_b]}
+      \newsym[Eigenwert des Matrix-Pencils, definiert durch $\lambda:=\omega^2$]{lam}{\lambda}
+      \newsym[Intervall, definiert durch $\lbrack\lambda_a,\lambda_b\rbrack := \lbrack\omega_a,\omega_b\rbrack$]{lamAlamB}{[\lambda_a,\lambda_b]}
 \closesymdef
-
+% , soll zum Schluss frei von Eigenkreisfrequenzen sein
 
 \begin{document}
 \selectlanguage{german}
@@ -139,7 +142,7 @@ Tag der Einreichung: \datum
 % hier muss noch einiges getan werden
       Damit kann sichergestellt werden, dass die Eigenfrequenzen des Systems nicht so liegen, dass es zu einer Selbsterregung kommt.
 
-      % Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
+      % Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix-Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
       % in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
       % Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt.
       % Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
@@ -151,7 +154,7 @@ Tag der Einreichung: \datum
       % In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt, um sicherzustellen,
       % dass bei einem vorgegebenem mechanischem System keine Eigenwerte in einem bestimmten festen Intervall liegen.
       % Dazu wird in den ersten Kapiteln die nötige Theorie anhand der Quellen \cite{grundlageFutamura} und \cite{hauptteilTkachuk} beschrieben.
-      % Hier werden Matrix Pencil und das verallgemeinerte Eigenwertproblem verwendet, um 
+      % Hier werden Matrix-Pencil und das allgemeinerte Eigenwertproblem verwendet, um 
       % Hierzu nutzt man die Identität von Futamura, um die Zählung der Eigenwerte auf die zugrundeliegenden Matrizen zurückzuführen.
 
 
@@ -161,34 +164,33 @@ Tag der Einreichung: \datum
 
       Ferner werden in Kapitel \ref{sec: Verbesserungen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
 
-\chapter{Das verallgemeinerte Eigenwert-Problem und die Identität von Futamura}
+\chapter{Das allgemeine Eigenwertproblem und die Identität von Futamura}
 \label{sec: EW Problem_Futamura}
 
       Zu Beginn der Ausarbeitung werden einige Resultate über Matrizen und lineare Algebra behandelt.
-      Diese werden in Kapitel \ref{sec: EW Zählung} verwendet, um die Zählung der Eigenwerte zu einer differenzierbaren Funktion umzustellen.
+      Diese werden in Kapitel \ref{sec: EW Zählung} verwendet, um die Zählung der Eigenwerte zu einer differenzierbaren Funktion umzuformen.
       
-      \section{Der Matrix Pencil}
-            Betrachte zunächst das Konzept des Matrix Pencil, welches in dieser Ausarbeitung eine entscheidende Rolle spielt.
+      \section{Der Matrix-Pencil}
+            Betrachte zunächst das Konzept des \zitat{Matrix-Pencils} \cite[S. 32]{matrixPencilDeutsch}, welches in dieser Ausarbeitung eine entscheidende Rolle spielt.
             \begin{definition}(pencil, \cite[S. 375]{matrixGolub})
                   \label{def: pencil}
                   Seien $A$ und $B$ Matrizen in $\C^{n\times n}$, dann wird die Menge aller Matrizen der Form
-                  $\AlamB, \lambda \in \C$ pencil genannt.
+                  $\AlamB, \lambda \in \C$ Matrix-Pencil genannt.
             \end{definition}
 
             Laut \cite[S. 375]{matrixGolub} seien die Eigenwerte von $\AlamB$ diejenigen $\lambda \in\C$, für die gelte:
             \begin{equation}
-                  \label{eqn: verallg EW Problem}
+                  \label{eqn: allg EW Problem}
                   (\AlamB)x=0,\quad x\ne 0
             \end{equation}
             
             Hier wird $x\in\C^n$ Eigenvektor genannt.
-            Man beachte, dass für $B=\In$ Gleichung (\ref{eqn: verallg EW Problem}) die folgende Form annimmt:
+            Man beachte, dass für $B=\In$ Gleichung (\ref{eqn: allg EW Problem}) die folgende Form annimmt:
             $$(A-\lambda\In)x=0 \Leftrightarrow Ax = \lambda x,$$
-            also genau die Definition des Eigenwert-Problems.
-% gibt es ein Eigenwert-Problem und wenn ja, gibt es eine Definition? oder ist es einfach eine Gleichung?
-            Daher wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: verallg EW Problem}) erfüllen auch verallgemeinertes Eigenwert-Problem genannt, da sie eine allgemeine Form des speziellen Eigenwertproblems darstellen.
-
-            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: verallg EW Problem}) das lineare homogene Gleichungssystem
+            also genau die Form des speziellen Eigenwertproblems.
+% gibt es ein Eigenwertproblem und wenn ja, gibt es eine Definition? oder ist es einfach eine Gleichung?
+            Daher wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: allg EW Problem}) erfüllen, auch \zitat{allgemeines Eigenwertproblem}\cite[S. 380]{maschinendynamikDresig} genannt, da sie eine allgemeine Form des speziellen Eigenwertproblems darstellen.
+            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: allg EW Problem}) das lineare homogene Gleichungssystem
             $$Cx=0,\quad x\ne 0$$
 
             Nach einem Resultat aus der linearen Algebra gilt:
@@ -197,26 +199,40 @@ Tag der Einreichung: \datum
             Durch Negation folgt:
             $$\det(C)=0 \Leftrightarrow \exists x\ne 0: Cx=0$$
 
-            Somit sucht man die Eigenwerte des Pencils, in dem man die Nullstellen des Polynoms $\det(\AlamB)$ berechnet\footnote{Man könnte das Polynom $\det(\AlamB)$ als eine Art charakteristisches Polynom des Pencils $\AlamB$ betrachten, ähnlich dem charakteristischen Polynom $f(A)$ einer Matrix $A$}.
+            Somit sucht man die Eigenwerte des Matrix-Pencils, in dem man die Nullstellen des Polynoms $\det(\AlamB)$ berechnet\footnote{Man könnte das Polynom $\det(\AlamB)$ als eine Art charakteristisches Polynom des Matrix-Pencils $\AlamB$ betrachten, ähnlich dem charakteristischen Polynom $f(A)$ einer Matrix $A$}.
             
-            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Pencils $\AlamB$ wie folgt definiert:
+            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Matrix-Pencils $\AlamB$ wie folgt definiert:
             \begin{equation}
                   \label{def: EW Pencil}
                   \lambda(A,B):=\{z\in\C:\ \det(A - zB) = 0\}
             \end{equation}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Def regulärer pencil mit Quelle fehlt %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            Laut \cite[S. 375]{matrixGolub} gelte zudem:
+            \begin{equation}
+                  \label{eqn: n EW äquiv rang B n}
+                  \AlamB \text{ hat }n\text{ Eigenwerte}\Leftrightarrow \rang(B)=n
+            \end{equation}
+            Dieses Resultat wird für Kapitel \ref{sec: EW Zählung} relevant werden und kann mithilfe von Theorem \ref{thrm: allg Schur Zerlegung} gezeigt werden.
 
-%             Zum Schluss folgt noch eine Definition, welche in Kapitel \ref{sec: Futamura} benötigt wird:
-%             \begin{definition}
-%                   Ein Pencil heißt regulär, falls $B$ invertierbar ist.
-%             \end{definition}
-% % Quelle einfügen
+            Man benötigt für die Identität von Futamura aus Kapitel \ref{sec: Futamura} zudem eine weitere Definition:
+            \begin{definition}(Regulärer Matrix-Pencil, vgl. \cite[S. 784]{regularMatrixPencil})\\
+                  \label{def: regulärer Pencil}
+                  Ein Matrix-Pencil $A+\lambda B$ wird regulär genannt, wenn $A,B\in \Cnn$ und
+                  $$\det(A+\lambda B)\ne 0$$ 
+            \end{definition}
 
-%             Man beachte, dass für einen regulären Pencil gilt:
-%             $$(\AlamB)x = 0 \Leftrightarrow (B^{-1}A - \lambda \In)x = 0$$
-%             Weshalb $$\lambda(A,B) = \lambda(B^{-1}A,\In) = \lambda(B^{-1}A),$$
-%             also kann man die Eigenwerte des regulären Pencils auf ein spezielles Eigenwertproblem zurückführen und die normalen Eigenwerte von $B^{-1}A$ sind genau die Eigenwerte des Pencils $\AlamB$.
+            Beachte, dass hier zwar der Matrix-Pencil mit $+$ statt $-$ angegeben wurde, aber diese Definitionen sind gleichwertig, da man $\tilde \lambda := -\lambda$ in den Matrix-Pencil einsetzen kann.
+            \begin{remark}
+                  \label{bem: B reg impl pencil reg}
+                  Diese Definition bedeutet insbesondere, dass der Matrix-Pencil regulär ist, falls B regulär ist, denn es gilt:
+                  \begin{align*}
+                        B\text{ regulär} \Leftrightarrow & \rang(B)=n\Leftrightarrow |\lambda(A,B)| = n<\infty\\
+                        \Rightarrow & \exists z\in\C\setminus\lambda(A,B): \det(A+zB) \ne 0 \Leftrightarrow \AlamB \text{ regulär}
+                  \end{align*}
+                  Wobei (\ref{eqn: n EW äquiv rang B n}) und die Überabzählbarkeit von $\C$ verwendet wurde.
+            \end{remark}
+            
+% man kann auch noch Korollar 2.3.11 (LinAlg Werner, S. 50) ansprechen
       \section{Die Schur-Zerlegung}
             In diesem Kapitel werden weitere wichtige Konzepte vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt werden.
 
@@ -225,182 +241,164 @@ Tag der Einreichung: \datum
                   $$Q^HQ = QQ^H=\In$$
             \end{definition}
 
-            Hier ist $Q^H := \Bar{Q^T}$ die Adjungierte von $Q$, also die skalar komplex konjugierte Transponierte von $Q$.
-% hier gibt es noch Verbesserungsmöglichkeiten
+            Hier ist $Q^H$ die Adjungierte von $Q$, also die Matrix, die durch komplexe Konjugation und Transponierung von $Q$ entsteht, siehe auch \cite[S. 14]{matrixGolub}.
 
-            Mithilfe dieser Definition können nun folgende Resultate behandelt werden:
-            \begin{theorem}(Theorem 7.1.3 (Schur Decomposition)\cite[S. 313]{matrixGolub})
-                  \label{thrm: Schur Zerlegung}
-                  Wenn $A \in \C^{n\times n}$, dann existiert eine unitäre Matrix $Q\in\C^{n\times n}$, sodass
-                  \begin{equation}
-                        \label{eqn: Schur_Resultat}
-                        Q^H\,AQ = T = D+N
-                  \end{equation}
-                  mit $D=\diag(\lambda_1,\dots,\lambda_n)$ und $N\in\C^{n\times n}$ strikter oberer Dreiecksmatrix.
-                  Ferner kann $Q$ so gewählt werden, dass die Eigenwerte $\lambda_i$ in beliebiger Reihenfolge auf der Diagonalen auftauchen.
-            \end{theorem}
+%             \begin{theorem}(vgl. Theorem 7.1.3 (Schur Decomposition)\cite[S. 313]{matrixGolub})\\
+%                   \label{thrm: Schur Zerlegung}
+%                   Wenn $A \in \C^{n\times n}$, dann existiert eine unitäre Matrix $Q\in\C^{n\times n}$, sodass
+%                   \begin{equation}
+%                         \label{eqn: Schur_Resultat}
+%                         Q^H\,AQ = T = D+N
+%                   \end{equation}
+%                   mit $D=\diag(\lambda_1,\dots,\lambda_n)$ und $N\in\C^{n\times n}$ strikter oberer Dreiecksmatrix.
+%                   Ferner kann $Q$ so gewählt werden, dass die Eigenwerte $\lambda_i$ in beliebiger Reihenfolge auf der Diagonalen auftauchen.
+%             \end{theorem}
 
-% bessere Erlärung, warum spezielleres Lemma
-            Um dieses Theorem zu beweisen, benötigt man ein Hilfslemma aus \cite[S.312]{matrixGolub}.
-            Das Resultat wird hier in dem speziellen Fall vorgestellt, wie er für den Beweis von Theorem \ref{thrm: Schur Zerlegung} benötigt wird.
+%             Um dieses Theorem zu beweisen, benötigt man ein Hilfslemma aus \cite[S.312]{matrixGolub}.
+%             Das folgende Resultat wird einfachheitshalber in dem speziellen Fall vorgestellt, wie es für den Beweis von Theorem \ref{thrm: Schur Zerlegung} benötigt wird.
 
-            \begin{lemma}(vgl. Lemma 7.1.2\cite[S. 312]{matrixGolub})
-                  \label{lemma: Hilfe Schur}
-                  Falls für $A\in\C^{n\times n}, \lambda\in \C \text{ Eigenwert von }A\text{ und }X\in \C^{n}$
-                  \begin{equation}
-                        \label{eqn: Hilfslemma Schur_Bed}
-                        AX = X\lambda,\qquad \rang(X)=1
-                  \end{equation}
+%             \begin{lemma}(vgl. Lemma 7.1.2\cite[S. 312]{matrixGolub})
+%                   \label{lemma: Hilfe Schur}\\
+%                   Falls ein $A\in\C^{n\times n}, \lambda\in \C$ Eigenwert von $A$ und $X\in \C^{n}$
+%                   \begin{equation}
+%                         \label{eqn: Hilfslemma Schur_Bed}
+%                         AX = X\lambda,\qquad \rang(X)=1
+%                   \end{equation}
                   
-                  gilt, dann existiert ein $Q\in \C^{n\times n}$ unitär, sodass
-                  $$Q^H\,AQ = T =  \begin{bmatrix}
-                        \lambda & T_{12} \\
-                        0 & T_{22} \\
-                        \end{bmatrix}$$
-                  mit $T_{22}\in \C^{(n-1)\times(n-1)}$
-            \end{lemma}
+%                   erfüllen, dann existiert ein $Q\in \C^{n\times n}$ unitär, sodass
+%                   $$Q^H\,AQ = T =  \begin{bmatrix}
+%                         \lambda & T_{12} \\
+%                         0 & T_{22} \\
+%                         \end{bmatrix}$$
+%                   mit $T_{22}\in \C^{(n-1)\times(n-1)}$
+%             \end{lemma}
 
-            Beweis:
-            Erhalte mit \cite[S. 233]{matrixGolub} eine komplexe QR-Zerlegung für $X$. Es gilt dann
-            $$X = Q\ \begin{bmatrix}
-                  r\\
-                  0\\
-                  \vdots\\
-                  0
-            \end{bmatrix}$$
-            mit $Q\in \C^{n \times n}$ unitär und $r\in \C$.
-            Durch Einsetzen in (\ref{eqn: Hilfslemma Schur_Bed}) und Multiplikation mit $Q^H$ folgt
-            \begin{equation}
-                  \label{eqn: Hilfslemma_Schur_Gl}
-                  \underbrace{Q^H\,AQ}_{=:T}\ \begin{bmatrix}
-                        r\\
-                        0\\
-                        \vdots\\
-                        0
-                  \end{bmatrix} = Q^H\,Q\ \begin{bmatrix}
-                        r\\
-                        0\\
-                        \vdots\\
-                        0
-                  \end{bmatrix}\ \lambda
-            \end{equation}
-% man könnte hier R statt dem Vektor nutzen, dann wäre es kompakter
-            mit $T:=\begin{matrix}
-                  \begin{bmatrix}
-                        T_{11} & T_{12}\\
-                        T_{21} & T_{22}\\
-                  \end{bmatrix} & \begin{matrix}
-                  \text{\small 1} \\\text{\small{n-1}}
-                  \end{matrix} \\
-                  \begin{matrix}
-                  \text{\small 1} &  \text{  \small{n-1}}\\
-                  \end{matrix} &  \\
-                  \end{matrix}$\\
+%             Beweis:
+%             Erhalte mit \cite[S. 233]{matrixGolub} eine komplexe QR-Zerlegung für $X$. Es gilt dann
+%             $$X = Q\,R$$
+%             mit $Q\in \C^{n \times n}$ unitär und $R = [r,0,\dots,0]^\top\in \C^n$.
+%             Durch Einsetzen in (\ref{eqn: Hilfslemma Schur_Bed}) und Multiplikation mit $Q^H$ folgt
+%             \begin{equation}
+%                   \label{eqn: Hilfslemma_Schur_Gl}
+%                   \underbrace{Q^H\,AQ}_{=:T}\ R = Q^H\,Q\ R\ \lambda
+%             \end{equation}
+% % man könnte hier R statt dem Vektor nutzen, dann wäre es kompakter
+%             hier ist noch $T:=\begin{matrix}
+%                   \begin{bmatrix}
+%                         T_{11} & T_{12}\\
+%                         T_{21} & T_{22}\\
+%                   \end{bmatrix} & \begin{matrix}
+%                   \text{\small 1} \\\text{\small{n-1}}
+%                   \end{matrix} \\
+%                   \begin{matrix}
+%                   \text{\small 1} &  \text{  \small{n-1}}\\
+%                   \end{matrix} &  \\
+%                   \end{matrix}$\\
 
-                  
-            Durch Ausmultiplizieren von (\ref{eqn: Hilfslemma_Schur_Gl}) folgen die Gleichungen\\
+%             Durch Ausmultiplizieren von (\ref{eqn: Hilfslemma_Schur_Gl}) folgen die Gleichungen\\
 
-            $$\begin{aligned}
-                  T_{11}\,r =& r\,\lambda\\
-                  T_{21}\,r =& 0
-            \end{aligned}$$
+%             $$\begin{aligned}
+%                   T_{11}\,r =& r\,\lambda\\
+%                   T_{21}\,r =& 0
+%             \end{aligned}$$
 
-            mit $\rang(X)=1 \Rightarrow X\ne 0 \Rightarrow r\ne 0$ folgt $T_{11} = \lambda,\ T_{21} = 0$.\qed
-% irgendwo muss erklärt werden, dass lam(A) = lam vereinigt lam(T_22)
+%             und mit $\rang(X)=1 \Rightarrow X\ne 0 \Rightarrow r\ne 0$ folgt $T_{11} = \lambda,\ T_{21} = 0$.\qed
+
+%             Nach \cite[S. 312]{matrixGolub} gelte ferner $\lambda(A) = \lambda(T) = \{\lambda\}\cup\lambda(T_{22})$.\\
             
 
-            Nun können wir Theorem \ref{thrm: Schur Zerlegung} beweisen.
+%             Nun können wir Theorem \ref{thrm: Schur Zerlegung} beweisen.
 
+%             Beweis Theorem \ref{thrm: Schur Zerlegung} (vgl. \cite[S. 313]{matrixGolub}):
 
-            Beweis Theorem \ref{thrm: Schur Zerlegung}(vgl. \cite[S. 313]{matrixGolub}):
+%             Offenbar gilt für $n=1$:\\
+%             $A$ ist ein Skalar, wodurch (\ref{eqn: Schur_Resultat}) für alle $Q$ unitär erfüllt ist.\\
+%             Sei nun $n>1$ und (\ref{eqn: Schur_Resultat}) gelte für alle $k<n$, dann gilt für einen beliebigen Eigenwert $\lambda$ von $A$ und zugehörigen Eigenvektor $X$:
+%             $$AX = \lambda X = X \lambda,\quad X\in \C^n, X\ne 0$$
+%             Nach Lemma \ref{lemma: Hilfe Schur} existiert $U\in \C^{n\times n}$ unitär, sodass
+%             $$U^H\, AU = \begin{bmatrix}
+%                   \lambda & T_{12} \\
+%                   0 & T_{22} \\
+%                   \end{bmatrix}$$
+%             Da aber $T_{22}\in\C^{(n-1)\times(n-1)}$, so gilt nach der Induktionsvoraussetzung:
+%             $$\widetilde U^H\,T_{22}\widetilde U = R,$$
+%             wobei $R\in\C^{(n-1)\times(n-1)}$  rechte obere Dreiecksmatrix, $\widetilde U \in\C^{(n-1)\times(n-1)}$ unitär.
 
-            Offenbar gilt für $n=1$: $A$ ist ein Skalar, wodurch (\ref{eqn: Schur_Resultat}) für alle $Q$ unitär erfüllt ist.
-            Sei nun $n>1$ und (\ref{eqn: Schur_Resultat}) gelte für alle $k<n$, dann gilt für einen beliebigen Eigenwert $\lambda$ von $A$:
-            $$AX = \lambda X = X \lambda,\quad X\in \C^n, X\ne 0$$
-            Nach Lemma \ref{lemma: Hilfe Schur} existiert $U\in \C^{n\times n}$, sodass
-            $$U^H\, AU = \begin{bmatrix}
-                  \lambda & T_{12} \\
-                  0 & T_{22} \\
-                  \end{bmatrix}$$
-            Da aber $T_{22}\in\C^{(n-1)\times(n-1)}$, so gilt nach der Induktionsvoraussetzung:
-            $$\widetilde U^H\,T_{22}\widetilde U = R,$$
-            wobei $R\in\C^{(n-1)\times(n-1)}$  rechte obere Dreiecksmatrix, $\widetilde U \in\C^{(n-1)\times(n-1)}$ unitär.
+%             Sei nun $Q:=U\cdot\begin{bmatrix}
+%                   1&0\\
+%                   0&\widetilde U
+%             \end{bmatrix}$
 
-            Sei nun $Q:=U\cdot\begin{bmatrix}
-                  1&0\\
-                  0&\widetilde U
-            \end{bmatrix}$
-
-            dann gilt mit\footnote{die folgende Gleichung stammt aus \cite{conjugateTranspose}, Beweis ebenfalls dort zu finden}
-% Fussnote vielleicht scheisse platziert
-            \begin{equation}
-                  \label{eqn: Produkt Adjungierter}
-                  \klammer{AB}^H = B^HA^H,\quad A,B\in \C^{n\times n}
-            \end{equation}
-            für (\ref{eqn: Schur_Resultat}):
-            $$\begin{aligned}
-                  Q^H\,AQ =& \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U
-                  \end{bmatrix}^H\,U^H\,AU \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U
-                  \end{bmatrix} = \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U^H
-                  \end{bmatrix}
-                  \begin{bmatrix}
-                        \lambda & T_{12} \\
-                        0 & T_{22} \\
-                  \end{bmatrix}
-                  \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U
-                  \end{bmatrix}\\
-                  =& \begin{bmatrix}
-                        \lambda&T_{12}\\
-                        0&\widetilde U^H\, T_{22}
-                  \end{bmatrix}
-                  \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U
-                  \end{bmatrix}
-                  = \begin{bmatrix}
-                        \lambda&T_{12}\,\widetilde U\\
-                        0&\widetilde U^H\, T_{22}\, \widetilde U
-                  \end{bmatrix}\\
-                  =& \begin{bmatrix}
-                        \lambda&T_{12}\,\widetilde U\\
-                        0&R
-                  \end{bmatrix}
-            \end{aligned}$$
-            Wobei verwendet wurde, dass die komplex konjugierte skalar wirkt, also es gilt:
-% vllt. Bullshit, am besten Beweis/Quelle finden
+%             dann gilt mit\footnote{die folgende Gleichung stammt aus \cite{conjugateTranspose}, Beweis ebenfalls dort zu finden}
+% % Fussnote vielleicht scheisse platziert
+%             \begin{equation}
+%                   \label{eqn: Produkt Adjungierter}
+%                   \klammer{AB}^H = B^HA^H,\quad A,B\in \C^{n\times n}
+%             \end{equation}
+%             für (\ref{eqn: Schur_Resultat}):
+%             $$\begin{aligned}
+%                   Q^H\,AQ =& \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U
+%                   \end{bmatrix}^H\,U^H\,AU \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U
+%                   \end{bmatrix} = \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U^H
+%                   \end{bmatrix}
+%                   \begin{bmatrix}
+%                         \lambda & T_{12} \\
+%                         0 & T_{22} \\
+%                   \end{bmatrix}
+%                   \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U
+%                   \end{bmatrix}\\
+%                   =& \begin{bmatrix}
+%                         \lambda&T_{12}\\
+%                         0&\widetilde U^H\, T_{22}
+%                   \end{bmatrix}
+%                   \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U
+%                   \end{bmatrix}
+%                   = \begin{bmatrix}
+%                         \lambda&T_{12}\,\widetilde U\\
+%                         0&\widetilde U^H\, T_{22}\, \widetilde U
+%                   \end{bmatrix}\\
+%                   =& \begin{bmatrix}
+%                         \lambda&T_{12}\,\widetilde U\\
+%                         0&R
+%                   \end{bmatrix}
+%             \end{aligned}$$
+%             Wobei verwendet wurde, dass nach Definition die komplex Konjugation skalar angewendet wird\footnote{siehe \cite[S. 14]{matrixGolub}}, also es gilt:
            
-           \begin{equation}
-            \label{eqn: Adjungierte reinziehen}
-                  \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U
-                  \end{bmatrix}^H = \overline{\begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U^T
-                  \end{bmatrix}} = \begin{bmatrix}
-                        \overline{1}&0\\
-                        0&\overline{\widetilde U^T}
-                  \end{bmatrix} = \begin{bmatrix}
-                        1&0\\
-                        0&\widetilde U^H
-                  \end{bmatrix}
-           \end{equation}
+%             \begin{equation}
+%             \label{eqn: Adjungierte reinziehen}
+%                   \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U
+%                   \end{bmatrix}^H = \overline{\begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U^T
+%                   \end{bmatrix}} = \begin{bmatrix}
+%                         \overline{1}&0\\
+%                         0&\overline{\widetilde U^T}
+%                   \end{bmatrix} = \begin{bmatrix}
+%                         1&0\\
+%                         0&\widetilde U^H
+%                   \end{bmatrix}
+%             \end{equation}
 
-            Damit ist gezeigt, dass $Q^H\,AQ$ eine rechte obere Dreiecksmatrix ist.
-            Es fehlt noch zu zeigen, dass $Q$ unitär ist, dass kann aber mit (\ref{eqn: Produkt Adjungierter}) und (\ref{eqn: Adjungierte reinziehen}) einfach gezeigt werden.
-            Die Beliebigkeit der Anordnung der Eigenwerte auf der Diagonalen folgt durch rekursives Anwenden von Theorem \ref{thrm: Schur Zerlegung} auf die Matrix $T_{22}$. \qed
+%             Damit ist gezeigt, dass $Q^H\,AQ$ eine rechte obere Dreiecksmatrix ist.
 
-            % Durch Lemma 7.1.1 aus \cite[S. 311]{matrixGolub} kann ferner gefolgert werden, dass die Diagonaleinträge genau die Eigenwerte sind.
+%             $D = \diag(\lambda_1,\dots,\lambda_n)$ folgt mit Korollar 4.2.3 aus \cite[S. 80]{LinAlgWerner}.
+%             Die Beliebigkeit der Anordnung der Eigenwerte auf der Diagonalen erhält man durch rekursives Anwenden von Theorem \ref{thrm: Schur Zerlegung} auf die Matrix $T_{22}$.
+%             Es fehlt noch zu zeigen, dass $Q$ unitär ist, was aber mit (\ref{eqn: Produkt Adjungierter}) und (\ref{eqn: Adjungierte reinziehen}) einfach gezeigt werden kann. \qed\\
 
-            Nun wird eine weitere Schur-Zerlegung vorgestellt. Diese wird für den Beweis der Identität von Futamura in Kapitel \ref{sec: Futamura} benötigt.
+            Mithilfe dieser Definition kann nun die allgemeine Schur-Zerlegung vorgestellt werden.
+            Diese wird für den Beweis der Identität von Futamura in Kapitel \ref{sec: Futamura} benötigt.
 %hier kann noch viel mehr erzählt werden: die Eigenschaft der Eigenwerte ist von entscheidender Relevanz
             \begin{theorem}(Generalized Schur Decompositon, \cite[S. 377]{matrixGolub})
                   \label{thrm: allg Schur Zerlegung}
@@ -417,28 +415,26 @@ Tag der Einreichung: \datum
                   \end{equation}
             \end{theorem}
             Beweis: siehe \cite[S. 377]{matrixGolub}\qed
-
-            
-
-% k.A. ob das so stimmt
       
       \section{Die Identität von Futamura}
       \label{sec: Futamura}
 
-            Nach den Vorbereitungen, die in diesem Kapitel gemacht wurden, kann nun die Identität von Futamura beschrieben und gezeigt werden.
+            Nach den Vorbereitungen, die in vorherigen Abschnitten gemacht wurden, kann nun die Identität von Futamura beschrieben und gezeigt werden.
 
-            Das folgende Theorem wird für das Finden einer Zielfunktion von entscheidender Relevanz,
-            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte und einem Integral über Matrizen gezeigt werden kann.
+            Das folgende Theorem wird für das Finden einer Zielfunktion von entscheidender Relevanz sein,
+            da durch diese Aussage in Kapitel \ref{sec: EW Zählung} ein Zusammenhang zwischen der Anzahl der Eigenwerte auf einem Intervall und einem Kurvenintegral über Matrizen gezeigt werden kann.
 
-            \begin{theorem}
-                  \label{thrm: IdentitätFutamura}(vgl. \cite[S. 127]{grundlageFutamura})
-                  Seien $A, B\in\Cnn, z\in \C$, sodass $(zB-A)$ ein regulärer Matrix pencil ist, dann gilt:
+            \begin{theorem}(vgl. \cite[S. 127]{grundlageFutamura})
+                  \label{thrm: IdentitätFutamura}\\
+                  Seien $A, B\in\Cnn, z\in \C$, sodass $(zB-A)$ ein regulärer Matrix-Pencil ist, dann gibt es unitäre Matrizen $Q$ und $U \in\Cnn$, sodass
+                  $$A = QTU^H,\quad B=QSU^H$$
+                  und
                   \begin{equation}
                         \label{eqn: Resultat_Futamura}
-                        \tr((zB-A)\inv B) = \sum_{j=1}^{n'} \frac{1}{z-\lambda_j},
+                        \tr((zB-A)\inv B) = \sum_{j\in N}\frac{1}{z-\lambda_j},
                   \end{equation}
-                  wobei $n'$ die Anzahl an von Null verschiedener Eigenwerte des pencils $(zB-A)$ und $\lambda_j$ die Eigenwerte des pencils sind.
-%ist es die Anzahl von Null verschiedener Eigenwerte?
+                  gilt, wobei $N:=\{i\in\{1,\dots,n\}: s_{ii}\ne 0\}$ und $\lambda_j$ die Eigenwerte des Matrix-Pencils sind.
+                  $S$ und $T$ sind hier obere Dreiecksmatrizen.
             \end{theorem}
 % warum zB-A? für Eigenwerte macht es keinen Unterschied
             Beweis:
@@ -446,45 +442,42 @@ Tag der Einreichung: \datum
             $$A=QTU^H,\quad B=QSU^H$$
             mit $T,S\in\Cnn$ obere Dreiecksmatrizen.
             
+            Hierbei sind $S$ und $T$ obere Dreiecksmatrizen, und es gilt:
+            $$\lambda(B)=\lambda(S) = \{s_{ii}:i=1,\dots,n\},$$
+            aber diese Eigenwerte sind noch ungeordnet und man kann nicht wie in \cite{grundlageFutamura}:
+            \begin{align*}
+                  s_{ii} = \begin{cases}
+                        \ne 0 & : i\le n'\\
+                        0 & : i>n'
+                  \end{cases}
+            \end{align*}
+            annehmen für $n':=|\{i\in\{1,\dots,n\}: s_{ii}\ne 0\}|$.
+
+            Mithilfe der Definition
+            $$N:=\{i=1,\dots,n: s_{ii}\ne 0\}$$
+            kann dies aber umgangen werden.
+
             Man kann folgern:
             \begin{align*}
                   (zB-A)\inv B =& (z\,QSU^H-QTU^H)\inv QSU^H = (Q(zS-T)U^H)\inv QSU^H \\
                   =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv
             \end{align*}
-            wobei die Regel für Inverse von Matrixprodukten und die Definition von unitären Matrizen verwendet wurde.
 
-            Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.
-            Da die Spur invariant unter Ähnlichkeitstransformation ist, gilt
-% Quelle Spur invariant
+            Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.\\
+            Da die Spur invariant unter Ähnlichkeitstransformation ist\footnote{vgl. 3. Exercise unter Example 1.3.5 in \cite{matrixSpur}}, gilt
             \begin{equation}
                   \label{eqn: Haltepunkt Bew Futamura}
                   \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}
             \end{equation}
 
-            Für die folgenden Beweisschritte benötigt man einige Aussagen über obere Dreiecksmatrizen, hierbei ist mit $X_{ij}$ der i-j-te Eintrag von X gemeint
-% i-j-te Eintrag?
+            Für die folgenden Beweisschritte benötigt man einige Aussagen über obere Dreiecksmatrizen, hierbei ist mit $X_{ij}$ der Eintag von X in Zeile $i$ und Spalte $j$ gemeint.
 
             \begin{lemma}
                   \label{Hilfslemma_Futamura: Inv Dreieck}
                   Die Inverse einer oberen Dreiecksmatrix $A$ ist eine obere Dreiecksmatrix
             \end{lemma}
-            Beweis:
-            Anwenden des Gauß-Jordan-Algorithmus auf $A|\In$, wie in dem folgenden Schritten:
-            Sei $A:= \begin{pmatrix}
-                  a_{11} & a_{12} & \dots & a_{1n}\\
-                  & a_{21} &\ddots&a_{2n}\\
-                   &  & \ddots &\vdots\\
-                  0 &  & &a_{nn}
-            \end{pmatrix}$
-
-            Betrachte nun $B:=(A\vert \In)$ und dividiere die n-te Spalte von $B$ durch $a_{nn}$, definiere anschließend die $(n-1)$-te Spalte wie folgt:
-            $B_{n-1}:=B_{n-1}-a_{n-1\, n}\ B_{n}$
-            Die letzten 2 Reihen der resultierende Matrix sehen anschließend wie folgt aus:
-            $$\left(\begin{array}{ccccc|cccccc}
-                  0 & \dots & 0 & a_{n-1\, n-1}& 0&0&\dots&0&1&-\frac{a_{n-1\, n}}{a_{nn}}\\
-                  0 & \dots & \dots & 0&1&0&\dots&\dots&0&(a_{nn})^{-1}
-                \end{array}\right)$$
-            Man sieht, dass die Inverse von $A$ ebenfalls eine obere Dreiecksmatrix wird. \qed
+            Beweis: Anwenden des Gauß-Jordan-Algorithmus zur Bestimmung der Inversen auf $(A|\In)$ mit $A$ rechte obere Dreiecksmatrix\qed
+% man könnte auch mit Gramerschen Regel argumentieren, aber da ist es schwer zu beweisen, dass die Kofaktoren null sind
 % hier gibt es noch Verbesserungsbedarf
 
             \begin{lemma}
@@ -505,107 +498,120 @@ Tag der Einreichung: \datum
             Beweis: Sei $i\in\{1,\dots,n\}$ fest, dann gilt
             $$\In = X\,X\inv \Rightarrow 1 = X_{ii}(X\inv)_{ii} \Rightarrow (X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
             Hier wurde Lemma \ref{Hilfslemma_Futamura: Prod Dreieck} und
-            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\ \forall k=\{1,\dots,n\}$$
-            verwendet.\qed
+            $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\quad \forall k=1,\dots,n$$
+            verwendet.\qed\\
 
-            Mit den Lemmas \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
-% Lemmas/Lemmen?
+            Nun kann man den Beweis für Theorem \ref{thrm: IdentitätFutamura} vervollständigen:
+            Mit den Lemmata \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
             \begin{align*}
                   \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((zS-T)\inv)_{ii}\ S_{ii} = \sum_{i=1}^{n}((zS-T)_{ii})\inv\ S_{ii}\\
-                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i=1}^{n'}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
-                  =& \sum_{i=1}^{n'} \frac{1}{z-\lambda_i}
+                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i\in N}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
+                  =& \sum_{i\in N} \frac{1}{z-\lambda_i}
             \end{align*}
 
-            mit $\lambda_i = \frac{t_{ii}}{s_{ii}}$.
-% jetzt wurde nicht erklärt: warum n' ersten Einträge s_ii ungleich 0, warum ist nicht auch t_ii =0 für i>n'
+            mit
+            $$\lambda_i = \frac{t_{ii}}{s_{ii}},\quad i\in N.$$
 
+            Nach Theorem \ref{thrm: allg Schur Zerlegung} und der Definition von $N$ gilt:
 
-            Beachte, dass nach Theorem \ref{thrm: allg Schur Zerlegung} gilt:
+            $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\} = \{\lambda_i: i\in N\}$$
+            somit sind die Eigenwerte des Matrix-Pencils genau die Polstellen der Funktion $\tr((zB-A)\inv B)$.
 
-            $$\lambda(A, B) = \{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\}$$
-            somit sind alle Eigenwerte des Matrix pencils Polstellen dieser Funktion.
-% das ist noch sehr doof gemacht, diese Funktion - welche?
-
-            Man kann somit mithilfe des Residuentheorems die Anzahl der Eigenwerte bestimmen, indem man über die Funktion $\tr((zB-A)\inv B)$ integriert.
-            Genau dies ist auch der Ansatz in \cite{grundlageFutamura,hauptteilTkachuk} und Kapitel \ref{sec: EW Zählung}.
+            In Kapitel \ref{sec: EW Zählung} wird daher das Residuentheorem auf ein Kurvenintegral\\
+            über $\tr((zB-A)\inv B)$ angewendet, um die Anzahl der Eigenwerte zu bestimmen.
+            Genau dies ist auch die Grundidee in \cite{grundlageFutamura,hauptteilTkachuk}.
 % hier noch entscheiden, was drin gelassen wird
 
 % falls man Schur-Zerlegung auf S anwendet, um die Eigenwerte zu sortieren, dann muss man auch gleiche Ähnlichkeitstransformation auf T anwenden, aber ist es dann noch eine obere Dreiecksmatrix?
             
 \chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
-      Um die Eigenfrequenzen und/oder Eigenkreisfrequenzen \w eines Systems zu bestimmen, benötigt man zuerst die Massenmatrix \M und die Steifigkeitsmatrix \K des Systems.
+      Die Berechnung von Eigenkreisfrequenzen hat in der Mechanik einen besonderen Stand:
+      Durch die Betrachtung von Systemen und der Berechnung von Eigenfrequenzen, kann vorhergesagt werden, mit welchen Frequenzen das System schwingen wird.
 
-      Laut \cite[S. 366]{maschinendynamikDresig} könne man für einfache Systeme das Prinzip von d'Alembert anwenden, es sei aber ungeeignet für komplexere Probleme.
-            
-      In diesem Kapitel werden 2 Systeme vorgestellt und die entsprechenden Matrizen berechnet:
-      das erste ist ein Längsschwinger-System in einer Dimension, das zweite ein Längsschwinger in 2 Dimensionen.
+      Durch das kontrollierte Verändern eines Design-Parameters $s$ kann sichergestellt werden, dass keine Eigenfrequenz des Systems in einem vorgegebenen Intervall liegt.
+      Durch die Eliminierung von allen Eigenwerten aus diesem Intervall wird garantiert, dass keine Frequenz in diesem Intervall das System anregt.
+      Es kommt daher zu keiner Interferenz und Überlagerung, was für große mechanische Systeme katastrophal sein kann.
 
-
-% Erklärung x und anderes einfügen, auch Def Schwingersysteme
-      Hier folgen nun Bilder, um die Systeme zu veranschaulichen:
-
+      In dieser Ausarbeitung werden die folgenden Systeme untersucht:
       \begin{figure}[ht]
             \centering
             \begin{minipage}[ht]{0.49\linewidth}
                   \centering
-                  \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/Längsschwinger 1D.png}
-                  \caption{Längsschwinger eindimensional}
-                  \label{fig: Längsschwinger 1d}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./System1.png}
+                  \caption{System 1}
+                  \label{fig: System 1}
             \end{minipage}
             \hfill
             \begin{minipage}[ht]{0.49\linewidth}
                   \centering
-                  \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/Längsschwinger 2D.png}
-                  \caption{Längsschwinger zweidimensional}
-                  \label{fig: Längsschwinger 2d}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./System2.png}
+                  \caption{System 2}
+                  \label{fig: System 2}
             \end{minipage}
       \end{figure}
 
-% in maschinendy gibt es def, was schwingersysteme sind 
-      Hierbei haben die Federn keine Massen und es existieren weder Dämpfung noch Gewichtskraft.
+      Der Vektor $x = (x_1,\dots,x_n)^T$ enthält hier die Auslenkungen der Massen aus ihrer Ruhelage und $s\in\R^l$ wird Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt, da die Eigenschaften des Systems, wie die Eigenkreisfrequenzen, von ihm abhängen.
 
+      Die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} werden \zitat{Schwingerketten}\cite[S. 236]{maschinendynamikDresig} genannt, da sie aus starren Massen und masselosen Federn bestehen, die linear miteinander verbunden sind.
+      Es existieren zudem in diesen Systemen keine Dämpfung.
+      
+      Laut \cite[S. 362-365]{maschinendynamikDresig} könne man für diese Systeme die \zitat{Differentialgleichung der freien Schwingungen}\cite[S. 365]{maschinendynamikDresig} erhalten, wenn man für jede Masse ein Kräftegleichgewicht aufstellt.
+      Diese Differentialgleichung besitzt folgende Form:
+      \begin{equation}
+            \label{eqn: Dgl freie Schwingungen}
+            Kx+M\ddot x = 0
+      \end{equation}
+
+      wobei $K$ die Steifigkeitsmatrix und $M$ die Massenmatrix des Systems sind.
+% bin ich genug auf d
+      Da genau diese Matrizen benötigt werden, um die Eigenkreisfrequenzen zu berechnen, ist das Ziel dieses Kapitels die Systeme von Kräftegleichgewichten aufzustellen und anschließend so umzuformen, dass eine Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) entsteht.
+      Anhand dieser Gleichung werden die Matrizen abgelesen.
+
+      Dafür wird der erste Abschnitt die im System wirkenden Kräfte und die Anwendung des Prinzips von d'Alembert behandeln.
+      Im zweiten Abschnitt werden die Matrizen der Systeme bestimmt und anschließend wird in Abschnitt \ref{sec: Formel EW} die Formel für die Berechnung der Eigenkreisfrequenzen hergeleitet. 
+      
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
 
-            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in Matrix-Schreibweise umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
+            Somit wird zuerst ein Kräftegleichgewicht aufgestellt und anschließend in eine Gleichung über Matrizen umgeformt, wodurch man die Massen- und Steifigkeitsmatrix erhält.
 % In Maschinendynamik war von Koeffizientenvgl die Rede, könnte man auch einbauen
-            Die erhaltene Gleichung muss die Form $M\,\ddot x+K\,x = 0$ besitzen. Dadurch können die gesuchten Matrizen an der Gleichung abgelesen werden.
 % Es muss irgendwo eine Quelle geben, die genau das sagt
             Da diese Herleitung auf Kräftegleichgewichten beruht, werden nun die agierenden Kräfte kurz erläutert:
 
-            Die Federkraft \FL wird laut \cite{federkraft} berechnet durch:
+            Die Federkraft \FL wird laut \cite{federkraft} durch
             \begin{equation}
                   \label{eqn: Federkraft}
-                  \FL = -c\cdot \overrightarrow s,
+                  \FL = -c\cdot s
             \end{equation}
-            wobei $c$ die Federkonstante ist und $\overrightarrow s$ die Auslenkung der Feder aus der Ruhelage darstellt.
+            berechnet, wobei $c$ die Federkonstante und $s$ die Auslenkung der Feder aus der Ruhelage ist.
 
-            Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei positiver Auslenkung die Feder sich zusammenziehen will, die Kraft also in die entgegengesetzte Richtung wirkt.
+            Beachte, dass die Kraft entgegen der Auslenkung wirkt, da bei Auslenkung die Feder in die Ruhelage zurückkehren will.
 % Quelle finden
                   
-            Die Trägheitskraft \FT ist definiert durch:
-% Quelle
+            Die Trägheitskraft \FT ist nach \cite{trägheitskraft} definiert durch:
             \begin{equation}
                   \label{eqn: Trägheitskraft}
-                  \FT = -m\cdot \overrightarrow{a}
+                  \FT = -m\cdot a
             \end{equation}
-            mit Masse $m$ und Beschleunigungsvektor $\overrightarrow{a}$.                  
+            mit Masse $m$ und Beschleunigungsvektor $a$.    
+            
+            Auch hier wirkt die Kraft wieder der Beschleunigung entgegen.
 
-            Um die Schematas klarer zu gestalten, werden die Kraftpfeile hier immer in die entgegengesetzte Richtung eingezeichnet, dafür aber die Minuszeichen weggelassen,
-            somit werden in den Kraftschemas keine negativen Richtungen verwendet.
-% Schemas, Kraftschemas, \dots
-
-            Generell sind $\FL,\ \overrightarrow{s},\ \FT \text{ und } \overrightarrow{a}\in \R^n$, aber in dieser Ausarbeitung werden sie immer als Skalare verwendet. 
-            Da in diesem Kapitel Feder-Masse-Systeme behandelt werden, kann man $\overrightarrow{s}$ und $\overrightarrow{a}$ auf die Verschiebungen der Massen $(\xk)_k$ zurückführen:
-            Im Allgemeinen wird hier $\overrightarrow{s}$ durch $(x_{k+1}-\xk)$ und $\overrightarrow{a}$ durch die zweite Ableitung $\ddot \xk$ ersetzt.
+            Um das Schemas der Kräfte klarer zu gestalten, werden die Kraftpfeile immer in die der Auslengung entgegengesetzte Richtung gezeichnet und die Minuszeichen weggelassen,
+            somit werden in den Kraftschemas keine negativen Beträge verwendet.
+% Schemas, Kraftschemas,...
             Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht.
 
-            \bild{Federkraft und Trägheitskraft.png}{0.4}{wirkende Kräfte an Masse mit Feder \cite{federkraft}}{\label{fig: KräfteAnFeder}}
-            
-            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und $F_L$ ist als $c\cdot z$ definiert (vgl. \cite{federkraft}).
+            \bild{Federkraft und Trägheitskraft.png}{0.3}{wirkende Kräfte an Masse mit Feder}{\label{fig: KräfteAnFeder}}
+
+            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und demnach gilt $F_L = c\cdot z$ (vgl. \cite{federkraft}).
+
+            Da in dieser Ausarbeitung nur Feder-Masse-Systeme behandelt werden, kann man $s$ und $a$ auf die Auslenkungen $(\xk)_k$ zurückführen:
+            Im Allgemeinen wird hier $s$ durch $(x_{k+1}-\xk)$ und $a$, wie schon in Abb. \ref{fig: KräfteAnFeder}, durch die zweite Ableitung $\ddot \xk$ ersetzt.
 % Man könnte es auch umschreiben
-            Betrachte nun einen Ausschnitt von Abb. \ref{fig: Längsschwinger 1d}: Die Massen $m_{k-1},\ m_k\text{ und }m_{k+1}$, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
+            Betrachte nun ein System mit 3 Massen, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
+            Anhand dieses Systems soll eine allgemeines Kräftegleichgewicht aufgestellt werden.
 
             \begin{figure}[ht]
                   \centering
@@ -624,95 +630,105 @@ Tag der Einreichung: \datum
                   \end{minipage}
             \end{figure}
 
-            Betrachtet man nur die $k$-te Masse, so erhält man die wirkenden Kräfte, wie sie in Abb. \ref{fig: Kräfte Masse 1D} dargestellt wurden.
+            Für $m_2$ erhält man die wirkenden Kräfte, wie sie in Abb. \ref{fig: Kräfte Masse 1D} dargestellt wurden.
 
             Mit dem Prinzip von d'Alembert führt dies auf die Gleichung
             \begin{equation}
-                  \label{eqn: Gl für kte Masse}
-                  m_k\,\ddot x_k + c_{k-1}\,(x_k-x_{k-1}) - c_k\,(x_{k+1}-x_k) = 0
+                  \label{eqn: Gl für Masse}
+                  m_2\,\ddot x_2 + a\,(x_2-x_1) - b\,(x_3-x_2) = 0
             \end{equation}
 
-            Man beachte, dass für unbewegliche Masse $m_{k-1}$, also für den Fall, dass
-            $$x_{k-1} \equiv 0$$
-            (\ref{eqn: Gl für kte Masse}) sich zu
-            \begin{equation}
-                  \label{eqn: Gl für kte Masse mit Rand links}
-                  m_k\,\ddot x_k + c_{k-1}\,x_k - c_k\,(x_{k+1}-x_k) = m_k\,\ddot x_k + (c_{k-1}+c_k)\,x_k -c_k\,x_{k+1} = 0
-            \end{equation}
-            reduziert.
-
-            In diesem Fall kann die $(k-1)$-te Masse als Rand betrachtet werden, für $k=1$ entspricht (\ref{eqn: Gl für kte Masse mit Rand links}) also genau der Gleichung für die Masse $m_1$ in Abb. \ref{fig: Längsschwinger 1d}.
-
-            Falls man diese Gleichungen für alle n Massen aufstellt, dann können diese zu einer Gleichung der Art
+            Nehme man an, man hat Dirichlet-Randbedingungen, also es gelte zum Beispiel $x_1 \equiv 0$, dann würde man aus (\ref{eqn: Gl für Masse})
 
             \begin{equation}
-                  \label{eqn: MK Gleichung in 1D}
-                  M\,\ddot x + K\,x = 0,\quad M,\ K\in\R^{n\times n}
+                  \label{eqn: Gl für Masse mit Rand links}
+                  m_2\,\ddot x_2 + a\,x_2 - b\,(x_3-x_2) = m_2\,\ddot x_2 + (a+b)\,x_2 -b\,x_3 = 0
             \end{equation}
-            zusammengefasst werden. Anhand der gewonnenen Gleichung werden die Massen- und Steifigkeitsmatrix abgelesen.
+            erhalten.
 
-            % Man sieht, dass hier M eine Diagonalmatrix ist, die nur positive Einträge auf der Hauptdiagonalen besitzt.
-            % Sie ist somit insbesondere positiv definit, da alle Minoranten positiv sind.
+            In (\ref{eqn: Gl für Masse mit Rand links}) kann die erste Masse als Rand betrachtet werden.
+            Eine Gleichung dieser Form wird daher in den Systemen aus Abb. \ref{fig: System 1} und \ref{fig: System 2} für die linken Massen gelten.
 
-            % Für den zwei-dimensionalen Fall benötigt man $n^2$ Punkt Massen und für jeden Punkt auch 2 Einträge in $x$, da es nun eine Bewegung in x- und in y-Richtung gibt.
-            % Somit existieren $2\,n^2$ Einträge in $x$, aber jede Masse besitzt nur 2 Verbindungen mehr, somit wird die Steifigkeitsmatrix \K viel größer, aber auch viel schwächer besetzt.
-            
       \section{Ermittlung der Matrizen der Modellprobleme}
-            % Nun werden die Massen- und Steifigkeitsmatrix der obigen Systeme berechnet.
-            Beginne dazu mit dem System aus Abb. \ref{fig: Längsschwinger 1d}
+            Berechne nun die Matrizen der Systeme.
+            Während die Systeme der Gleichungen allgemein gehalten werden, verwende für die endgültige Definition der Matrizen $K$ und $M$
+            $$n=8, j=n/2$$ 
+            Beginne dazu mit dem System aus Abb. \ref{fig: System 1}.
 
-            Die Gleichung für $m_1$ ist durch (\ref{eqn: Gl für kte Masse mit Rand links}) mit $k=1$ gegeben.
-            Für $k=2,\dots, n-1$ gilt (\ref{eqn: Gl für kte Masse}).
+            Die Form der Gleichung für die linke Masse ist durch (\ref{eqn: Gl für Masse mit Rand links}) gegeben.
+            Für $k=2,\dots, n-1$ gilt eine Gleichung der Form (\ref{eqn: Gl für Masse}).
             
-            Da die Masse $m_n$ durch die rechte Feder mit dem Rand verbunden ist, gilt analog zu oben $x_{n+1} \equiv 0$.
-            Man erhält
-            $$m_n\,\ddot x_n + c_{n-1}\,(x_n-x_{n-1}) + c_n\,x_n = 0.$$  
+            Da die letzte Masse durch die rechte Feder mit dem Rand verbunden ist, gilt also $x_{n+1} \equiv 0$.
+            Und analog zu (\ref{eqn: Gl für Masse mit Rand links}) erhält man
+            $$(s+1)\,\ddot x_n + c\,(x_n-x_{n-1}) + c\,x_n = 0.$$  
 
-            Nach Umstellen folgt:
-            \begin{equation}
-                  \label{eqn: System GDgl MK 1d}
-                  \begin{cases}
-                        m_1\ \ddot x_1 + (c_0+c_1)\,x_1 - c_1\,x_2 & = 0   \\
-                        m_i\ \ddot x_i - c_{i-1}\,x_{i-1} + (c_{i-1}+c_i)\,x_i -c_i\,x_{i+1} & = 0,\ i=2,\dots,n-1 \\
-                        m_n\ \ddot x_n - c_{n-1}\,x_{n-1} + (c_{n-1}+c_n)\,x_n & = 0
-                  \end{cases}
-            \end{equation}
+            Falls man nun alle Massen, Federkonstanten und Auslenkungen einsetzt, so erhält man nach Umstellen das Gleichungssystem
 
-            Dieses System kann man zusammenfassen zu:
-            $$M\,\ddot x + K\,x = 0,$$
-            % damit wird die folgende Matrix quadratischer
-            \renewcommand{\arraystretch}{1.5}
-            wobei $$M= \text{diag}(m_1,\dots,m_n),\ 
-            K = \begin{pmatrix}
-                  c_0+c_1 & -c_1 &  &  & 0 \\
-                  -c_1 & c_1+c_2 & -c_2 &  &  \\
-                   & -c_2 & c_2+c_3 & \ddots &  \\
-                    &  & \ddots & \ddots  & -c_{n-1} \\
-                   0&  & & -c_{n-1} & c_{n-1}+c_n \\
-                  \end{pmatrix}$$
+            $$\begin{cases}
+                  m\ \ddot x_1 + 2s\,x_1 - s\,x_2 & = 0   \\
+                  m\,\ddot x_k -s\,x_{k-1} + 2s\,x_k -s\,x_{k+1} & = 0,\quad k=2,\dots,j-1\\
+                  (s+1)\,\ddot x_j -s\,x_{j-1} + (s+c)\,x_j -c\,x_{j+1} & = 0\\
+                  (s+1)\,\ddot x_k -c\,x_{k-1} + 2c\,x_k -c\,x_{k+1} & = 0,\quad k=j+1,\dots,n-1\\
+                  (s+1)\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
+            \end{cases}$$
 
+            Dieses System kann man zusammenfassen zu der Gleichung (\ref{eqn: Dgl freie Schwingungen}),
+            wobei
+            \begin{align}
+                  M &= \diag(m, m, m, s+1, s+1,s+1, s+1,  s+1),\label{def: M1}\\
+                  K &= \begin{pmatrix}
+                        2s & -s &  &  &  &  &  &  \\
+                        -s &  2s& -s &  &  &  &0  &  \\
+                         & -s & 2s & -s &  &  &  &  \\
+                         &  & -s & s+c & -c &  &  &  \\
+                         &  &  & -c & 2c & -c &  &  \\
+                         &  &  &  & -c & 2c & -c &  \\
+                         & 0 &  &  &  & -c & 2c &  -c\\
+                         &  &  &  &  &  & -c & 2c \\
+                        \end{pmatrix}\label{def: K1}
+            \end{align}\\
+
+            Wende dieses Vorgehen auch für das System aus Abb. \ref{fig: System 2} an und erhalte
+            
+            $$\begin{cases}
+                  m\ \ddot x_1 + (s_1+s_2)\,x_1 - s_2\,x_2 & = 0   \\
+                  m\,\ddot x_k -s_k\,x_{k-1} + (s_k+s_{k+1})\,x_k -s_{k+1}\,x_{k+1} & = 0,\quad k=2,\dots,j-2\\
+                  s_j\,\ddot x_{j-1} -s_{j-1}\,x_{j-2} + (s_{j-1}+c)\,x_{j-1} -c\,x_{j+1} & = 0\\
+                  s_j\,\ddot x_k -c\,x_{k-1} + 2c\,x_k -c\,x_{k+1} & = 0,\quad k=j,\dots,n-1\\
+                  s_j\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
+            \end{cases}$$
+            
+
+            Dieses System kann man analog zu oben zu der Gleichung (\ref{eqn: Dgl freie Schwingungen}) umformen.
+            Hier gilt nun aber
+            \begin{align}
+                  M &= \diag(m, m, s_4, s_4, s_4, s_4, s_4, s_4)\label{def: M2}\\
+                  K &= \begin{pmatrix}
+                        s_1+s_2 & -s_2 &  &  &  &  &  &  \\
+                        -s_2 &  s_2+s_3& -s_3 &  &  &  &0  &  \\
+                              & -s_3 & s_3+c & -c &  &  &  &  \\
+                              &  & -c & 2c & -c &  &  &  \\
+                              &  &  & -c & 2c & -c &  &  \\
+                              &  &  &  & -c & 2c & -c &  \\
+                              & 0 & &  &  & -c & 2c &  -c\\
+                              &  &  &  &  &  & -c & 2c \\
+                        \end{pmatrix}\label{def: K2}
+            \end{align}
                   
-            % wird wieder auf Standard zurückgesetzt
-            \renewcommand{\arraystretch}{1}
-% Erklärung x? Oder kennt das jeder
-
 % hier muss was über die Eigenschaften gesagt werden
-            
-            % Für das zwei-dimensionale System kann dieses Verfahren analog angewendet werden. 
-
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
-            Nach der Ermittlung der zugehörigen Matrizen, werden nun die Eigenfrequenzen des Systems bestimmt.
-% Eigenkreisfrequenzen?
+            \label{sec: Formel EW}      
+            Nach der Ermittlung der zugehörigen Matrizen bestimme nun die Formel für die Eigenkreisfrequenzen eines Systems.
 
-            Da in diesen Systemen die Massen um ihre Ruhelage schwingen und keine weiteren Kräfte wirken, schwingt jede einzelne Masse harmonisch.
-            Nach \cite[S. 380]{maschinendynamikDresig} gilt daher mit $x$ statt $q$:
+            Die Schritte in diesem Abschnitt folgen \cite[S. 380]{maschinendynamikDresig} und \cite[S. 2]{hauptteilTkachuk}.
+            Nach \cite[S. 380]{maschinendynamikDresig} gelte für die Auslenkungen der Massen mit $x$ statt $q$:
             $$x(t) = v\,\exp(i\w t),\ \ \ddot x(t) = -\w^2\,v \exp(i\w t)$$
-            mit $v=(v_1,\dots,v_n)$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfreqenz \w}\cite[S. 380]{maschinendynamikDresig}
+            mit $v=(v_1,\dots,v_n)^T$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfrequenz \w}\cite[S. 380]{maschinendynamikDresig}
             
-            Diesen Ansatz kann man in (\ref{eqn: MK Gleichung in 1D}) einsetzen und erhält nach dividieren durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
+            Diesen Ansatz wird in (\ref{eqn: Dgl freie Schwingungen}) eingesetzt und man erhält nach Division durch $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$:
             
             \begin{equation}
-                  \label{eqn: verallg EW Problem mit w}
+                  \label{eqn: allg EW Problem mit w}
                   (K-\w^2\,M)\,v = 0
             \end{equation}
 
@@ -720,48 +736,61 @@ Tag der Einreichung: \datum
 
             Man will diese Gleichung für $v\ne 0$ lösen, da man sonst eine triviale Lösung erhält, in der keine Masse schwingt.
 
+            Um die Theorie aus Kapitel \ref{sec: EW Problem_Futamura} anzuwenden, so definiere
+            $$\lambda_i := \w_i^2,\quad i=1,\dots,n$$
 
-% braucht man wohl hier noch nicht
-            Um (\ref{eqn: verallg EW Problem mit w}) mit $v\ne 0$ zu erfüllen, muss
-            $$\det\klammer{K-\w^2\,M} = 0$$
-            erfüllt sein.
-% nachschlagen, warum das so ist
+            Es folgt das allgemeine Eigenwertproblem
+            \begin{equation}
+                  \label{eqn: allg EW Problem mit lam}
+                  (\K-\lambda\,\M)\,v = 0
+            \end{equation}
+
+            Man beachte, dass diese Gleichung genau die Form aus (\ref{eqn: allg EW Problem}) besitzt.
+            Man kann für die vorgestellten Probleme folgern, dass für $N$ aus Kapitel \ref{sec: Futamura}
+            $$N=\{1,\dots,n\}$$
+
+            gilt, da die Massenmatrizen aus (\ref{def: M1}) und (\ref{def: M2}) hier Diagonalmatrizen mit positiven Einträgen auf der Diagonalen sind. Somit sind auch alle Eigenwerte positiv.
+
+            Für reguläre Massenmatrizen gelte nach \cite[S. 376]{matrixGolub} für (\ref{eqn: allg EW Problem mit lam}):
+            $$(K-\lambda\,M)\,v = 0 \Leftrightarrow (M\inv K-\lambda\In)\,v=0$$
+            und folglich
+            $$\lambda(K, M) =\lambda(M\inv K,\In) = \lambda(M\inv K)$$
+
+            Somit sind die Eigenwerte des Matrix-Pencils $K-\lambda M$ und der Matrix $M\inv K$ äquivalent.
+
+            Da auch $M\inv$ eine Diagonalmatrix ist, so ist $M\inv K$ für die vorgestellten Systeme symmetrisch.
+            Es gilt daher für die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2}
+            \begin{equation}
+                  \label{eqn: alle Ew reell}
+                  \lambda(K, M) = \lambda(M\inv K) \subset \R
+            \end{equation}
+            wobei \cite[S. 393]{matrixGolub} angewendet wurde.
+
+            Durch Bemerkung \ref{bem: B reg impl pencil reg} folgt ferner, dass die Matrix-Pencil der Systeme regulär sind.
 
 \chapter{Zählung von Eigenwerten}
 \label{sec: EW Zählung}
 % vielleicht eher Finden der Zielfunktion nennen
 % es fehlt noch: Einführung s und Erklärung, warum nun lambda statt w^2
-% vorher war immer von n' die Rede, jetzt gibt es nur noch n?      
       Nun wende man sich dem Finden einer Zielfunktion zu, die die Anzahl der Eigenwerte auf einem Intervall beschreibt.
-      Diese Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) abhängen und schlussendlich minimiert werden,
-      um ein $s$ aus der zulässigen Menge $\Omega$ zu finden, für welches die Zielfunktion minimal ist, also kein Eigenwert in dem vorgegebenen Intervall liegt.
+      Diese Funktion hängt von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) ab und wird offenbar minimal, wenn kein Eigenwert des Matrix-Pencils in dem Intervall liegt.
       
       \section{Vorüberlegungen}
             Die in diesem Abschnitt erwähnten Schritte stammen aus \cite[S. 2-4]{hauptteilTkachuk}.
 
-            Betrachte das Problem
-            $$(K-\w^2 M)x = 0$$
-            Falls man das Problem eigenständig betrachtet, so sucht man eine Familie $(\w_j)_j$, die diese Gleichung für ein $x_j \ne 0$ löst.
-
-            Um auf die Form eines Matrix pencils und somit auf die normale Form eines verallgemeinerten Eigenwertproblems zu gelangen, definiere
-            $$\lambda_j := \w_j^2$$
-% zitat      
-            Für das Lösen dieser Gleichung sucht man nun nicht mehr eine Familie $(\w_j)_j$, sondern genau die Eigenwerte des pencils, $\lambda(K,M)$.
-            Man beachte aber, dass sich durch die Substitution auch die gegebenen Grenzen verändert haben:
-            man will nun, dass keine Eigenwerte des pencils $(\AlamB)$ in dem Intervall $[\lambda_a, \lambda_b]:=[\w_a^2,\w^2_b]$ liegen.
-
-            Eine normale Massematrix, d.h. eine Diagonalmatrix mit ausschließlich positiven Einträgen, ist offenbar regulär.
-% ???? warum hier so random
+            Betrachte Gleichung (\ref{eqn: allg EW Problem mit lam}), durch die Definition $\lam = \w^2$ verändert sich auch das Intervall, welches man betrachtet:
+            $$\lamAlamB:=\wAwB$$
+% \w_a und \w_b nicht erklärt
             Definiere nun die Funktion $h$ wie folgt:
             $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)$$
 
             Da man nur daran interessiert ist, ob ein Eigenwert in dem Intervall liegt oder nicht, definiere
 
-            $$\mu := \sum_{j=1}^{n} h(\lambda_j)$$
+            $$\mu := \sum_{j\in N} h(\lambda_j)$$
 
-            Obwohl diese Funktion korrekt ist, so gibt es doch einige Schwachstellen, sollte man diese Funktion minimieren wollen:
-% wie kann eine Funktion korrekt sein?
-            Die Funktion ist nicht stetig differenzierbar und entscheidender: sie ist eine Treppenfunktion, damit sind alle Ableitungen gleich 0, also unbrauchbar für Minimierungsalogrithmen, die mit der Ableitung arbeiten.
+            Nach Kapitel \ref{sec: Formel EW} gilt aber $N=\{1,\dots,N\}$.\\
+            Obwohl diese Funktion die Anzahl der Eigenwerte korrekt beschreibt, gibt es einige Schwachstellen, sollte man diese Funktion minimieren wollen:
+            Die Funktion ist eine Treppenfunktion, damit ist sie nicht stetig und alle Ableitungen sind gleich 0, also unbrauchbar für Minimierungsalogrithmen, die eine Ableitung verwenden.
 
             Diese Probleme kann man abfedern, indem man die Funktion auf dem Intervall $[\lambda_a, \lambda_b]$ gewichtet.
 % abfedern
@@ -769,33 +798,41 @@ Tag der Einreichung: \datum
             Diese Funktion sorgt dafür, dass Eigenwerte in der Mitte des Intervalls stärker ins Gewicht fallen
             Nach \cite[S. 3]{hauptteilTkachuk} sei die Funktion
             $$g(z) = -(z-((1+\alpha)\lambda_a -\alpha\lambda_b))(z-((1+\alpha)\lambda_b-\alpha\lambda_a))$$
-            sehr geeignet, man könnte aber auch zum Beispiel die Funktion
-            $$\Hat g(z) := -(z-(\lambda_a-\alpha))(z-(\lambda_b+\alpha))$$
-            nutzen, die die gleichen Eigenschaften besitzt.
-            In den Funktionen stellt $\alpha>0$ einen Parameter dar, der dafür sorgt, dass die Funktion auf dem Intervall positiv ist.
-            $\alpha$ wird auch \zitat{Inflationsparameter} (vgl. \cite[S. 3]{hauptteilTkachuk}) genannt.
+            sehr geeignet, man könnte aber auch andere Funktionen definieren, die diese Eigenschaften besitzen.
+            In den Funktionen stellt $\alpha>0$ einen Parameter dar, der dafür sorgt, dass die Funktion auf \lamAlamB positiv ist.
+            $\alpha$ wird auch Inflationsparameter (vgl. \cite[S. 3]{hauptteilTkachuk}) genannt.
 % Inflationsparameter
 
             Man findet so die erste Funktion, welche man mit Verfahren der Optimierung sinnvoll minimieren könnte:
             $$J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)$$
 
             Hier müsste man allerdings jeden Eigenwert zuerst berechnen, um dann diese Formel anzuwenden.
-            Auch hängen weder $g$ noch $h$ explizit von $s$ ab, weshalb diese Funktion eher zur Ermittlung der gewichteten Anzahl von Eigenwerten gesehen werden kann, als die tatächliche Zielfunktion, die es zu minimieren gilt.
-            Das Ziel ist daher die Zählung der Eigenwerte durch
+            Auch hängen weder $g$ noch $h$ explizit von $s$ ab, weshalb diese Funktion eher zur Bestimmung der aktuellen gewichteten Anzahl von Eigenwerten gesehen werden kann, als die tatächliche Zielfunktion, die es zu minimieren gilt.
+            Das Ziel ist daher eine Funktion, deren Polstellen die Eigenwerte des Matrix-Pencils sind.
+            Diese Funktion kann dann durch ein Kurvenintegral integriert werden, um die Anzahl an Eigenwerten zu bestimmen
+
+            Die gesuchte Funktion sei
             \begin{equation}
                   \label{eqn: ZielfunktionMitPolstellen}
-                  \frac 1 {2\pi i}\int_\gamma \sum_{j=1}^{n} \frac{1}{z-\lambda_j}\ dz
+                  L(z, s) = g(z)\sum_{j\in N} \frac{1}{z-\lam_j} = \sum_{j=1}^n \frac{g(z)}{z-\lam_j}
             \end{equation}
-% besser wäre es, hier eine Funktion f/g zu definieren, man hat nicht so oft Eigenschaften über das Integral
-            Auf diese Gleichung kann Theorem \ref{thrm: IdentitätFutamura} angewendet werden.
-            Allerdings muss man zunächst zeigen, dass diese Gleichung tatsächlich die Eigenwerte in dem Intervall zählt, dafür benötigt man aber den Residuensatz, welcher im nächsten Abschnitt vorgestellt wird.
-% irgendwo muss noch gezeigt werden, dass alle Eigenwerte auf der reellen Achse liegen, sonst könnte man sich fragen, ob die Gleichung fehlerhaft wird, wenn man über einen Kreis in IC integriert
-      \section{Komplexe Analysis und der Residuensatz}
-            Dieses Kapitel behandelt ausschließlich den Residuensatz und die Argumente, warum man ihn auf (\ref{eqn: ZielfunktionMitPolstellen}) anwenden kann.
-            
-            Zuerst wird der Residuensatz vorgestellt und anschließend wird die benötigte Theorie definiert und auf (\ref{eqn: ZielfunktionMitPolstellen}) angewendet.
 
-            \begin{theorem}(Theorem 9.2 (Residue theorem)\cite[S. 141]{complexAnalysis})
+            Und das entsprechende Integral ist wie folgt definiert:
+            \begin{equation}
+                  \label{eqn: IntZielfunktionMitPolstellen}
+                 \int_\gamma L(z, s)\ dz
+            \end{equation}
+
+            Da alle Eigenwerte auf der reellen Achse liegen, sei $\gamma$ einfachheitshalber ein Kreis $C$.
+
+            Allerdings muss zunächst gezeigt werden, dass diese Gleichung tatsächlich die Eigenwerte in dem Intervall zählt, dafür benötigt man den Residuensatz, welcher im nächsten Abschnitt vorgestellt wird.
+      \section{Komplexe Analysis und der Residuensatz}
+            Dieses Kapitel behandelt ausschließlich den Residuensatz und die Argumente, warum man ihn auf (\ref{eqn: IntZielfunktionMitPolstellen}) anwenden kann.
+            Obwohl $L$ durch die Verteilung der Eigenwerte auch von dem Design-Parameter $s$ abhängt, vernachlässige diese Abhängigkeit in diesem Abschnitt.
+
+            Zuerst wird der Residuensatz und anschließend die benötigte Theorie vorgestellt und auf das Problem oben angewendet.
+
+            \begin{theorem}(Theorem 9.2 (Residue theorem)\cite[S. 141]{complexAnalysis})\\
                   \label{thrm: Residuensatz}
                   Sei $f$ analytisch auf $\Omega$, mit Ausnahme der isolierten Singularitäten $a_1,\dots,a_n$. Wenn für einen Kreis $\gamma\subseteq\C$ die Bedingungen $\gamma \sim 0$ und $a_j\notin \gamma,\ j=1,\dots,n$ erfüllt sind, dann
                   $$\int_\gamma f(z)\ dz = 2\pi i\sum_{k=1}^{n} n(\gamma, a_k)\Res_{a_k}f$$
@@ -813,7 +850,7 @@ Tag der Einreichung: \datum
                         
                         Offenbar ist (\ref{eqn: ZielfunktionMitPolstellen}) eine rationale Funktion:
 
-                        $$L(z) = \frac{p(Z)}{q(z)}$$
+                        $$L(z) = \frac{p(z)}{q(z)}$$
                         mit 
                         \begin{align*}
                               p(z) &= \sum_{j=1}^{n}\prod_{\underset{i\ne j}{i=1}}^{n} z-\lambda_i,\\
@@ -829,17 +866,17 @@ Tag der Einreichung: \datum
 
                         \begin{equation}
                               \label{hilfe: complexAnalysis_isolierteSingularitäten}
-                              f \text{ analytisch für } 0<|z-\lambda_i|<\widetilde{\epsilon},\quad i=1,\dots,n
+                              L \text{ analytisch für } 0<|z-\lambda_i|<\widetilde{\epsilon},\quad i=1,\dots,n
                         \end{equation}
                         mit
-                        $$\widetilde{\epsilon}:= \frac{1}{2}\,\min_{i,j\in\{1,\dots,n\}: \lambda_i\ne \lambda_j} |\lambda_i-\lambda_j|$$
+                        $$\widetilde{\epsilon}:= \frac{1}{2}\,\min_{i,j\in N: \lambda_i\ne \lambda_j} |\lambda_i-\lambda_j|$$
 % alternative: \min_{\lambda_i,\lambda_j\in\lambda(K,M): \lambda_i\ne\lambda_j}
                         Für den Fall, dass ein Eigenwert doppelt vorkommt, so ist der Eigenwert trotzdem eine isolierte Singularität, da die Definition dies zulässt.
 % aus den Fingern gesaugt
                   \item $\frac{1}{2\pi i}\int_{C} \frac 1 {z-a}\ dz:$
                         Dieses Integral ist zwar nicht direkt für Theorem \ref{thrm: Residuensatz} von Bedeutung, allerdings wird damit vieles vereinfacht.
 
-                        Sei $z_0\in\C,\ r>0\text{ und }C=\{z_0+r e^{it}: t\in [0,2\pi]\}$ (vgl. \cite[S. 48]{complexAnalysis}), laut Proposition 4.13 aus \cite[S. 48]{complexAnalysis} gilt:
+                        Sei $z_0\in\C,\ r>0\text{ und }C=\{z_0+r e^{it}: t\in [0,2\pi]\}$ (vgl. \cite[S. 48]{complexAnalysis}), laut Proposition 4.13 aus \cite[S. 48]{complexAnalysis} gelte:
                         \begin{equation}
                               \label{hilfe: complexAnalysis_IntegralEinsDurchX}
                               \frac{1}{2\pi i}\int_C \frac 1 {z-a}\ dz = \begin{cases}
@@ -858,19 +895,16 @@ Tag der Einreichung: \datum
                               n(\gamma,a) = \begin{cases}
                                     1& \text{ : }a\in B_r(z_0)\\
                                     0& \text{ : }a\notin\overline {B_r(z_0)}
-      % ist klar was mit Inneren eines Pfadintegrals gemeint ist?
                               \end{cases}
                         \end{equation}
-                        Hierbei benötigt man das $C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}), damit der Kreis in positive Richtung durchlaufen wird und kein Punkt (bis auf $z=z_0+1$) mehrmals vorkommt.
+                        Hierbei benötigt man das $C$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}), damit der Kreis in positive Richtung durchlaufen wird und kein Punkt (bis auf $z=z_0+r$) mehrmals vorkommt.
 % jetzt klingt es so, also könne kein anderes C dies vollbringen
                   \item $\gamma \sim 0$:
                         Sei $\gamma$ geschlossene Kurve und $\Omega$ ein Gebiet, durch Anwenden von Definition 5.5 aus \cite[S. 67]{complexAnalysis} folgt:
                         $$\gamma \sim 0 \Leftrightarrow n(\gamma, a)=0\ \forall a\notin \Omega$$
 
-                        Mit obiger Theorie schließt man, dass gilt:
-                        $$\gamma\subset \Omega \Rightarrow n(\gamma, a)=0$$
-                        da sich $\gamma$ nicht um den Punkt $a$ winden kann.
-% das ist falsch und schlecht begründet, Omega muss einfach zusammenhängend oder so sein(Omega zusammenhängend und Omega^C zusammenhängend), sonst könnte Omega wie Donut geformt sein
+                        Für das obige Problem sei $\Omega = \C$, offenbar gilt damit für alle $\alpha \in \Omega^C$
+                        $$n(\gamma, \alpha) = 0$$
 
                   \item $\Res_af$:
                         Nach Beispiel 9.3 aus \cite[S. 142]{complexAnalysis} gilt für eine einfache Polstelle:
@@ -880,123 +914,98 @@ Tag der Einreichung: \datum
                         \end{equation}
                         Anwenden auf $\Res_{\lambda_i}L$ ergibt:
                         \begin{align*}
-                              \Res_{\lambda_i}L =& \lim_{z\to \lambda_i} \sum_{j=1}^{n} (z-\lambda_i)\frac{1}{z-\lambda_j} = \underbrace{\sum_{\underset{j\ne i}{j=1}}^{n} \frac{z-\lambda_i}{z-\lambda_j}}_{\to 0} + \frac{z-\lambda_I}{z-\lambda_i} \\
-                              =& 1
+                              \Res_{\lambda_i}L =& \lim_{z\to \lambda_i} \sum_{j=1}^{n} (z-\lambda_i)\frac{g(z)}{z-\lambda_j} = g(z)\underbrace{\sum_{\underset{j\ne i}{j=1}}^{n} \frac{z-\lambda_i}{z-\lambda_j}}_{\to 0} + g(z)\frac{z-\lambda_i}{z-\lambda_i} \\
+                              =& g(\lambda_i)
                         \end{align*}
 
                         Man beachte, dass für einen Eigenwert $\lambda$, der k-mal vorkommt, gilt:
                         $$\Res_\lambda L = k$$
-                        In dem Residuensatz ist es somit nicht von Belangen, wie groß der Koeffizient eines Summanden ist. Am Ende erhält man hier immer die Anzahl an Eigenwerten, die sich in dem Integrationsgebiet befinden.
+                        Am Ende erhält man hier immer die Anzahl an Eigenwerten, die sich in dem Integrationsgebiet befinden.
             \end{itemize}
 
             Damit wurde gezeigt, dass der Residuensatz auf die Funktion $L$ angewendet werden kann.
 
+% kann auch rausgelassen werden
             Ferner gelte nach \cite[S. 77]{complexAnalysisVL} der Residuensatz auch für \zitat{toy contours}\cite[S. 77]{complexAnalysisVL}.
 % Zitat überprüfen/ übersetzen
             Beispiele für toy contours sind Rechtecke oder Kreisausschnitte (siehe \cite[S. 42]{complexAnalysisVL}).
 
       \section{Anwendung des Residuensatzes und der Identität von Futamura}
-            % Nach (\ref{hilfe: complexAnalysis_WindungNullEins}) gilt für einen Eigenwert, der nicht in dem Intervall liegt: 
+            Mit dem Residuensatz aus Theorem \ref{thrm: Residuensatz} gilt folglich für (\ref{eqn: IntZielfunktionMitPolstellen}):
+            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} n(\gamma, \lambda_k) \Res_{\lambda_k}L = \sum_{k=1}^{n} n(\gamma, \lambda_k) g(\lambda_k)$$
 
-            Mit dem Residuensatz \ref{thrm: Residuensatz} gilt folglich für (\ref{eqn: ZielfunktionMitPolstellen}):
-            $$\int_\gamma \sum_{j=1}^{n} \frac{1}{z-\lambda_j}\ dz = \mu$$
-
-            und mit der Identität von Futamura:
-            $$\mu = \int_\gamma \tr((zM-K)\inv M)\ dz$$
-
-            Man hat somit die ungewichtete Zählung der Eigenwerte als Integral darstellen können, analog kann auch die gewichtete Zählung umgeschrieben werden:
-            \begin{align*}
-                  \frac{1}{2\pi i}\int_\gamma \sum_{j=1}^{n} g(z)\frac{1}{z-\lambda_j} \ dz=& \sum_{j=1}^{n} n(\gamma, \lambda_j) \Res_{\lambda_j}K = \sum_{j=1}^n n(\gamma, \lambda_j) g(\lambda_j)\\
-                  =& \sum_{j=1}^{n} \1_{[\lambda_a,\lambda_b]}(\lambda_j) g(\lambda_j) = \sum_{j=1}^{n} h(\lambda_j) g(\lambda_j) \\
-                  =& J(s)
-            \end{align*}
-% nochmal schauen, ob alles passt
-% vorher muss definiert werden, welcher Kreis \gamma ist
-            wobei verwendet wurde, dass $\lambda_j\in\R\ \forall j=1,\dots,n$ und damit nach (\ref{hilfe: complexAnalysis_WindungNullEins}) gilt:
-            $$n(\gamma, \lambda_j) = \begin{cases}
-                  1& \text{ : }\lambda_j\in B_\frac{\lambda_b-\lambda_a}{2}(\frac{\lambda_a+\lambda_b}{2})\\
-                  0& \text{ : }\lambda_j\notin\overline {B_\frac{\lambda_b-\lambda_a}{2}(\frac{\lambda_a+\lambda_b}{2})}
-            \end{cases} = \begin{cases}
-                  1& \text{ : }\lambda_j\in (\lambda_a,\lambda_b)\\
-                  0& \text{ : }\lambda_j\notin[\lambda_a,\lambda_b]
-            \end{cases} = \1_{[\lambda_a,\lambda_b]}(\lambda_j)$$
-% ist nicht ganz richtig, was ist mit \lambda_j = \lambda_a?
-
-            und wie in (\ref{hilfe: complexAnalysis_Residuum}) gilt:
-
-            $$Res_{\lambda_j}K = \lim_{z\to\lambda_j} (z-\lambda_j)K(z) = \underbrace{\sum_{\underset{j\ne i}{j=1}}^{n} g(z)\frac{z-\lambda_i}{z-\lambda_j}}_{\to 0} + g(z)\frac{z-\lambda_I}{z-\lambda_i} = g(z)$$
-% vielleicht nicht das Resultat, sondern die Anwendung von Bsp 9.3 referenzieren
-
-            Man wende nun die Identität von Futamura aus Theorem \ref{thrm: IdentitätFutamura} an und erhalte
-            $$J(s) = \frac 1 {2\pi i}\int_\gamma g(z) \tr((zM-K)\inv M)\ dz$$
-
-            Zur numerischen Berechnung, approximiere $J(s)$ durch eine Quadraturregel, nehme hier die zusammengesetzte Trapezregel.
-            Die $m$ Quadraturpunkte $z_k$ und Gewichte $c_k$ sind in \cite[S. 128]{grundlageFutamura} gegeben durch:
-            \begin{align}
-                  z_k =& \widetilde{z_0}+ \widetilde{r}e^{\frac{2\pi i}{m}\klammer{k+\frac 1 2}},\quad k=0,\dots,m-1\\
-                  c_k =& \frac{z_k-\widetilde{z_0}}{m} = \frac {\widetilde{r}} m e^{\frac{2\pi i}{m}\klammer{k+\frac 1 2}},\quad k=0,\dots,m-1
+            mit \begin{align}
+                  \gamma =& \{\Tilde{z_0} + \Tilde r\exp(i t): t\in [0,2\pi]\},\label{def: Kreis}\\
+                  \Tilde{z_0} =& \frac {\lambda_a+\lambda_b} {2},\quad\Tilde r = \frac {\lambda_b-\lambda_a} {2}\nonumber
             \end{align}
-            Die Gewichte verteilen sich somit gleichmäßig auf dem Kreis $\gamma$. Ferner wird die Quadraturregel nicht an den Punkten $\lambda_a$ und $\lambda_b$ ausgewertet, da es zu einem Fehler kommt, falls ein Eigenwert gerade einen der beiden Werte annehmen sollte.
-% das stimmt vielleicht, aber bis jetzt ist es nur hingerotzt
-            
-            Durch Anwenden der Trapezregel gilt für $J$:
-            $$J(s) \approx \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \tr((z_kM-K)\inv M)\,c_k =:J^*(s)$$
 
-            Laut \cite[S. 4]{hauptteilTkachuk} sei dieser Ausdruck differenzierbar
-% in tkachuk ist aber das gewicht anders definiert, macht aber keinen unterschied
-            Da diese Funktion in Kapitel \ref{sec: Programmieren} mithilfe des Gradientenverfahrens minimiert wird, benötigt man zusätzlich die Ableitung von $J^*$. Diese ist gegeben durch:
+            Mit (\ref{hilfe: complexAnalysis_WindungNullEins}) folgt für $n(\gamma, \lam_k)$:
+            $$n(\gamma, \lam_k) = \begin{cases}
+                  1& \text{ : }\lam_k\in B_{\Tilde{r}}(\Tilde{z_0})\\
+                  0& \text{ : }\lam_k\notin\overline {B_{\Tilde{r}}(\Tilde{z_0})}
+            \end{cases}$$
+            
+            Da aber $\lam_k\in \R\ \forall k=1,\dots,n$, ist diese Gleichung äquivalent zu
+            $$n(\gamma, \lam_k) = \begin{cases}
+                  1& \text{ : }\lam_k\in (\lam_a,\lam_b)\\
+                  0& \text{ : }\lam_k\notin \lamAlamB
+            \end{cases} = \1_{\lamAlamB}(\lambda_k) = h(\lambda_k)$$
+
+            Beachte, dass für den Fall $\lam_k \in \{\lam_a, \lam_b\}$ diese Theorie und auch der Residuensatz aus Theorem \ref{thrm: Residuensatz} keine Aussage trifft, dieser Fall tritt aber fast sicher nicht ein.
+            Für (\ref{eqn: IntZielfunktionMitPolstellen}) folgt
+            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} h(\lambda_k) g(\lambda_k) = J(s)$$
+            
+            und mit der Identität von Futamura:
+            \begin{align}
+                  J(s) =&\, \frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \frac 1 {2\pi i}\int_\gamma g(z)\sum_{j\in N} \frac{1}{z-\lam_j}\ dz\nonumber\\
+                  =&\, \frac 1 {2\pi i}\int_\gamma g(z)\tr((zM(s)-K(s))\inv M(s))\ dz\label{eqn: JGleichIntTr}
+            \end{align}
+
+            Diese Funktion hängt nun explizit von $s$ ab und kann daher in Kapitel \ref{sec: Programmieren} minimiert werden.
+            
+            Da diese Funktion in Kapitel \ref{sec: Programmieren} mithilfe des Gradientenverfahrens minimiert wird, benötigt man zusätzlich die Ableitung
             \begin{equation}
                   \label{eqn: AbleitungZielfunktion}
-                  \nabla J^*(s) = \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \nabla \klammer{\tr(\underbrace{(z_kM-K)\inv M}_{=:B_j(s)})}\,c_k
+                  \frac{\partial L(z,s)}{\partial s} = g(z) \frac{\partial}{\partial s}\klammer{\tr(\underbrace{(zM-K)\inv M}_{=:B(z, s)})}
             \end{equation}
 
-            und es gilt für $\nabla \klammer{\tr(B_j(s))}$:
-            $$\nabla \klammer{\tr(B_j(s))} = \nabla \klammer{\sum_{i=1}^n (B_j)_{ii}} = \sum_{i=1}^n \nabla (B_j)_{ii} = \tr(\nabla B_j)$$.
+            und es gilt für $\frac{\partial}{\partial s} \klammer{\tr(B(z, s))}$:
+            $$\frac{\partial}{\partial s} \klammer{\tr(B(z, s))} = \frac{\partial}{\partial s} \klammer{\sum_{i=1}^n (B(z, s))_{ii}} = \sum_{i=1}^n \frac{\partial}{\partial s} (B(z,s))_{ii} = \tr\klammer{\frac{\partial}{\partial s} B(z,s)}$$.
 
-            Beachte, dass für $s\in \R^l$ und $B_j \in \R^{n\times n}$ gilt:
+            Beachte, dass für $s\in \R^l$, $z$ fest und $B\in \R^{n\times n}$ gilt:
 
-            $$B_j(s): \R^l \to \R^{n\times n}\Rightarrow \nabla B_j(s) : \R^l\to \R^{n\times n}\times \R^l \Rightarrow \tr(\nabla B_j(s)): \R^l \to \R^l$$
+            $$B(z, \cdot): \R^l \to \R^{n\times n}\Rightarrow \frac{\partial}{\partial s} B(z, s) : \R^l\to \R^{n\times n}\times \R^l \Rightarrow \tr\klammer{\frac{\partial}{\partial s} B(z, s)}: \R^l \to \R^l$$
 
-            Man kann sich $\nabla B_j(s)$ als eine $n\times n$-Matrix vorstellen, in der jeder Eintrag ein Vektor in $\R^l$ ist.
+            Man kann sich $\frac{\partial}{\partial s} B(z, s)$ als eine $n\times n$-Matrix vorstellen, in der jeder Eintrag ein Vektor in $\R^l$ ist.
             Daher summiert man auch mit der Spur die Vektoren in $\R^l$ auf der Diagonalen auf und erhält selber wieder einen Vektor in $\R^l$.
 % könnte man auch weglassen
             
-            Außerdem gilt für $\nabla B_j(s)$:
+            Ferner gilt für $\frac{\partial}{\partial s} B(z, s)$:
             \begin{align*}
-                  \nabla B_j(s) =& \frac{dD_k}{ds} \ M + D_k \ \frac{dM}{ds}\\
-                  =& - D_k \frac{d}{ds}(z_kM-K) D_k + D_k \ \frac{dM}{ds}\\
-                  =& D_k \ \frac{dM}{ds} - D_k \klammer{z_k \frac{dM}{ds}-\frac{dK}{ds}} D_k
+                  \frac{\partial}{\partial s} B(z, s) =& \frac{\partial D}{\partial s} \ M + D \ \frac{dM}{ds}\\
+                  =& - D \frac{d}{ds}(zM-K) D + D \ \frac{dM}{ds}\\
+                  =& D \ \frac{dM}{ds} - D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D
             \end{align*}
 
-            Wobei der Lesbarkeit halber $D_k:=(z_kM-K)\inv$ gilt und im 2. Schritt die Formel
-            $$\nabla A\inv = -A\inv\ \nabla A\ A\inv$$
-            angewendet wurde.
-            Beweis (vgl. \cite{derivativeInverseMatrix}):
-            Seien $a_{ij}(t)$ die Elemente der Matrix $A(t)$ und $\widetilde{a}_{ij}(t)$ die Elemente von $A\inv(t)$.
-
-            Dann gilt für alle $t$:
-            $$\sum_{j=1}^{n} a_{ij}(t)\widetilde{a}_{jk}(t) =  \begin{cases}
-                        1 & \text{ :  }\, i=k \\
-                        0 & \text{ :  sonst } 
-                        \end{cases} = \text{kons. für }t $$
-            Folglich gilt für die Ableitung:
-            $$\frac{d}{dt}\sum_{j=1}^{n} a_{ij}(t)\widetilde{a}_{jk}(t) = \sum_{j=1}^{n} \frac{d}{dt}a_{ij}(t)\ \widetilde{a}_{jk}(t)+a_{ij}(t)\ \frac{d}{dt}\widetilde{a}_{jk}(t) = 0 \quad \forall i,k\in\{1,\dots,n\}$$
-            Diese Gleichungen kann man in eine Gleichung über Matrizen umformen:
-            $$\frac{dA}{dt}\ A\inv + A\ \frac{dA\inv}{dt} = 0$$
-            Nach Umstellen folgt damit die Behauptung.\qed
+            Wobei der Lesbarkeit halber $D:=(zM-K)\inv$ gilt und im 2. Schritt die Formel
+            $$\nabla A(t)\inv = -A(t)\inv\ \nabla A(t)\ A(t)\inv$$
+            angewendet wurde.\\
+            Beweis: siehe \cite{derivativeInverseMatrix}\qed
 % in Quelle wurde t auf ein Intervall beschränkt, A muss Inverse haben und stetig diffb. sein für alle t, das müsste man noch zeigen
 
-            Die endgültige Formel für die Ableitung der approximierten gewichteten Eigenwert-Zählung sieht folgendermaßen aus:
-            \begin{align}
-                  \label{eqn: vollständigeZielfunktion}
-                  \nabla J^*(s) =& \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \tr\klammer{D_k \ \frac{dM}{ds} - D_k \klammer{z_k \frac{dM}{ds}-\frac{dK}{ds}} D_k}\,c_k\\
-                  =& \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z_k) \klammer{\tr\klammer{D_k \ \frac{dM}{ds}} - \tr\klammer{D_k \klammer{z_k \frac{dM}{ds}-\frac{dK}{ds}} D_k}}\,c_k
-            \end{align}
+            Die endgültige Formel für die Ableitung von $L$ sieht folgendermaßen aus:
+            \begin{equation}
+                  \label{eqn: vollständigeAblL}
+                  \frac{\partial L(z,s)}{\partial s} = g(z)\,\klammer{\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}}
+            \end{equation}
 % man könnte noch auf die Wohldefiniertheit eingehen, da es mit den Dimensionen passt, aber es geht erstmal
             
 \chapter{Implementierung}
 \label{sec: Programmieren}
       \section{Erklärungen}
+            Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens aus \cite[S. 285]{optimierung}:
+            Die Schrittweite $\lambda_*$ sei immer 
+            
 
       \section{Implementation}
 
