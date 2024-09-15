@@ -17,6 +17,8 @@ s = np.ones(j)
 lambda_a = 1
 # obere Grenze des Intervalls
 lambda_b = 2
+# gibt Schrittweite des Gradientenverfahrens an
+schrittweiteGrad = 0.5
 # gibt an, ob erstes oder zweites System verwendet wird
 system = 1
 
@@ -30,6 +32,7 @@ def initSystem(ausgewaehltesSystem):
     global lambda_b
     global system
     global m
+    global schrittweiteGrad
 
     m=100
 
@@ -37,19 +40,21 @@ def initSystem(ausgewaehltesSystem):
         system = 1
         lambda_a = 1.5
         lambda_b = 2.5
+        schrittweiteGrad = 0.05
         s = np.array([3.5])
         bedingungen = np.array([[2,5]])
 
-        algorithms.init(0.1, 0.1, 0.5, lambda_a, lambda_b, bedingungen, "vorwaerts")
+        algorithms.init(0.1, schrittweiteGrad, lambda_a, lambda_b, bedingungen, "vorwaerts")
     else:
         system = 2
         lambda_a = 0.9
         lambda_b = 1.5
+        schrittweiteGrad = 0.05
         s = np.concatenate((np.full(j-1, 0.7), [1.5]))
         bedingungen = np.concatenate((np.tile(np.array([0.1,2.0]),j-1),np.array([.5,3.5])))
         bedingungen = np.reshape(bedingungen, (j,2))
 
-        algorithms.init(0.1, 0.1, 0.5, lambda_a, lambda_b, bedingungen, "vorwaerts")
+        algorithms.init(0.1, schrittweiteGrad, lambda_a, lambda_b, bedingungen, "vorwaerts")
 
 def minimierenPlottenUndEckdatenAnzeigen():
     # berechnet K abhaengig vom verwendeten System
@@ -134,6 +139,11 @@ def minimierenPlottenUndEckdatenAnzeigen():
     # wird für den unteren Plot benötigt, gibt den Verlauf aller Eigenwerte an
     eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
     
+    if(EWungewichtet[-1]==0):
+        ergebnis = "ja"
+    else:
+        ergebnis = "nein"
+
     # der angezeigt Plot wird aus einem oberen und unteren Plot bestehen
     fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
@@ -161,23 +171,42 @@ def minimierenPlottenUndEckdatenAnzeigen():
     print("Eckdaten für System "+str(system)+":")
     print("Startwert: "+str(verlaufS[0].real))
     print("Intervall: ["+str(lambda_a)+","+str(lambda_b)+"]")
-    print("Eigenwerte am Anfang: "+str(eigenwerte[0,:]))
-    print("Eigenwerte am Ende: "+str(eigenwerte[-1,:]))
+    print("Eigenwerte am Anfang: "+str(np.round(eigenwerte[0,:], 2)))
+    print("Eigenwerte am Ende:   "+str(eigenwerte[-1,:].round(2)))
     print("Anzahl Stützstellen Quadratur: "+str(m))
+    print("Schrittweite des Gradientenverfahrens: "+str(schrittweiteGrad))
+    print("Verfahren brachte ein Ergebnis: "+ergebnis)
     print("für Minimierung vergangene Zeit in s: "+str(vergangeneZeit))
     print("\n")
 
 if(__name__=='__main__'):
+
+    print("an den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss")
+    print("beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren\n")
     # System 1 mit Standardwerten initialisieren
     initSystem(1)
-    minimierenPlottenUndEckdatenAnzeigen()
 
+    minimierenPlottenUndEckdatenAnzeigen()
     # Verwendung von mehr Stützstellen
     m=150
     minimierenPlottenUndEckdatenAnzeigen()
 
+    print("erhöhe nun die Schrittweite des Gradientenverfahrens, um eine schnellere Konvergenz zu erwarten")
+    print("man siehe hier zudem, dass eine höhere Genauigkeit der Quadraturformel zu einem schnelleren Ergebnis führt\n")
+    m=100
+    schrittweiteGrad = 0.5
+    algorithms.schrittweiteGradAendern(schrittweiteGrad)
+    # Verfahren mit Standardwerten, aber groesserer Schrittweite des Gradientenverfahrens
+    minimierenPlottenUndEckdatenAnzeigen()
+    # wieder mehr Stützstellen verwenden
+    m=150
+    minimierenPlottenUndEckdatenAnzeigen()
+
+    print("betrachte nun das zweite System mit kleiner Schrittweite")
+    print("mit diesen zwei Durchläufen wird gezeigt, dass mehr Stützstellen sogar schlecht sein können\n")
     # System 2 mit Standardwerten
     initSystem(2)
+
     minimierenPlottenUndEckdatenAnzeigen()
     # mehr Stuetzstellen verwenden
     m=150
