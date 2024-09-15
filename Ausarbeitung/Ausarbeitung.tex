@@ -982,7 +982,7 @@ Tag der Einreichung: \datum
             
             Ferner gilt für $\frac{\partial}{\partial s} B(z, s)$:
             \begin{align*}
-                  \frac{\partial}{\partial s} B(z, s) =& \frac{dD}{ds} \ M + D \ \frac{dM}{ds}\\
+                  \frac{\partial}{\partial s} B(z, s) =& \frac{\partial D}{\partial s} \ M + D \ \frac{dM}{ds}\\
                   =& - D \frac{d}{ds}(zM-K) D + D \ \frac{dM}{ds}\\
                   =& D \ \frac{dM}{ds} - D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D
             \end{align*}
@@ -990,32 +990,22 @@ Tag der Einreichung: \datum
             Wobei der Lesbarkeit halber $D:=(zM-K)\inv$ gilt und im 2. Schritt die Formel
             $$\nabla A(t)\inv = -A(t)\inv\ \nabla A(t)\ A(t)\inv$$
             angewendet wurde.\\
-            Beweis (vgl. \cite{derivativeInverseMatrix}):
-            Seien $a_{ij}(t)$ die Elemente der Matrix $A(t)$ und $\widetilde{a}_{ij}(t)$ die Elemente von $A\inv(t)$.
-
-            Dann gilt für alle $t$:
-            $$\sum_{j=1}^{n} a_{ij}(t)\widetilde{a}_{jk}(t) =  \begin{cases}
-                        1 & \text{ :  }\, i=k \\
-                        0 & \text{ :  sonst } 
-                        \end{cases} = \text{kons. für }t $$
-            Folglich gilt für die Ableitung:
-            $$\frac{d}{dt}\sum_{j=1}^{n} a_{ij}(t)\widetilde{a}_{jk}(t) = \sum_{j=1}^{n} \frac{d}{dt}a_{ij}(t)\ \widetilde{a}_{jk}(t)+a_{ij}(t)\ \frac{d}{dt}\widetilde{a}_{jk}(t) = 0 \quad \forall i,k\in\{1,\dots,n\}$$
-            Diese Gleichungen kann man in eine Gleichung über Matrizen umformen:
-            $$\frac{dA}{dt}\ A\inv + A\ \frac{dA\inv}{dt} = 0$$
-            Nach Umstellen folgt damit die Behauptung.\qed
+            Beweis: siehe \cite{derivativeInverseMatrix}\qed
 % in Quelle wurde t auf ein Intervall beschränkt, A muss Inverse haben und stetig diffb. sein für alle t, das müsste man noch zeigen
 
-            Die endgültige Formel für die Ableitung der approximierten gewichteten Eigenwert-Zählung sieht folgendermaßen aus:
-            \begin{align}
-                  \label{eqn: vollständigeZielfunktion}
-                  \nabla J^*(s) =& \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z) \tr\klammer{D \ \frac{dM}{ds} - D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}\,c_k\\
-                  =& \frac 1 {2\pi i}\sum_{k=0}^{m-1} g(z) \klammer{\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}}\,c_k
-            \end{align}
+            Die endgültige Formel für die Ableitung von $L$ sieht folgendermaßen aus:
+            \begin{equation}
+                  \label{eqn: vollständigeAblL}
+                  \frac{\partial L(z,s)}{\partial s} = g(z)\,\klammer{\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}}
+            \end{equation}
 % man könnte noch auf die Wohldefiniertheit eingehen, da es mit den Dimensionen passt, aber es geht erstmal
             
 \chapter{Implementierung}
 \label{sec: Programmieren}
       \section{Erklärungen}
+            Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens aus \cite[S. 285]{optimierung}:
+            Die Schrittweite $\lambda_*$ sei immer 
+            
 
       \section{Implementation}
 
