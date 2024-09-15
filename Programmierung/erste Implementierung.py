@@ -21,6 +21,9 @@ lambda_b = 2
 schrittweiteGrad = 0.5
 # gibt an, ob erstes oder zweites System verwendet wird
 system = 1
+# gibt an, ob ein Durchlauf des Minimierungsverfahrens nach 500 Schritten abbrechen soll
+# kann True oder False sein
+begrenzung:bool = True
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # der Startwert s wird zwar hier definiert, aber erst in der Funktion algorithms.EigenwerteMinimierenAufIntervall() uebergeben
@@ -119,7 +122,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
-    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
+    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m, begrenzung)
     # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
     vergangeneZeit = time.time()-startzeit
 
