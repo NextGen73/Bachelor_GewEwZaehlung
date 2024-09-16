@@ -1049,7 +1049,7 @@ Tag der Einreichung: \datum
       Nach Einsetzen dieser Parameter in die obigen Matrizen und Gleichungen werden diese beiden Systeme genutzt, um als Beispiele zu dienen.
 
       Zunächst wird aber noch der zu verwendende Minimierungsalgorithmus erläutert.
-      \section{Erklärungen}
+      \section{Theorie}
             Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens aus \cite[S. 285]{optimierungBurkhard} an:
             \begin{algorithm}
                   \caption{Verfahren des steilsten Abstiegs (vgl. \cite[S. 285]{optimierungBurkhard})}
@@ -1131,36 +1131,128 @@ Tag der Einreichung: \datum
             
             Bei der jetzigen Datei gibt es eine Begrenzung für die Anzahl an Schritten pro Durchlauf der Minimierung.
             Falls ein Durchlauf mehr als 500 Schritte benötigen sollte, um zu einem Ergebnis zu kommen, wird er abgebrochen, damit ein einzelner Durchlauf nicht zu viel Zeit beansprucht.
-            Diese Begrenzung kann man umgehen, indem man in Zeile 
+            Diese Begrenzung kann man umgehen, indem man in Zeile 26 den Integer-Wert beliebig verändert. Man beachte aber, dass für nicht-positive Werte keine Begrenzung vorhanden ist.
+            Das Verfahren wird in diesem Fall solange ausgeführt, bis es zu einem Ergebnis kommt, oder manuell abgebrochen wird.
 
             Es folgt nun eine Auflistung der 6 Durchläufe, die in diesem Programm durchgeführt werden.
             Dabei sind die Durchläufe 1-4 von System 1 und die Durchläufe 5 und 6 behandeln System 2.
 
             Es gehören immer 2 nacheinander folgende Durchläufe zusammen, da sie sich immer nur in der Anzahl der Stützstellen in der Quadraturformel unterscheiden.
-            Hierbei wird in den ersten und letzten beiden Durchläufen eine kurze Schrittweite des Gradientenverfahrens gewählt. In diesen Durchläufen gilt
-            $$\lambda_* = 0.05$$.
+            Hierbei wird in den ersten und letzten beiden Durchläufen eine kurze Schrittweite des Gradientenverfahrens gewählt. In diesen Durchläufen gilt $\lambda_* = 0.05$.
             Die beiden mittleren Durchläufe werden mit einer Schrittweite $\lambda_* = 0.5$ verwendet.
 
-            \begin{tabular}{lllll}
-                 System & $m$ & $\lambda_*$ & Iterationen & Zeit\\
-                 \hline
-                 1 & 100 & 0.05 & - & - \\
-                 1 & 150 & 0.05 & - & - \\
-                 \hline
-                 1 & 100 & 0.5 & - & - \\
-                 1 & 150 & 0.5 & - & - \\
-                 \hline
-                 2 & 100 & 0.05 & - & - \\
-                 2 & 150 & 0.05 & - & - \\
-                 \hline
-            \end{tabular}
+            Beim Ausführen des Programmes werden noch verschiedene andere Kennzahlen ausgegeben, aber hier soll zuerst die Anzahl an benötigten Iterationen und die benötigte Zeit ausreichen.
 
-      \section{Grafiken}
+            Es folgt eine Tabelle zur Verdeutlichung\\
+
+            \begin{tabular}{lllcc}
+                  \label{tab: Ergebnisse}
+                 System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
+                 \hline
+                 1 & $100$ & $0.05$ & $>10000$ & $>584$ \\ 
+                 1 & $150$ & $0.05$ & $>10000$ & $>830$ \\
+                 \hline
+                 1 & $100$ & $0.5$ & $>10000$ & $>561$ \\
+                 1 & $150$ & $0.5$ & $15$ & $1.2$ \\
+                 \hline
+                 2 & $100$ & $0.05$ & $150$ & $15.2$ \\
+                 2 & $150$ & $0.05$ & $>10000$ & $>1592$ \\
+                 \hline
+            \end{tabular}\\
+
+            Man kann schon hier erkennen, dass dieses Verfahren nur selten zum Erfolg führt
+
+            Man sieht schon hier an den drei zwei Durchläufen, dass Zeiten über 9 Minuten für ein System mit nur 8 Freiheitsgraden und einem skalarem Design-Parameter völlig unzureichend sind.
+            Für die Ermittlung dieser Werte wurde die Begrenzung auf 10000 erhöht, wie man aber in den folgenden Abbildungen sehen kann, ändern die Schritte 501-10000 das Ergebnis nur unwesentlich. 
+
+      \section{Grafiken und Erklärung}
+            Man gehe nun genauer auf den Verlauf der Eigenwertzählung und dem Verlauf der Eigenwerte selbst ein.
+            Betrachte zuerst die ersten beiden Plots.
+            Um die folgenden Ausführungen zu unterstützen, wird nur die Verteilung der Eigenwerte bis zum 200. Schritt gezeigt.
+            Nach dem Schritt verändern sich in diesen beiden Durchläufen bis Schritt 10000 weder die Eigenwert-Zählungen noch die Verteilung der Eigenwerte wesentlich.
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_100_0.05.png}
+                  \caption{Plot zu System 1, $m=100$, $\lam_*=0.05$}
+                  \label{fig: Plot_1_100_0.05}
+            \end{figure}
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_150_0.05.png}
+                  \caption{Plot zu System 1, $m=150$, $\lam_*=0.05$}
+                  \label{fig: Plot_1_150_0.05}
+            \end{figure}
+
+            Man sehe zuerst, dass sich Eigenwert 2 dem oberen Rand des Intervalls nähert, aber ihn nicht überschreitet.
+            Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man in Tabelle \ref{tab: Ergebnisse} erkennen kann.
+            Die Unterschiede zwischen diesen Durchläufen kann man an den Verläufen der Eigenwerte 3-8 erkennen.
+            Da diese Eigenwerte aber nicht im Intervall liegen, unterscheiden sich die Eigenwert-Zählungen dieser Durchläufe nicht sichtbar.
+            Diese Tatsache kann man durch Ausführen des Programmes selber belegen.
+
+            Bei den nächsten beiden Durchläufen betrachte nur die Schritte 0 bis 19. 
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_100_0.5.png}
+                  \caption{Plots zu System 1, $m=100$, $\lam_*=0.5$}
+                  \label{fig: Plot_1_100_0.5}
+            \end{figure}
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_150_0.5.png}
+                  \caption{Plots zu System 1, $m=100$, $\lam_*=0.5$}
+                  \label{fig: Plot_1_150_0.5}
+            \end{figure}
+
+            Hier kann man die Unterschiede zwischen den Genauigkeiten der Quadraturformeln erkennen: während in Abb. \ref{fig: Plot_1_100_0.5} nach Schritt 15 nicht alle Eigenwerte aus dem Intervall entfernt wurden,
+            so wurde es in Abb. \ref{fig: Plot_1_150_0.5} vollbracht.
+
+            Man sehe aber auch, dass die approximierte gewichtete Eigenwertzählung bei beiden Durchläufen sehr stark von der genauen abweicht.
+            Dies kann sehr wahrscheinlich auf die verwendete Quadraturformel zurückgeführt werden:
+            Bei beiden Quadraturformeln wird L(z,s) an den Stellen $z=\lambda_a$ und $z=\lambda_b$ ausgewertet.
+            Falls aber ein Eigenwert sich nahe des Intervallrandes befindet, so sind diese Stützstellen nahe einer Polstelle.
+            Das kann zu unvorhersagbaren Erscheinungen führen:
+            Während in Abb. \ref{fig: Plot_1_100_0.5} bei Schritt 15 die gewichtete Eigenwertzählung viel zu hoch approximiert wird,
+            so wird die approximierte gewichtete Eigenwertzählung in Abb. \ref{fig: Plot_1_150_0.5} bei Schritt 15 negativ.
+
+            Bei Durchlauf \ref{fig: Plot_1_100_0.5} wird infolge dessen nun nicht mehr versucht, den zweiten Eigenwert zu vergrößern, damit er das obere Ende des Intervalls überschreitet, sondern er wird verringert, wodurch nun sogar der erste Eigenwert im Intervall liegt.
+            Obwohl die negative Approximation bei Abb. \ref{fig: Plot_1_150_0.5} einen Wert annimmt, der für die genauen Eigenwertzählung nicht möglich ist, so ändert es nichts an dem Verlauf, da in diesem Schritt alle Eigenwert außerhalb des Intervalls liegen und laut Algorithmus \ref{alg: steilster Abstieg} die genaue gewichtete Zählung verwendet wird, um zu entscheiden, ob ein Minimum erreicht wurde.
+            Sollte man nur Informationen über die approximierte Zählung besitzen, so wäre das Verfahren, je nach Programmierung, nicht beendet worden, sondern fortgeführt worden, obwohl es ein Minimum erreicht hatte.
+
+            Dieses Verhalten der approximierten gewichteten Eigenwertzählung wird in Kapitel \ref{sec: Verbesserungen} erneut angesprochen.
+
+            Betrachte nun die letzten zwei Durchläufe:
+            Es wurde sich hier auf die Schritte 50-150 beschränkt, um diese im Detail sehen zu können.
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_2_100_0.05.png}
+                  \caption{Plots zu System 2, $m=100$, $\lam_*=0.05$}
+                  \label{fig: Plot_2_100_0.05}
+            \end{figure}
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_2_150_0.05.png}
+                  \caption{Plots zu System 2, $m=150$, $\lam_*=0.05$}
+                  \label{fig: Plot_2_150_0.05}
+            \end{figure}
+
+            Hier sieht man, dass das Erreichen eines Minimums in Abb. \ref{fig: Plot_2_100_0.05} keine kontrollierte Veränderung von $s$ war, um einen einzelnen Eigenwert zu vergrößern/ verringern, sondern die Eigenwerte sich fast zufällig veränderten.
+            Bei Abb. \ref{fig: Plot_2_100_0.05} traf der Algorithmus bei Schritt 150 nur zufällig einen Design-Parameter, durch welchen alle Eigenwerte außerhalb des Intervalls lagen.
+            Durch die genauere Quadraturformel, die in Abb. \ref{fig: Plot_2_150_0.05} verwendet wurde, wurde $\nabla J^*(s)$ derart verändert, dass der letzte Design-Parametern aus Abb. \ref{fig: Plot_2_100_0.05} nicht erreicht wurde.
+            Man kann hier die Suche nach einem passenden Parameter $s$ als fast chaotisches System betrachten, da eine Veränderung der genutzen Quadraturformel ausreicht, um den Verlauf der Minimierung komplett zu verändern\footnote{es reicht sogar ein Wechsel des Gerätes, welches das Programm ausführt, um unterschiedliche Ergebnisse hervorzubringen}.
 
 \chapter{Verbesserungen}
 \label{sec: Verbesserungen}
       \section{Auswertung bisheriger Implementation}
-
+            In Kapitel \ref{sec: Programmieren} sind folgende Probleme deutlich zum Vorschein getreten:
+            Einerseits ist die approximierte Zählung der Eigenwerte unzureichend, wenn sich ein Eigenwert in der Nähe der Intervallgrenzen befindet.
+            Andererseits führte die Erhöhung der Genauigkeit der Quadraturformel nicht unbedingt zu besseren Ergebnissen.
+            Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5}, dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
+            Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte ein Schritt des Verfahrens nahe an einer Lösung des Problems sich befinden. 
       \section{mögliche Verbesserungen}
 
       \section{Implementation und Auswertung der verbesserten Programme}
