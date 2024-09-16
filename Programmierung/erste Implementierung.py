@@ -163,7 +163,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
     # axu.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)
+        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.8)
 
     axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
     axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
