@@ -147,6 +147,8 @@ def minimierenPlottenUndEckdatenAnzeigen():
     else:
         ergebnis = "nein"
 
+    anzahlIterationen = len(EWungewichtet)-1
+
     # der angezeigt Plot wird aus einem oberen und unteren Plot bestehen
     fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
@@ -179,6 +181,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
     print("Anzahl Stützstellen Quadratur: "+str(m))
     print("Schrittweite des Gradientenverfahrens: "+str(schrittweiteGrad))
     print("Verfahren brachte ein Ergebnis: "+ergebnis)
+    print("Anzahl an benötigten Iterationen: "+str(anzahlIterationen))
     print("für Minimierung vergangene Zeit in s: "+str(vergangeneZeit))
     print("\n")
 
