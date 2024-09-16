@@ -113,14 +113,17 @@ def quadratureContourIntegralCircleTrapez(f, m:int, s) -> complex:
 def quadratureContourIntegralCircleMittelpunkt(f, m:int, s) -> complex:
     # Berechne Stuetzstellen
     zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*(k+1/2)) for k in range(m)])
-    return sum(f(zs[i], s)*np.exp(2*np.pi*1j*i/m) for i in range(m))*r*(np.exp(2*np.pi*1j/m)-1)
+    return sum(f(zs[k], s)*np.exp(2*np.pi*1j*(k+1/2)/m) for k in range(m))*2*np.pi*1j*r/m
 
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles aus
-def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, anzahlStuetzstellen:int, begrenzung) -> np.ndarray:
+def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, anzahlStuetzstellen:int, begrenzung, quadratur) -> np.ndarray:
     """
     :param M: Massematrix.
     :param K: Steifigkeitsmatrix.
+    :param startpunkt: Ausgangpunkt für Minimierung.
     :anzahlStuetzstellen: Anzahl der Stuetzstellen in Quadraturformel.
+    :param begrenzung: Matrix, in der die Intervalle gespeichert sind, die der Design-Parameter annehmen darf.
+    :param quadratur: Funktion, die eine Quadraturformel verwendet.
     :return: Vektor, der berechnete Werte und Eigenwert-Zaehlungen enthaelt.
     """
 
@@ -158,7 +161,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
             D = np.linalg.inv(z*M(s)-K(s))
             return g(z)*np.trace(D.dot(M(s)))
         
-        return quadratureContourIntegralCircleTrapez(F, anzahlStuetzstellen, s)/2/np.pi/1j
+        return quadratur(F, anzahlStuetzstellen, s)/2/np.pi/1j
     
     # Ableitung der approximierten gewichteten Ew-Zaehlung
     def nablaJ_Stern(s)->float:
@@ -168,7 +171,7 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
             dKds = ableitungDurchDifferenz(K, s)
 
             return g(z)*(np.trace(D.dot(dMds))-np.trace(((D.dot(z*dMds-dKds)).transpose(0,2,1).dot(D)).transpose(0,2,1)))
-        return quadratureContourIntegralCircleTrapez(nablaF, anzahlStuetzstellen, s)/2/np.pi/1j
+        return quadratur(nablaF, anzahlStuetzstellen, s)/2/np.pi/1j
 
     # pruefe, ob Bedingungen von Wert erfuellt sind, sonst Projektion auf Intervallgrenze
     def bedingungenPruefen(x)->np.ndarray:

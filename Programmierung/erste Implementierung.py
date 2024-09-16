@@ -122,7 +122,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
-    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m, begrenzung)
+    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m, begrenzung, algorithms.quadratureContourIntegralCircleTrapez)
     # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
     vergangeneZeit = time.time()-startzeit
 
