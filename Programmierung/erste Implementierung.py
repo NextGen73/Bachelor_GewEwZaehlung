@@ -21,9 +21,9 @@ lambda_b = 2
 schrittweiteGrad = 0.5
 # gibt an, ob erstes oder zweites System verwendet wird
 system = 1
-# gibt an, ob ein Durchlauf des Minimierungsverfahrens nach 500 Schritten abbrechen soll
-# kann True oder False sein
-begrenzung:bool = True
+# gibt an, nach wie vielen Schritten ein Durchlauf des Minimierungsverfahrens abbrechen soll
+# für 0 gibt es keine Begrenzung
+begrenzung = 500
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # der Startwert s wird zwar hier definiert, aber erst in der Funktion algorithms.EigenwerteMinimierenAufIntervall() uebergeben
