@@ -116,7 +116,7 @@ def quadratureContourIntegralCircleMittelpunkt(f, m:int, s) -> complex:
     return sum(f(zs[i], s)*np.exp(2*np.pi*1j*i/m) for i in range(m))*r*(np.exp(2*np.pi*1j/m)-1)
 
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles aus
-def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, anzahlStuetzstellen:int, begrenzung:bool) -> np.ndarray:
+def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, anzahlStuetzstellen:int, begrenzung) -> np.ndarray:
     """
     :param M: Massematrix.
     :param K: Steifigkeitsmatrix.
@@ -196,11 +196,10 @@ def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.n
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
         result = np.append(result, np.expand_dims(np.append(x_neu, [ungewichteteEwZaehlung_genau(x_neu), J(x_neu), J_Stern(x_neu)]), 1), axis=1)
 
-        # falls begrenzung True ist, dann bricht ein Durchlauf nach 500 Schritten ab
-        if(begrenzung):
-            # nach 500 Durchlaeufen wird abgebrochen
-            # nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel (Anfangsdaten und Daten nach erstem Durchlauf) in result gespeichert wurden
-            if(np.size(result,1) == 501):
-                break
+        # nach einer gewissen Anzahl an Durchlaeufen wird abgebrochen
+        # nach dem ersten Durchlauf gilt: np.size(result,1)=2, da 2 Tupel (Anfangsdaten und Daten nach erstem Durchlauf) in result gespeichert wurden
+        # somit wird bei np.size()==begrenzung+1 abgebrochen, damit es genau `begrenzung` viele Schritte waren
+        if(np.size(result,1) == begrenzung+1):
+            break
 
     return result
