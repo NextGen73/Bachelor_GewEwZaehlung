@@ -3,19 +3,32 @@ import math
 import matplotlib.pyplot as plots
 import time
 
-r=100
-gamma = 0
-lambdaStern = 500
-m = 10
-begrenzung = 5000
+# all diese Werte werden in init() und systemAuswaehlen() neu definiert,
+# sie stehen hier nur, damit es zu keinem Fehler kommt
+
+# definiert das verwendete System
+system = 1
+# definiert Startwert für Minimierung
 s = np.ones(1)
 bedingung = np.array(1)
+# definiert das Intervall
 lambda_a=-1
 lambda_b=1
+# definiert Steifigkeits- und Massematrix
 K = 1
 M = 1
-system = 1
+# definiert die verwendete Quadraturformel
 quadratur = 1
+# definiert die Anzahl an Teilintervallen
+m = 10
+# diese Variablen definieren den Kreis
+r=100
+gamma = 0
+# defniert feste Schrittweite bei Schritt des Gradientenverfahrens
+lambdaStern = 500
+# definiert die maximale Anzahl an Schritten pro Durchlauf
+begrenzung = 5000
+
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koennen
 # hier werden globale Variablen definiert, die ueberall benoetigt werden, aber normalerweise nur einmal definiert werden muessen
