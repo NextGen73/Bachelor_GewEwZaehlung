@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 # inflation parameter von g(z)
 alpha = 0.1
@@ -7,13 +8,13 @@ h = 0.01
 # Schrittweite Gradientenverfahren
 schrittGrad = 0.05
 # startIntervall
-lamA = 0
+lamA = -1
 # endeIntervall
 lamB = 1
 # Mittelpunkt Kreis
-gamma = 0.5
+gamma = 0
 # Radius Kreis
-r = .5
+r = 1.0
 # Bedingungen, die fuer Werte gelten muessen, das ist nur ein Platzhalter
 bedingung = np.zeros(1)
 # Differenzenverfahren
@@ -106,7 +107,7 @@ def schrittGradientenverfahren_festeSchrittweite(nablaF, x):
 # das beruht auf echter Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
 def quadratureContourIntegralCircleTrapez(f, m:int, s) -> complex:    
     # Berechne Stuetzstellen
-    z = np.array([gamma+r*np.exp(2j*np.pi*k/m) for k in range(m+1)])
+    z = np.array([gamma+r*np.exp(2j*np.pi*(k+1/2)/m) for k in range(m+1)])
     return sum((f(z[k], s)+f(z[k+1], s)*np.exp(2*np.pi*1j/m))*np.exp(2*np.pi*1j*k/m) for k in range(m))*r*np.pi*1j/m
 
 # das ist eher die Mittelpunktsregel, wo man Funktion nur an einer Stelle auswerten muss, Differenz wurde explizit berechnet und rausgezogen
@@ -114,6 +115,13 @@ def quadratureContourIntegralCircleMittelpunkt(f, m:int, s) -> complex:
     # Berechne Stuetzstellen
     zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*(k+1/2)) for k in range(m)])
     return sum(f(zs[k], s)*np.exp(2*np.pi*1j*(k+1/2)/m) for k in range(m))*2*np.pi*1j*r/m
+
+# diese Quadraturformel ist optimal für 2 Stuetzstellen, siehe Gauss 2 Punkt Formel
+def quadratureContourIntegralCircleGaussZwei(f, m:int, s) -> complex:
+    #Stuetzstellen sind hier ein mx2 Array
+    PiIDurchM = np.pi*1j/m
+    zs = gamma+r*np.exp(PiIDurchM*np.array([[2*k+1-1/math.sqrt(3), 2*k+1+1/math.sqrt(3)] for k in range(m)]))
+    return sum((f(zs[k,0], s)*np.exp(-PiIDurchM/math.sqrt(3))+f(zs[k,1], s)*np.exp(PiIDurchM/math.sqrt(3)))*np.exp(PiIDurchM*(2*k+1)) for k in range(m))*PiIDurchM*r
 
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles aus
 def EigenwerteMinimierenAufIntervall(M:np.ndarray, K:np.ndarray, startpunkt:np.ndarray, anzahlStuetzstellen:int, begrenzung, quadratur) -> np.ndarray:
