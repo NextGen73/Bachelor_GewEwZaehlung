@@ -184,8 +184,8 @@ def minimierenPlottenUndEckdatenAnzeigen():
 
 if(__name__=='__main__'):
 
-    print("an den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss")
-    print("beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren\n")
+    print("An den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss.")
+    print("Beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren.\n")
     # System 1 mit Standardwerten initialisieren
     initSystem(1)
 
@@ -194,8 +194,8 @@ if(__name__=='__main__'):
     m=150
     minimierenPlottenUndEckdatenAnzeigen()
 
-    print("erhöhe nun die Schrittweite des Gradientenverfahrens, um eine schnellere Konvergenz zu erwarten")
-    print("man siehe hier zudem, dass eine höhere Genauigkeit der Quadraturformel zu einem schnelleren Ergebnis führt\n")
+    print("Erhöhe nun die Schrittweite des Gradientenverfahrens, um eine schnellere Konvergenz zu erwarten.")
+    print("Man siehe zudem, dass eine höhere Genauigkeit der Quadraturformel hier zu einem schnelleren Ergebnis führt.\n")
     m=100
     schrittweiteGrad = 0.5
     algorithms.schrittweiteGradAendern(schrittweiteGrad)
@@ -205,8 +205,8 @@ if(__name__=='__main__'):
     m=150
     minimierenPlottenUndEckdatenAnzeigen()
 
-    print("betrachte nun das zweite System mit kleiner Schrittweite")
-    print("mit diesen zwei Durchläufen wird gezeigt, dass mehr Stützstellen sogar schlecht sein können\n")
+    print("Betrachte nun das zweite System mit kleiner Schrittweite.")
+    print("Mit diesen zwei Durchläufen wird gezeigt, dass mehr Stützstellen sogar schlecht sein können.\n")
     # System 2 mit Standardwerten
     initSystem(2)
 
