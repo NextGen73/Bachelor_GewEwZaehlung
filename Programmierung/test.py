@@ -21,6 +21,9 @@ lambda_b = 2
 schrittweiteGrad = 0.5
 # gibt an, ob erstes oder zweites System verwendet wird
 system = 1
+# gibt an, nach wie vielen Schritten ein Durchlauf des Minimierungsverfahrens abbrechen soll
+# für 0 gibt es keine Begrenzung
+begrenzung = 500
 
 # diese Funktion definiert abhängig von ausgewaehltesSystem den Startwert, das Intervall und die Bedingungen, die für s gelten sollen
 # der Startwert s wird zwar hier definiert, aber erst in der Funktion algorithms.EigenwerteMinimierenAufIntervall() uebergeben
@@ -119,7 +122,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
-    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m)
+    result = algorithms.EigenwerteMinimierenAufIntervall(M, K, s, m, begrenzung, algorithms.quadratureContourIntegralCircleTrapez)
     # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
     vergangeneZeit = time.time()-startzeit
 
@@ -144,6 +147,8 @@ def minimierenPlottenUndEckdatenAnzeigen():
     else:
         ergebnis = "nein"
 
+    anzahlIterationen = len(EWungewichtet)-1
+
     # der angezeigt Plot wird aus einem oberen und unteren Plot bestehen
     fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
@@ -158,7 +163,7 @@ def minimierenPlottenUndEckdatenAnzeigen():
     # axu.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.5)
+        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.8)
 
     axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
     axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
@@ -176,13 +181,14 @@ def minimierenPlottenUndEckdatenAnzeigen():
     print("Anzahl Stützstellen Quadratur: "+str(m))
     print("Schrittweite des Gradientenverfahrens: "+str(schrittweiteGrad))
     print("Verfahren brachte ein Ergebnis: "+ergebnis)
+    print("Anzahl an benötigten Iterationen: "+str(anzahlIterationen))
     print("für Minimierung vergangene Zeit in s: "+str(vergangeneZeit))
     print("\n")
 
 if(__name__=='__main__'):
 
-    print("an den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss")
-    print("beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren\n")
+    print("An den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss.")
+    print("Beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren.\n")
     # System 1 mit Standardwerten initialisieren
     initSystem(1)
 
@@ -191,8 +197,8 @@ if(__name__=='__main__'):
     m=150
     minimierenPlottenUndEckdatenAnzeigen()
 
-    print("erhöhe nun die Schrittweite des Gradientenverfahrens, um eine schnellere Konvergenz zu erwarten")
-    print("man siehe hier zudem, dass eine höhere Genauigkeit der Quadraturformel zu einem schnelleren Ergebnis führt\n")
+    print("Erhöhe nun die Schrittweite des Gradientenverfahrens, um eine schnellere Konvergenz zu erwarten.")
+    print("Man siehe zudem, dass eine höhere Genauigkeit der Quadraturformel hier zu einem schnelleren Ergebnis führt.\n")
     m=100
     schrittweiteGrad = 0.5
     algorithms.schrittweiteGradAendern(schrittweiteGrad)
@@ -202,8 +208,8 @@ if(__name__=='__main__'):
     m=150
     minimierenPlottenUndEckdatenAnzeigen()
 
-    print("betrachte nun das zweite System mit kleiner Schrittweite")
-    print("mit diesen zwei Durchläufen wird gezeigt, dass mehr Stützstellen sogar schlecht sein können\n")
+    print("Betrachte nun das zweite System mit kleiner Schrittweite.")
+    print("Mit diesen zwei Durchläufen wird gezeigt, dass mehr Stützstellen sogar schlecht sein können.\n")
     # System 2 mit Standardwerten
     initSystem(2)
 
