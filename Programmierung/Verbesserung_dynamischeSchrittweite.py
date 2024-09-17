@@ -14,24 +14,19 @@ if(__name__=='__main__'):
     # ohne diese Aufrufe koennen keine Berechnungen durchgeführt werden
     
     init(algorithms.quadratureContourIntegralCircleMittelpunkt, n, j)
-    print("An den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss.")
-    print("Beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren.\n")
+    print("An dem folgenden Beispiel kann man sehen, dass durch die variable Schrittweite hier erreicht wird, dass das Verfahren nach einem Schritt fertig ist.")
+    print("Das ist aber nicht verwunderlich, da der Parameter eindimensional ist.\n")
     # System 1 mit Standardwerten initialisieren
     systemAuswaehlen(1)
-
     minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
-    # Verwendung von mehr Teilintervallen
-    minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
 
     print("Betrachte nun das zweite System mit kleiner Schrittweite.")
-    print("Mit diesen zwei Durchläufen wird gezeigt, dass mehr Teilintervalle sogar schlecht sein können.\n")
+    print("Hier wird durch die variable Schrittweite zwar mehr Zeit benötigt, aber dafür bleiben die Eigenwerte bis zum Schritt 120 sehr oft fast konstant.\n")
     # System 2 mit Standardwerten
     systemAuswaehlen(2)
-
     minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
-    # mehr Teilintervalle verwenden
-    minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
 
     print("Nehme nun eine größere Schrittweite")
+    print("Obwohl dadurch der Durchlauf extrem beschleunigt werden, so hat es zur Folge, dass die Eigenwerte sich extrem ausbreiten.")
+    print("Man sehe aber auch, dass die Entwicklung der Eigenwerte hier sehr gleichförmig verläuft.\n")
     minimierenPlottenUndEckdatenAnzeigen(100, 0.5, True)
-    minimierenPlottenUndEckdatenAnzeigen(150, 0.5, True)
