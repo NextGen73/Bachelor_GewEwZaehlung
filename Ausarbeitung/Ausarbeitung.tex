@@ -1247,17 +1247,17 @@ Tag der Einreichung: \datum
 
 \chapter{Verbesserungen}
 \label{sec: Verbesserungen}
-      \section{Auswertung bisheriger Implementation}
-            In Kapitel \ref{sec: Programmieren} sind folgende Probleme deutlich zum Vorschein getreten:
-            Einerseits ist die approximierte Zählung der Eigenwerte unzureichend, wenn sich ein Eigenwert in der Nähe der Intervallgrenzen befindet.
-            Andererseits führte die Erhöhung der Genauigkeit der Quadraturformel nicht unbedingt zu besseren Ergebnissen.
-            Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5}, dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
-            Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte ein Schritt des Verfahrens nahe an einer Lösung des Problems sich befinden. 
-      \section{mögliche Verbesserungen}
+      In Kapitel \ref{sec: Programmieren} sind folgende Probleme deutlich zum Vorschein getreten:
+      Einerseits ist die approximierte Zählung der Eigenwerte unzureichend, wenn sich ein Eigenwert in der Nähe der Intervallgrenzen befindet.
+      Andererseits führte die Erhöhung der Genauigkeit der Quadraturformel nicht unbedingt zu besseren Ergebnissen.
+      Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5}, dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
+      Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte sich ein Schritt des Verfahrens nahe an einer Lösung des Problems befinden.
+      Man kann auch sehen, dass die Eigenwerte oft oszilieren, ohne die Eigenwertzählungen erkennbar zu verändern.
+      Zuletzt sind diese langen Zeiten für Probleme mit einstelligen Freiheitsgraden nicht wünschenswert, da einige Systeme $n>1.000.000$ Freiheitsgrade betrachten (vgl. \cite[text]{keylist})
 
-      \section{Implementation und Auswertung der verbesserten Programme}
+      Daher wird sich dieses Kapitel die folgenden Themen behandeln:
+      \section{Verbesserte Quadraturformeln}
 
-      \section{Approximation der Spur}
 
 \chapter{Auswertung}
 \label{sec: Auswertung}
