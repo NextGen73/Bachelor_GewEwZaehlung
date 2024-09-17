@@ -22,12 +22,12 @@ quadratur = 1
 # definiert die Anzahl an Teilintervallen
 m = 10
 # diese Variablen definieren den Kreis
-r=100
+r=1
 gamma = 0
 # defniert feste Schrittweite bei Schritt des Gradientenverfahrens
-lambdaStern = 500
+lambdaStern = 1
 # definiert die maximale Anzahl an Schritten pro Durchlauf
-begrenzung = 5000
+begrenzung = 1
 
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koennen
