@@ -29,4 +29,4 @@ if(__name__=='__main__'):
     print("Nehme nun eine größere Schrittweite")
     print("Obwohl dadurch der Durchlauf extrem beschleunigt werden, so hat es zur Folge, dass die Eigenwerte sich extrem ausbreiten.")
     print("Man sehe aber auch, dass die Entwicklung der Eigenwerte hier sehr gleichförmig verläuft.\n")
-    minimierenPlottenUndEckdatenAnzeigen(100, 0.5, True)
+    minimierenPlottenUndEckdatenAnzeigen(100, 0.5, dynamischSchritt=True)
