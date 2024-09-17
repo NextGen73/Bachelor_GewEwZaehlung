@@ -136,19 +136,26 @@ def systemAuswaehlen(ausgewaehltesSystem):
     r = (lambda_b-lambda_a)*0.5
 
 # das beruht auf echter Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
-def quadratureContourIntegralCircleTrapez(f, s, m:int = m) -> complex:    
+def quadratureContourIntegralCircleTrapez(f, s, m) -> complex:    
     # Berechne Stuetzstellen
     z = np.array([gamma+r*np.exp(2j*np.pi*k/m) for k in range(m+1)])
     return sum((f(z[k], s)+f(z[k+1], s)*np.exp(2*np.pi*1j/m))*np.exp(2*np.pi*1j*k/m) for k in range(m))*r*np.pi*1j/m
 
+
+# das beruht auf verschobener Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
+def quadratureContourIntegralCircleTrapezNeu(f, s, m) -> complex:    
+    # Berechne Stuetzstellen
+    z = np.array([gamma+r*np.exp(2j*np.pi*(k+0.5)/m) for k in range(m+1)])
+    return sum((f(z[k], s)+f(z[k+1], s)*np.exp(2*np.pi*1j/m))*np.exp(2*np.pi*1j*k/m) for k in range(m))*r*np.pi*1j/m
+
 # das ist eher die Mittelpunktsregel, wo man Funktion nur an einer Stelle auswerten muss, Differenz wurde explizit berechnet und rausgezogen
-def quadratureContourIntegralCircleMittelpunkt(f, s, m:int = m) -> complex:
+def quadratureContourIntegralCircleMittelpunkt(f, s, m) -> complex:
     # Berechne Stuetzstellen
     zs = np.array([gamma+r*np.exp(2*np.pi*1j/m*(k+1/2)) for k in range(m)])
     return sum(f(zs[k], s)*np.exp(2*np.pi*1j*(k+1/2)/m) for k in range(m))*2*np.pi*1j*r/m
 
 # diese Quadraturformel ist optimal für 2 Stuetzstellen, siehe Gauss 2 Punkt Formel
-def quadratureContourIntegralCircleGaussZwei(f, s, m:int = m) -> complex:
+def quadratureContourIntegralCircleGaussZwei(f, s, m) -> complex:
     #Stuetzstellen sind hier ein mx2 Array
     PiIDurchM = np.pi*1j/m
     zs = gamma+r*np.exp(PiIDurchM*np.array([[2*k+1-1/math.sqrt(3), 2*k+1+1/math.sqrt(3)] for k in range(m)]))
@@ -250,7 +257,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
             D = np.linalg.inv(z*M(s)-K(s))
             return g(z)*np.trace(D.dot(M(s)))
         
-        return quadratur(F, s, m=anzahlTeilintervalle)/2/np.pi/1j
+        return quadratur(F, s, anzahlTeilintervalle)/2/np.pi/1j
     
     # Ableitung der approximierten gewichteten Ew-Zaehlung
     def nablaJ_Stern(s)->float:
@@ -260,7 +267,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
             dKds = ableitungDurchDifferenz(K, s)
 
             return g(z)*(np.trace(D.dot(dMds))-np.trace(((D.dot(z*dMds-dKds)).transpose(0,2,1).dot(D)).transpose(0,2,1)))
-        return quadratur(nablaF, s, m=anzahlTeilintervalle)/2/np.pi/1j
+        return quadratur(nablaF, s, anzahlTeilintervalle)/2/np.pi/1j
 
     # pruefe, ob Bedingungen von Wert erfuellt sind, sonst Projektion auf Intervallgrenze
     def bedingungenPruefen(x)->np.ndarray:
