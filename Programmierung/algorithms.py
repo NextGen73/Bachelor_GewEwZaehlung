@@ -360,7 +360,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
     # gibt die Farben des unteren Plots an, damit das Array lang genug ist, wird es oft genug mit sich selbst verkettet
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
     # wird für den unteren Plot benötigt, gibt den Verlauf aller Eigenwerte an
-    eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
+    eigenwerte = np.array([np.sort(np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s)))) for s in verlaufS])
     
     if(EWungewichtet[-1]==0):
         ergebnis = "ja"
@@ -380,14 +380,13 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
     axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+", "+str(lambda_b)+"]")
-    # axu.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
         axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.8)
 
     axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
     axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
-    axu.legend()
+    # axu.legend()
 
     # Plot anzeigen
     plots.show()
