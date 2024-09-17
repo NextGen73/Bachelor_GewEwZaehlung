@@ -48,6 +48,7 @@
 }
 \newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
 \newcommand{\zitat}[1]{\glqq #1\grqq}
 \newcommand{\klammer}[1]{\left(#1\right)}
 \newcommand{\diag}{\text{diag}}
@@ -1079,14 +1080,17 @@ Tag der Einreichung: \datum
             Betrachte zunächst eine allgemeine Funktion $f$, über die entlang der Kurve $\gamma$ aus (\ref{def: gamma}) integriert wird.
 
             Teile dazu $\gamma = \{\Tilde{z_0}+\Tilde r\exp(it): t\in [0,2\pi]\}$ in $m$ Teile auf:
-            $$\gamma_k = \left\{\Tilde{z_0}+\Tilde r\exp(it): t\in \left[ 2\pi \frac k m, 2\pi \frac {k+1} m\right]\right\},\quad k=0,\dots,m-1$$
+            \begin{equation}
+                  \label{def: gamma_k}
+                  \gamma_k = \left\{\Tilde{z_0}+\Tilde r\exp(it): t\in \left[ 2\pi \frac k m, 2\pi \frac {k+1} m\right]\right\},\quad k=0,\dots,m-1
+            \end{equation}
 
             Es folgt
-            \begin{align*}
-                  \int_{\gamma_k} f(z)\ dz =& \int_{2 \pi \frac k m}^{2\pi \frac {k+1} m} f(\Tilde{z_0}+\Tilde r\exp(it))\,i\Tilde r\exp(it)\ dz\\
-                  \approx& \frac{f(z_k)\,i\Tilde r\exp(\frac{2\pi i k}{m})+f(z_{k+1})\,i\Tilde r\exp(\frac{2\pi i (k+1)}{m})}{2} \frac{2\pi} m\\
-                  =& \klammer{f(z_k)+f(z_{k+1})\,\exp\klammer{\frac{2\pi i}{m}}}\frac{\pi i \Tilde r} m \,\exp(\frac{2\pi i k}{m})
-            \end{align*}
+            \begin{align}
+                  \int_{\gamma_k} f(z)\ dz =& \int_{2 \pi \frac k m}^{2\pi \frac {k+1} m} f(\Tilde{z_0}+\Tilde r\exp(it))\,i\Tilde r\exp(it)\ dz\label{eqn: Teilintegral Kurve zu Intergral normal}\\
+                  \approx& \frac{f(z_k)\,i\Tilde r\exp(\frac{2\pi i k}{m})+f(z_{k+1})\,i\Tilde r\exp(\frac{2\pi i (k+1)}{m})}{2} \frac{2\pi} m\nonumber\\
+                  =& \klammer{f(z_k)+f(z_{k+1})\,\exp\klammer{\frac{2\pi i}{m}}}\frac{\pi i \Tilde r} m \,\exp(\frac{2\pi i k}{m})\nonumber
+            \end{align}
             wobei $z_k:=\Tilde{z_0}+\Tilde r\exp\klammer{\frac {2\pi ik} m}, \quad k=0,\dots,m$.
             Es wurde hier eine Transformation verwendet, wie sie immer verwendet wird, um Kurvenintegrale auszurechnen.
             Ferner wurde in der zweiten Zeile die Trapezregel angewendet, wie sie in \cite[S. 498]{numerikHermann} vorgestellt wird.
@@ -1249,16 +1253,101 @@ Tag der Einreichung: \datum
 \label{sec: Verbesserungen}
       In Kapitel \ref{sec: Programmieren} sind folgende Probleme deutlich zum Vorschein getreten:
       Einerseits ist die approximierte Zählung der Eigenwerte unzureichend, wenn sich ein Eigenwert in der Nähe der Intervallgrenzen befindet.
-      Andererseits führte die Erhöhung der Genauigkeit der Quadraturformel nicht unbedingt zu besseren Ergebnissen.
+      Am einfachsten ist dies an den Abbildungen \ref{fig: Plot_1_100_0.5}, \ref{fig: Plot_1_150_0.5} und \ref{fig: Plot_2_100_0.05} zu sehen:
+      Immer wenn ein Eigenwert in die Nähe der Intervallgrenze und damit der Integrationskurve kam, wurde die gewichtete Eigenwertzählung falsch approximiert, was dazu führte, dass die Systeme in einem Schritt sehr große Sprünge ausführten.
+      Auch das Verhalten des Eigenwerts in den Abbildungen \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05} kann damit erklärt werden. Hier kam es zwar nicht zu Sprüngen, aber wahrscheinlich verhinderte diese Quadraturformel, dass der Parameter so verändert wird, dass der Eigenwert das Intervall verlassen kann.
       Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5}, dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
       Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte sich ein Schritt des Verfahrens nahe an einer Lösung des Problems befinden.
-      Man kann auch sehen, dass die Eigenwerte oft oszilieren, ohne die Eigenwertzählungen erkennbar zu verändern.
-      Zuletzt sind diese langen Zeiten für Probleme mit einstelligen Freiheitsgraden nicht wünschenswert, da einige Systeme $n>1.000.000$ Freiheitsgrade betrachten (vgl. \cite[text]{keylist})
+      Man sehe zudem, dass sich viele der Durchläufe über lange Strecken kaum verändern.
+      Zuletzt sind diese langen Zeiten für Probleme mit einstelligen Freiheitsgraden nicht wünschenswert, da einige Systeme $n>1.000.000$ Freiheitsgrade einbeziehen (vgl. \cite[S. 359]{maschinendynamikDresig}).
 
-      Daher wird sich dieses Kapitel die folgenden Themen behandeln:
       \section{Verbesserte Quadraturformeln}
+            Man wende sich zuerst der Verbesserung der Quadraturformel zu.
+            Dadurch erhofft man sich, dass es keine großen Sprünge in der Verteilung der Eigenwerte mehr gibt, um zu gewährleisten, dass die Eigenwerte geordnet das Intervall verlassen und nicht per Zufall wie in Abb. \ref{fig: Plot_2_100_0.05}.
+
+            Man nutze daher eine Quadraturformel, welche das Integral zwar approximiert, aber nicht an den Stellen $\lambda_a$ oder $\lam_b$ ausgewertet wird.
+
+            Die einfachste Quadraturformel, die dies bewerkstelligt ist die \zitat{Mittelpunkts-Regel}\cite[S. 526]{numerikHermann}:
+
+            Sei dazu $\gamma_k, k=0,\dots,m-1$ wie in (\ref{def: gamma_k}). Nach (\ref{eqn: Teilintegral Kurve zu Intergral normal}) gilt:
+            \begin{align*}
+                  \int_{\gamma_k} L(z, s)\ dz =& \int_{2\pi \frac{k}{m}}^{2\pi\frac{k+1}{m}}L(\Tilde z_0+\Tilde r\exp(it), s)i\Tilde r \exp(it)\ dt\\
+                  \approx& L(\Tilde z_0+\Tilde r\exp(\frac{2\pi i}{m}(k+\frac{1}{2})), s)i\Tilde r \exp(\frac{2\pi i}{m}(k+\frac{1}{2})) \frac{2\pi}{m}\\
+                  =& L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}}) \frac{2\pi i}{m}
+            \end{align*}
+
+            wobei die Definition $z_{k+\frac{1}{2}}:= \Tilde z_0+\Tilde r\exp(\frac{2\pi i}{m}(k+\frac{1}{2})), k=0,\dots,m$ und die Formel für die Mittelpunkts-Regel aus \cite[S. 526]{numerikHermann} verwendet wurde.
+
+            Es gilt für $J(s)$:
+            \begin{align}
+                  J(s) =& \frac{1}{2\pi i}\sum_{k=0}^{m-1} \int_{\gamma_k} L(z, s)\ dz = \frac{1}{2\pi i}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}}) \frac{2\pi i}{m}\nonumber\\
+                  =&  \frac{1}{2\pi i}\left[\frac{2\pi i}{m}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}})\right]\label{def: Mittelpunkts-Regel, angewendet}
+            \end{align}
+
+            Wobei wieder die Faktoren vor der Summe nicht gekürzt wurden, da der erste Faktor von der Anwendung des Residuensatzes stammt und der zweite Faktor ein Teil der Quadraturformel ist\footnote{falls man die Faktoren kürzt, erhält man die Stützstellen $z_k$ und Gewichte $\w_k$ aus \cite[S. 128]{grundlageFutamura}. Die $\w_k$ werden dort zwar als Gewichte einer Quadraturformel bezeichnet, sie sind aber eher die Gewichte einer Quadraturformel mit dem Faktor $\frac{1}{2\pi i}$ multipliziert.}.
+
+            Durch die Verwendung dieser Quadraturformel erhält man folgende Ergebnisse:
+
+            \begin{tabular}{lllll}
+                  
+            \end{tabular}
+
+            Die Ergebnisse können auch in der Datei \textit{./Programmierung/Verbesserung\_Mittelpunkt.py} nachvollzogen werden.
+
+            Wie man sehen kann, erfolgen die Berechnungen der ersten beiden Durchläufe nun viel schneller, da nur 15 Schritte benötigt werden.
+            Die Intervallgrenze stellt nun kein Hindernis für den Eigenwert mehr dar.
+            Auch alle anderen Durchläufe sind nun zuverlässiger, siehe 3. und 4. welche nun beide in wenigen Schritten ein Ergebnis liefern.
 
 
+            Natürlich wären diese Durchläufe auch schneller, wenn sie kein Ergebnis bringen, da hier die Funktion nur an einer Stelle auszuwerten ist.
+
+            Nehme daher als zweites Beispiel die \zitat{Zweipunkt-Formel}\cite[S. 526]{numerikHermann}. Analog zu (\ref{def: JStern}) und (\ref{def: Mittelpunkts-Regel, angewendet}) folgt:
+            \begin{align}
+                  J(s) = \frac 1 {2\pi i}\left[\frac{\pi i \Tilde r}{m}\sum_{k=0}^{m-1}\klammer{L(z_{k,-}, s)\exp\klammer{-\frac{\pi i}{\sqrt{3}m}}+L(z_{k,+}, s)\exp\klammer{\frac{\pi i}{\sqrt{3}m}}}\right]
+            \end{align}
+            mit $z_{k,\pm}:=\Tilde z_0+\Tilde r\exp\klammer{\frac{\pi I}{\sqrt{3}m}(2\sqrt 3 k+\sqrt 3 \pm 1)}$
+
+            Diese Formel erhält man durch Anwenden von \cite[S. 526]{numerikHermann} mit $u= \frac{2\pi}{m}(k+\frac 1 2)$ und $v=\frac \pi m$.
+
+            Es folgen die Ergebnisse des Programms \textit{./Programmierung/Verbesserung\_Gauss2.py}.
+
+
+            Obwohl diese Quadraturformel eine Gauss-Legendre-Quadratur und somit optimal ist, ergibt sich in der Performance zu der Mittelpunkts-Regel kaum ein Unterschied.
+            Man kann sogar so weit gehen und sagen, dass die Mittelpunkts-Regel besser ist, da sie weniger Zeit in Anspruch nimmt.
+
+            Die Tatsache, dass diese zwei Quadraturformeln nicht bei $\lam_a$ und $\lam_b$ ausgewertet werden und sie deshalb besser sind, kann man auch an Programm
+            \textit{./Programmierung/Vergleich Quadraturformeln.py} sehen. Dort wurde noch die verschobene Trapezregel angewendet. Diese Trapezregel nutzt nicht mehr die Werte $z_k$ als Stützstellen, sondern die $s_{k+\frac 1 2}$.
+            Allein dies macht einen gewaltigen Unterschied:
+
+            Für eine immer näher an $\lambda_b = 1$ rückende Polstelle, wächst die alte Trapezformel sehr stark an. Alle anderen Quadraturformeln gehen stattdessen gegen 0.5.
+            Auch hier liegen die Ergebnisse der Mittelpunkts-Regel und der Zweipunkt-Formel sehr dicht beieinander.
+
+            Verwende daher ab nun immer die Mittelpunkts-Regel, um zu einem schnellstmöglichen Ergebnis zu kommen.
+
+      \section{dynamische Schrittweite}
+            Als nächstes wende man sich dem Gradientenverfahren zu:
+            Die Schrittweite $\lambda_*$ soll nun nicht mehr fest sein, sondern möglichst optimal berechnet werden.
+
+            Werte daher nablaJ\_Stern() an den Stellen $x-d*t, t=\N*\lambda_*$ aus\footnote{obwohl $\lambda_*$ nicht mehr direkt die Schrittweite bestimmt, so benötigt man trotzdem eine Schrittweite, wie weit die Stellen auseinander liegen sollen.}.
+
+            Die Ergebnisse sind auch in \textit{./Programmierung/Verbesserung\_dynamischeSchrittweite.py} .
+
+            Wie man sehen kann, wird die Eigenwertzählung innerhalb eines Schrittes minimiert. Dies war aber zu erwarten, da $s$ in System 1 ein Skalar war. Somit musste die negative Ableitung in die Richtung des argmin zeigen.
+            Nach der Defintion der Funktion kam der Design-Parameter innerhalb dieses Schrittes am argmin an.
+
+            An Plot 3 sieht man, dass sich die Minimierung extrem beschleunitgt hat, aber die Eigenwerte im Vergleich zu extrem breit auffächern:
+            In waren die Eigenwerte auf dem Intervall $[0,2.5]$ verteilt, hier ist es $[0,6]$. Dies kann auch durch die variable Schrittweite erklärt werden:
+            Während bei den Verfahren mt fester Schrittweite bei jeder Iteration eine neue Richtung berechnet wird, die ein argmin anvisiert, welches möglichst nah bei dem Startwert ist, so geht in dieser Iteration die Funktion die ganze Länge der ersten Richtung, bis der Rand der zulässigen Menge erreicht wurde, das Minimum hinter dem Wert liegt, oder dieser Wert die Eigenwertzählung minimiert.
+
+      \section{Approximation von der Ableitung von J durch ein Differenzenverfahren}
+
+            Zuletzt bemerke zuerst, dass die Auswertung der $m$ Stützstellen die meiste Zeit benötigt, hingegen die Berechnung der genauen gewichteten Eigenwertzählung immer sofort geschieht.
+            Approximiere daher $\nabla J$ durch die Anwendung eines Differenzenverfahren, wie es auch in Kapitel \ref{sec: Programmieren} auf $\frac {dM}{ds}$ angewendet wurde.
+
+            Die Ergebnisse sind:
+
+            Man beachte die extrem kurze Rechenzeit.
+            Für System 2 könnte man die Anzahl an maximal möglichen Schritten pro Durchlauf erhöhen und außerdem die Ableitung genauer machen, indem h reduziert wird.
 \chapter{Auswertung}
 \label{sec: Auswertung}
 
