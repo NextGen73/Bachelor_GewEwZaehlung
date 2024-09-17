@@ -382,7 +382,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
     axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+", "+str(lambda_b)+"]")
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.8)
+        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i])
 
     axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
     axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
@@ -393,7 +393,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
 
     # Angabe der wichtigsten Eckdaten 
     print("Eckdaten für System "+str(system)+":")
-    print("Startwert Parameter: ",str(verlaufS[0].real.round(3)))
+    print("Startwert Parameter: ",str(np.round(verlaufS[0].real, 3)))
     print("Endwert   Parameter: ", np.round(verlaufS[-1].real, 3))
     print("Intervall: ["+str(lambda_a)+", "+str(lambda_b)+"]")
     # print("Eigenwerte am Anfang: "+str(np.round(eigenwerte[0,:], 2)))
