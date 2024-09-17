@@ -1,0 +1,206 @@
+Mittelpunktformel
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.51 1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 142
+      für Minimierung vergangene Zeit in s: 3.6682093143463135
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.66 2.51 1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 143
+      für Minimierung vergangene Zeit in s: 4.387176990509033
+
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.5
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 15
+      für Minimierung vergangene Zeit in s: 0.40634965896606445
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.5
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 15
+      für Minimierung vergangene Zeit in s: 0.524240255355835
+
+
+      Eckdaten für System 2:
+      Startwert: [0.7 0.7 0.7 1.5]
+      Intervall: [0.9,1.5]
+      Eigenwerte am Anfang: [1.91 1.66 1.32 1.03 0.06 0.21 0.75 0.44]
+      Eigenwerte am Ende:   [2.51 2.1  1.51 0.06 0.17 0.38 0.9  0.68]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 289
+      für Minimierung vergangene Zeit in s: 11.089428186416626
+
+      Eckdaten für System 2:
+      Startwert: [0.7 0.7 0.7 1.5]
+      Intervall: [0.9,1.5]
+      Eigenwerte am Anfang: [1.91 1.66 1.32 1.03 0.06 0.21 0.75 0.44]
+      Eigenwerte am Ende:   [6.65 5.48 4.3  2.85 0.08 0.4  0.89 1.51]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 431
+      für Minimierung vergangene Zeit in s: 25.26122283935547
+
+verschobene Trapezformel
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 142
+      für Minimierung vergangene Zeit in s: 5.965065002441406
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.66 2.51 1.25 0.06 0.21 0.44 1.04 0.75]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 143
+      für Minimierung vergangene Zeit in s: 8.397464036941528
+
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.5
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 15
+      für Minimierung vergangene Zeit in s: 0.6790149211883545
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 0.06 0.21 0.44 1.04 0.75]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.5
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 15
+      für Minimierung vergangene Zeit in s: 1.0506906509399414
+
+
+      Eckdaten für System 2:
+      Startwert: [0.7 0.7 0.7 1.5]
+      Intervall: [0.9,1.5]
+      Eigenwerte am Anfang: [1.91 1.66 1.32 1.03 0.06 0.21 0.75 0.44]
+      Eigenwerte am Ende:   [2.53 2.11 1.52 0.05 0.16 0.37 0.89 0.67]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 302
+      für Minimierung vergangene Zeit in s: 24.395472764968872
+
+      Eckdaten für System 2:
+      Startwert: [0.7 0.7 0.7 1.5]
+      Intervall: [0.9,1.5]
+      Eigenwerte am Anfang: [1.91 1.66 1.32 1.03 0.06 0.21 0.75 0.44]
+      Eigenwerte am Ende:   [3.7  3.15 2.38 1.55 0.08 0.29 0.65 0.89]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 288
+      für Minimierung vergangene Zeit in s: 33.75296759605408
+
+Gauss 2PunktFormel:
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.69 2.53 1.26 0.06 0.21 0.44 1.03 0.74]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 145
+      für Minimierung vergangene Zeit in s: 7.589966535568237
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.51 1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 145
+      für Minimierung vergangene Zeit in s: 9.23354196548462
+
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 1.04 0.75 0.06 0.44 0.21]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.5
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 15
+      für Minimierung vergangene Zeit in s: 0.7164509296417236
+
+      Eckdaten für System 1:
+      Startwert: [3.5]
+      Intervall: [1.5,2.5]
+      Eigenwerte am Anfang: [3.12 2.16 1.25 1.08 0.81 0.47 0.07 0.22]
+      Eigenwerte am Ende:   [3.65 2.5  1.25 0.06 0.21 0.44 1.04 0.75]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.5
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 15
+      für Minimierung vergangene Zeit in s: 1.1384766101837158
+
+
+      Eckdaten für System 2:
+      Startwert: [0.7 0.7 0.7 1.5]
+      Intervall: [0.9,1.5]
+      Eigenwerte am Anfang: [1.91 1.66 1.32 1.03 0.06 0.21 0.75 0.44]
+      Eigenwerte am Ende:   [3.35 2.94 2.3  1.55 0.08 0.28 0.61 0.88]
+      Anzahl Stützstellen Quadratur: 100
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 112
+      für Minimierung vergangene Zeit in s: 8.869754552841187
+
+      Eckdaten für System 2:
+      Startwert: [0.7 0.7 0.7 1.5]
+      Intervall: [0.9,1.5]
+      Eigenwerte am Anfang: [1.91 1.66 1.32 1.03 0.06 0.21 0.75 0.44]
+      Eigenwerte am Ende:   [0.07 0.28 0.54 0.9  1.65 3.54 3.15 2.47]
+      Anzahl Stützstellen Quadratur: 150
+      Schrittweite des Gradientenverfahrens: 0.05
+      Verfahren brachte ein Ergebnis: ja
+      Anzahl an benötigten Iterationen: 63
+      für Minimierung vergangene Zeit in s: 7.723153829574585
