@@ -249,7 +249,7 @@ def bedingungenPruefen(x)->np.ndarray:
     return x
     
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles zurueck
-def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle:int, schrittweiteGrad=0.05, dynamischSchritt=False) -> np.ndarray:
+def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle:int, schrittweiteGrad=0.05, dynamischSchritt=False, approxNablaJ=False) -> np.ndarray:
     """
     :param startpunkt: Ausgangpunkt für Minimierung.
     :anzahlTeilintervalle: Anzahl der Stuetzstellen in Quadraturformel.
@@ -279,6 +279,10 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     def J(s)->float:
         eigvals = np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s)))
         return sum(h(i)*g(i) for i in eigvals)
+    
+    # berechnet NablaJ durch J und Differenzenverfahren
+    def nablaJ(s)->float:
+        return ableitungDurchDifferenz(J, s)
 
     #berechnet, wie viele Eigenwerte sich in dem vorgegebenen Intervall befinden
     def ungewichteteEwZaehlung_genau(s)->int:
@@ -316,7 +320,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     while result[-3,-1]>0:
         x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
-        x_neu = schrittGradientenverfahren(nablaJ_Stern, x_alt, schrittweiteGrad, dynamischSchritt)
+        x_neu = schrittGradientenverfahren(nablaJ if approxNablaJ else nablaJ_Stern, x_alt, schrittweiteGrad, dynamischSchritt)
         # Bedingungen pruefen, evtl. Projektion
         x_neu = bedingungenPruefen(x_neu)
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
@@ -331,7 +335,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     return result
 
 # ruft EigenwerteMinimierenAufIntervall auf, stoppt benoetigte Zeit, fertigt Plots an und gibt Eckdaten aus
-def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=0.05, dynamischSchritt=False):
+def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=0.05, dynamischSchritt=False, approxNablaJ=False):
     global m
     m = anzahlTeilintervalle
     
@@ -342,7 +346,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
-    result = EigenwerteMinimierenAufIntervall(s, anzahlTeilintervalle, schrittweiteGrad, dynamischSchritt)
+    result = EigenwerteMinimierenAufIntervall(s, anzahlTeilintervalle, schrittweiteGrad, dynamischSchritt, approxNablaJ)
     # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
     vergangeneZeit = time.time()-startzeit
 
