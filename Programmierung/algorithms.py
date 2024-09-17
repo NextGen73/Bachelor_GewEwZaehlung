@@ -32,7 +32,7 @@ begrenzung = 5000
 
 # muss zu Beginn aufgerufen werden, damit sinnvolle Ergebnisse berechnet werden koennen
 # hier werden globale Variablen definiert, die ueberall benoetigt werden, aber normalerweise nur einmal definiert werden muessen
-def init(quadraturformel, freiheitsgrade=8, hilfszahl=4, anzahlTeilintervalleQuadratur = 100, schrittweiteGradVerfahren = 0.05, inflationParameter=0.1, maxIter = 500, schrittweiteDiffVerfahren=0.1, differenzenVerfahren="vorwaerts", ):
+def init(quadraturformel, freiheitsgrade=8, hilfszahl=4, anzahlTeilintervalleQuadratur = 100, schrittweiteGradVerfahren = 0.05, inflationParameter=0.1, maxIter = 500, schrittweiteDiffVerfahren=0.1, differenzenVerfahren="vorwaerts"):
     global quadratur
     global n
     global j
@@ -141,7 +141,6 @@ def quadratureContourIntegralCircleTrapez(f, s, m) -> complex:
     z = np.array([gamma+r*np.exp(2j*np.pi*k/m) for k in range(m+1)])
     return sum((f(z[k], s)+f(z[k+1], s)*np.exp(2*np.pi*1j/m))*np.exp(2*np.pi*1j*k/m) for k in range(m))*r*np.pi*1j/m
 
-
 # das beruht auf verschobener Trapezregel, wo man Mittelwert bildet und Differenz der Stellen
 def quadratureContourIntegralCircleTrapezNeu(f, s, m) -> complex:    
     # Berechne Stuetzstellen
@@ -201,7 +200,7 @@ def ableitungDurchDifferenz(f, x):
     return nablaF
 
 # ein Schritt des Gradientenverfahrens
-def schrittGradientenverfahren(nablaF, x, lambdaStern):
+def schrittGradientenverfahren(nablaF, x, lambdaStern=0.05, dynamisch=False):
     """
     :param nableF: Ableitung der Funktion, die minimiert werden soll.
     :param x: Startwert fuer das Gradientenverfahren.
@@ -209,12 +208,48 @@ def schrittGradientenverfahren(nablaF, x, lambdaStern):
     :return: berechnete neue Stelle `x`.
     """
 
-    abl_real = nablaF(x).real
-    # wie schafft man es eine Funktion oder eine float zu erkennen?
-    return x-lambdaStern*abl_real
+    def punktDynamischBerechnen(nablaF, x, d):
+        # kann nur eintreten, wenn das Intervall viel zu groß ist, sonst sollte vorher eine andere Bedingung eintreten
+        x_alt = x
+        for i in range(1000):
+            # leider muss man aus Performance-Gründen die Schrittweite auf 0.5 erhöhen
+            x_neu = x_alt-lambdaStern*d
+            # falls ein Wert außerhalb der zulässigen Menge ist, so nehme diesen Wert als Ergebnis für das Gradientenverfahren
+            # es würde nichts bringen noch weiter zu machen, da nachher der Wert immer auf den Rand der zulässigen Menge gesetzt
+            if(np.any(x_neu != bedingungenPruefen(x_neu))):
+                return x_neu
+            # berechne es einmal, da es in den nächsten zwei Abfragen benötigt wird
+            nablaFMalD = nablaF(x_neu).dot(d)
+            # aufgrund von Ungenauigkeiten und der Diskretisierung ist es besser |nablaFMalD| < epsilon zu fordern
+            # anstatt nablaFMalD = 0
+            if(abs(nablaFMalD)<1e-5):
+                return x_neu
+            # falls nablaFMalD kleiner Null ist, dann ist man zu weit gelaufen
+            # falls aber schon im ersten Schritt diese Bedingung eintritt, dann würde man in eine Endlosschleife laufen, da das Gradientenverfahren dann den selben Wert zurückgibt, wie reinkam
+            # beim nächsten Durchlauf wären daher wieder alle Werte gleich und man würde in eine Endlosschleife laufen
+            if(nablaFMalD < 0):
+                return x_alt if i==1 else x_neu
+            x_alt = x_neu
+        return x_alt
 
-# minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles aus
-def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle:int) -> np.ndarray:
+    abl_real = nablaF(x).real
+
+    if(dynamisch):
+        return punktDynamischBerechnen(nablaF, x, abl_real)
+    else:
+        return x-lambdaStern*abl_real
+
+# pruefe, ob Bedingungen von Wert erfuellt sind, sonst Projektion auf Intervallgrenze
+def bedingungenPruefen(x)->np.ndarray:
+    for i in range(len(x)):
+        if(x[i]<bedingungen[i,0]):
+            x[i] = bedingungen[i,0]
+        elif(x[i]>bedingungen[i,1]):
+            x[i] = bedingungen[i,1]
+    return x
+    
+# minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles zurueck
+def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle:int, schrittweiteGrad=0.05, dynamischSchritt=False) -> np.ndarray:
     """
     :param startpunkt: Ausgangpunkt für Minimierung.
     :anzahlTeilintervalle: Anzahl der Stuetzstellen in Quadraturformel.
@@ -269,15 +304,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
             return g(z)*(np.trace(D.dot(dMds))-np.trace(((D.dot(z*dMds-dKds)).transpose(0,2,1).dot(D)).transpose(0,2,1)))
         return quadratur(nablaF, s, anzahlTeilintervalle)/2/np.pi/1j
 
-    # pruefe, ob Bedingungen von Wert erfuellt sind, sonst Projektion auf Intervallgrenze
-    def bedingungenPruefen(x)->np.ndarray:
-        for i in range(len(x)):
-            if(x[i]<bedingungen[i,0]):
-                x[i] = bedingungen[i,0]
-            elif(x[i]>bedingungen[i,1]):
-                x[i] = bedingungen[i,1]
-        return x
-    
+   
     # result wird spaeter eine 2d-Matrix, jetzt ist es noch ein Vektor
     # result[0:j,i] ist Wert, der in i-tem Schritt berechnet wurde
     # result[-3,i] ungewichtete Ew-Zaehlung mit Wert aus i-tem Schritt
@@ -289,7 +316,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     while result[-3,-1]>0:
         x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
-        x_neu = schrittGradientenverfahren(nablaJ_Stern, x_alt, lambdaStern)
+        x_neu = schrittGradientenverfahren(nablaJ_Stern, x_alt, schrittweiteGrad, dynamischSchritt)
         # Bedingungen pruefen, evtl. Projektion
         x_neu = bedingungenPruefen(x_neu)
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
@@ -303,11 +330,10 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
 
     return result
 
-def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad):
+# ruft EigenwerteMinimierenAufIntervall auf, stoppt benoetigte Zeit, fertigt Plots an und gibt Eckdaten aus
+def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=0.05, dynamischSchritt=False):
     global m
-    global lambdaStern
     m = anzahlTeilintervalle
-    lambdaStern = schrittweiteGrad
     
     # mit startzeit und später vergangeneZeit wird nur die Zeit gemessen, die die Funktion EigenwerteMinimierenAufIntervall benötigt,
     # also genau die Zeit, die das Minimierungsverfahren braucht
@@ -316,7 +342,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad)
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
-    result = EigenwerteMinimierenAufIntervall(s, anzahlTeilintervalle)
+    result = EigenwerteMinimierenAufIntervall(s, anzahlTeilintervalle, schrittweiteGrad, dynamischSchritt)
     # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
     vergangeneZeit = time.time()-startzeit
 
@@ -346,14 +372,14 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad)
     # der angezeigt Plot wird aus einem oberen und unteren Plot bestehen
     fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
-    axo.set_title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+","+str(lambda_b)+"]")
+    axo.set_title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+", "+str(lambda_b)+"]")
     axo.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
     axo.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
     axo.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
     axo.legend()
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
-    axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+","+str(lambda_b)+"]")
+    axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+", "+str(lambda_b)+"]")
     # axu.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
@@ -368,7 +394,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad)
 
     # Angabe der wichtigsten Eckdaten 
     print("Eckdaten für System "+str(system)+":")
-    print("Startwert Parameter: ",str(verlaufS[0].real))
+    print("Startwert Parameter: ",str(verlaufS[0].real.round(3)))
     print("Endwert   Parameter: ", np.round(verlaufS[-1].real, 3))
     print("Intervall: ["+str(lambda_a)+", "+str(lambda_b)+"]")
     # print("Eigenwerte am Anfang: "+str(np.round(eigenwerte[0,:], 2)))
