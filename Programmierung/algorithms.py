@@ -249,7 +249,7 @@ def bedingungenPruefen(x)->np.ndarray:
     return x
     
 # minimiert die gewichtete Zaehlung der Eigenwerte, berechnet tatsaechliche gewichtete Eigenwert-Zaehlung, gibt alles zurueck
-def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle:int, schrittweiteGrad=0.05, dynamischSchritt=False) -> np.ndarray:
+def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle:int, schrittweiteGrad=0.05, dynamischSchritt=False, approxNablaJ=False) -> np.ndarray:
     """
     :param startpunkt: Ausgangpunkt für Minimierung.
     :anzahlTeilintervalle: Anzahl der Stuetzstellen in Quadraturformel.
@@ -279,6 +279,10 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     def J(s)->float:
         eigvals = np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s)))
         return sum(h(i)*g(i) for i in eigvals)
+    
+    # berechnet NablaJ durch J und Differenzenverfahren
+    def nablaJ(s)->float:
+        return ableitungDurchDifferenz(J, s)
 
     #berechnet, wie viele Eigenwerte sich in dem vorgegebenen Intervall befinden
     def ungewichteteEwZaehlung_genau(s)->int:
@@ -316,7 +320,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     while result[-3,-1]>0:
         x_alt = np.array(result[0:len_s,-1])
         # neuen Wert s berechnen
-        x_neu = schrittGradientenverfahren(nablaJ_Stern, x_alt, schrittweiteGrad, dynamischSchritt)
+        x_neu = schrittGradientenverfahren(nablaJ if approxNablaJ else nablaJ_Stern, x_alt, schrittweiteGrad, dynamischSchritt)
         # Bedingungen pruefen, evtl. Projektion
         x_neu = bedingungenPruefen(x_neu)
         # neues Tupel an result anhaengen, gleicher Aufbau wie oben, ab jetzt ist result wirklich eine 2d Matrix
@@ -331,7 +335,7 @@ def EigenwerteMinimierenAufIntervall(startpunkt:np.ndarray, anzahlTeilintervalle
     return result
 
 # ruft EigenwerteMinimierenAufIntervall auf, stoppt benoetigte Zeit, fertigt Plots an und gibt Eckdaten aus
-def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=0.05, dynamischSchritt=False):
+def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=0.05, dynamischSchritt=False, approxNablaJ=False):
     global m
     m = anzahlTeilintervalle
     
@@ -342,7 +346,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
     # Minimierungsverfahren auf Problem anwenden.
     # result enthält in jeder Spalte die zu einem Schritt zugehörigen Werte
     # zuerst kommt der berechnete Wert s, dann die ungewichtete Eigenwertzaehlung, die gewichtete Eigenwertzaehlung und zum Schluss die approximierte gewichtete Eigenwertzaehlung
-    result = EigenwerteMinimierenAufIntervall(s, anzahlTeilintervalle, schrittweiteGrad, dynamischSchritt)
+    result = EigenwerteMinimierenAufIntervall(s, anzahlTeilintervalle, schrittweiteGrad, dynamischSchritt, approxNablaJ)
     # in vergangeneZeit wird die Zeit in Sekunden gespeichert, die das Minimierungsverfahren benötigte
     vergangeneZeit = time.time()-startzeit
 
@@ -360,7 +364,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
     # gibt die Farben des unteren Plots an, damit das Array lang genug ist, wird es oft genug mit sich selbst verkettet
     colors=np.tile(['b', 'g', 'r', 'c', 'm'], math.ceil(n/5))
     # wird für den unteren Plot benötigt, gibt den Verlauf aller Eigenwerte an
-    eigenwerte = np.array([np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s))) for s in verlaufS])
+    eigenwerte = np.array([np.sort(np.linalg.eigvals(np.linalg.inv(M(s)).dot(K(s)))) for s in verlaufS])
     
     if(EWungewichtet[-1]==0):
         ergebnis = "ja"
@@ -380,21 +384,20 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
     axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+", "+str(lambda_b)+"]")
-    # axu.yticks(np.arange(0,np.max(eigenwerte)+.1, 0.2))
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=0.8)
+        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i])
 
     axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
     axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
-    axu.legend()
+    # axu.legend()
 
     # Plot anzeigen
     plots.show()
 
     # Angabe der wichtigsten Eckdaten 
     print("Eckdaten für System "+str(system)+":")
-    print("Startwert Parameter: ",str(verlaufS[0].real.round(3)))
+    print("Startwert Parameter: ",str(np.round(verlaufS[0].real, 3)))
     print("Endwert   Parameter: ", np.round(verlaufS[-1].real, 3))
     print("Intervall: ["+str(lambda_a)+", "+str(lambda_b)+"]")
     # print("Eigenwerte am Anfang: "+str(np.round(eigenwerte[0,:], 2)))
