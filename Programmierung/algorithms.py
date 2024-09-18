@@ -397,6 +397,7 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
 
     # Angabe der wichtigsten Eckdaten 
     print("Eckdaten für System "+str(system)+":")
+    print("Verfahren brachte ein Ergebnis: "+ergebnis)
     print("Startwert Parameter: ",str(np.round(verlaufS[0].real, 3)))
     print("Endwert   Parameter: ", np.round(verlaufS[-1].real, 3))
     print("Intervall: ["+str(lambda_a)+", "+str(lambda_b)+"]")
@@ -404,7 +405,6 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
     # print("Eigenwerte am Ende:   "+str(eigenwerte[-1,:].round(2)))
     print("Anzahl Stützstellen Quadratur: "+str(m))
     print("Schrittweite des Gradientenverfahrens: "+str(schrittweiteGrad))
-    # print("Verfahren brachte ein Ergebnis: "+ergebnis)
     print("Anzahl an benötigten Iterationen: "+str(anzahlIterationen))
     print("für Minimierung vergangene Zeit in s: "+str(np.round(vergangeneZeit, 2)))
     print("")
