@@ -1363,7 +1363,7 @@ Tag der Einreichung: \datum
             \begin{figure}[ht]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_Mittelpunkt/Plot_2_100_0.05.png}
-                  \caption{Plot zu System 2,$m=100$, $\lam_*=0.05$, Zweipunkt-Formel verwendet}
+                  \caption{Plot zu System 2, $m=100$, $\lam_*=0.05$, Zweipunkt-Formel verwendet}
                   \label{fig: Plot_2_150_0.05_Gauss2}
             \end{figure}
 
@@ -1388,41 +1388,44 @@ Tag der Einreichung: \datum
             Als nächstes wende man sich dem Gradientenverfahren zu:
             Die Schrittweite $\lambda_*$ soll nun nicht mehr fest sein, sondern möglichst optimal berechnet werden.
 
-            Werte daher nablaJ\_Stern an den Stellen $x-d*t, t=\lambda_*\N$ an\footnote{obwohl $\lambda_*$ nicht mehr direkt die Schrittweite bestimmt, so benötigt man trotzdem eine Schrittweite, wie weit die berechneten Stellen auseinander liegen sollen}.
+            Wende daher $\nabla J^*(s)$ an den Stellen $s-d*t, t=\lambda_*\N$ an\footnote{obwohl $\lambda_*$ nicht mehr direkt die Schrittweite bestimmt, so benötigt man trotzdem eine Schrittweite, wie weit die berechneten Stellen auseinander liegen sollen}.
 
-            Der Algorithmus zur Bestimmung des neuen Punktes ist wie folgt definiert:
-            \begin{algorithm}
-                  \caption{Bestimmung des nächsten Punktes}
-                  \label{alg: dynamischerPunkt}
+            Der Algorithmus zur Bestimmung des neuen Punktes ist in \textit{./Programmierung/algorithms.py} in der Funktion \textit{schrittGradientenverfahren} definiert.
+            % \begin{algorithm}[!ht]
+            %       \caption{Bestimmung des nächsten Punktes}
+            %       \label{alg: dynamischerPunkt}
 
-                  \begin{algorithmic}
-                        \Require $\nabla J(s), s, d, \lambda_*, \Omega$
-                        \Ensure $s^*$
-                        \State $s_{\text{alt}} = s;$
-                        \For {$i = 1,\dots,1000$}\Comment{stellt sicher, dass Schleife nicht unendlich läuft}
-                              \State $s_{\text{neu}} = s_{\text{alt}}-\lambda_* d$;
-                              \If{$s_{\text{neu}}\notin \Omega$}
-                                    \State\Return $s_{\text{neu}}$;
-                              \ElsIf{$|\nabla J(s_{\text{neu}})\cdot d^T| < 0.00001$}
-                                    \State\Return $s_{\text{neu}}$;
-                              \ElsIf{$\nabla J(s_{\text{neu}})\cdot d^T < 0$}
-                                    \If{$i=1$}
-                                          \State\Return $s_{\text{neu}}$;
-                                    \Else
-                                          \State\Return $s_{\text{alt}}$;
-                                    \EndIf
-                              \EndIf
-                              \State $s_{\text{alt}} = s_{\text{neu}}$;
-                        \EndFor
-                  \State\Return $s_{\text{neu}};$
-                  \end{algorithmic}
-            \end{algorithm}
+            %       \begin{algorithmic}
+            %             \Require $\nabla J(s), s, d, \lambda_*, \Omega$
+            %             \Ensure $s^*$
+            %             \State $s_{\text{alt}} = s;$
+            %             \For {$i = 1,\dots,1000$}\Comment{stellt sicher, dass Schleife nicht unendlich läuft}
+            %                   \State $s_{\text{neu}} = s_{\text{alt}}-\lambda_* d$;
+            %                   \If{$s_{\text{neu}}\notin \Omega$}
+            %                         \State\Return $s_{\text{neu}}$;
+            %                   \ElsIf{$|\nabla J(s_{\text{neu}})\cdot d^T| < 0.00001$}
+            %                         \State\Return $s_{\text{neu}}$;
+            %                   \ElsIf{$\nabla J(s_{\text{neu}})\cdot d^T < 0$}
+            %                         \If{$i=1$}
+            %                               \State\Return $s_{\text{neu}}$;
+            %                         \Else
+            %                               \State\Return $s_{\text{alt}}$;
+            %                         \EndIf
+            %                   \EndIf
+            %                   \State $s_{\text{alt}} = s_{\text{neu}}$;
+            %             \EndFor
+            %       \State\Return $s_{\text{neu}};$
+            %       \end{algorithmic}
+            % \end{algorithm}
 
-            Hierbei ist $s$ der alte Wert, $d$ die approximierte Ableitung an diesem Wert, $\lam_*$ die Schrittweite und $\Omega$ der zulässige Bereich des Design-Parameters $s$.
             Diese Funktion gibt einen Wert s aus, der möglichst nahe an der optimalen Stelle ist.
-            An dieser Stelle würde laut \cite[S. 286]{optimierungBurkhard}
-            $$\nabla J(s)\cdot d^T = 0$$ gelten, da die Ableitung aber nur approximiert wurde, reiche hier 
-
+            Die optimale Stelle würde laut \cite[S. 286]{optimierungBurkhard}
+            $$\nabla J(s)\cdot d^T = 0$$
+            erfüllen, da die Ableitung aber nur approximiert wurde, soll hier die Bedingung
+            $$|\nabla J(s)\cdot d^T| < 0.00001$$
+            ausreichen.
+            Es besteht weiterhin die Möglichkeit, dass $s$ die zulässige Menge $\Omega$ verlässt, oder man über einen optimalen Parameter springt.
+            Diese Fälle wurden auch in der Funktion mit abgedeckt.
 
             Das Anwenden dieses Algorithmus zur Bestimmung des nächsten Punktes bringt folgende Ergebnisse:
             \begin{table}[!ht]
@@ -1478,9 +1481,9 @@ Tag der Einreichung: \datum
                   \begin{tabular}{lllcc}
                        System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
                        \hline
-                       1 & $1$ & $0.05$ & $31$ & $0.02$ \\ 
+                       1 & $1$ & $0.05$ & $31$ & $0.03$ \\ 
                        \hline
-                       1 & $1$ & $0.5$ & $4$ & $0.0$ \\
+                       1 & $1$ & $0.5$ & $4$ & $0.01$ \\
                        \hline
                        2 & $1$ & $0.05$ & $>100000$ & $>198$ \\
                        2 & $1$ & $0.05$ & $>150000$ & $>428$ \\
@@ -1490,7 +1493,7 @@ Tag der Einreichung: \datum
                   \captionof{table}{Kennzahlen bei Verwendung von $\nabla J(s)$}\label{tab: Ergebnisse_nablaJ}
             \end{table}
 
-            Man beachte, dass diese Approximation für System 1 genau genug war, um ein Minimum innerhalb von 0.02 s zu finden.
+            Man beachte, dass diese Approximation für System 1 genau genug war, um ein Minimum innerhalb von 0.03 s zu finden.
             Allerdings ist dieses Verfahren in dieser Form für System 2 unzureichend. Man könnte die Ableitung genauer approximieren, indem die Schrittweite $h$ aus (\ref{def: DiffVerfahren}) verringert.
             Ferner würde vielleicht eine größere Schrittweite $\lambda_*$ helfen.
 
