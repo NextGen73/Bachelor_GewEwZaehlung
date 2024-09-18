@@ -13,20 +13,26 @@ if(__name__=='__main__'):
     # beachte, dass man immer init() und systemAuswaehlen() aufrufen muss
     # ohne diese Aufrufe koennen keine Berechnungen durchgeführt werden
     
-    init(algorithms.quadratureContourIntegralCircleMittelpunkt, n, j)
+    init(algorithms.quadratureContourIntegralCircleGaussZwei, n, j)
     print("An dem folgenden Beispiel kann man sehen, dass durch die variable Schrittweite hier erreicht wird, dass das Verfahren nach einem Schritt fertig ist.")
     print("Das ist aber nicht verwunderlich, da der Parameter eindimensional ist.\n")
     # System 1 mit Standardwerten initialisieren
     systemAuswaehlen(1)
     minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
+
+    # verwende nun wieder eine größere Reichweite
+    minimierenPlottenUndEckdatenAnzeigen(100, 0.5, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(150, 0.5, dynamischSchritt=True)
 
     print("Betrachte nun das zweite System mit kleiner Schrittweite.")
     print("Hier wird durch die variable Schrittweite zwar mehr Zeit benötigt, aber dafür bleiben die Eigenwerte bis zum Schritt 120 sehr oft fast konstant.\n")
     # System 2 mit Standardwerten
     systemAuswaehlen(2)
     minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
 
-    print("Nehme nun eine größere Schrittweite")
+    print("Nehme nun eine größere Schrittweite für System 2")
     print("Obwohl dadurch der Durchlauf extrem beschleunigt werden, so hat es zur Folge, dass die Eigenwerte sich extrem ausbreiten.")
     print("Man sehe aber auch, dass die Entwicklung der Eigenwerte hier sehr gleichförmig verläuft.\n")
     minimierenPlottenUndEckdatenAnzeigen(100, 0.5, dynamischSchritt=True)

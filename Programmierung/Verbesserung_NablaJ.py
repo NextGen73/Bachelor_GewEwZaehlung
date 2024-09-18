@@ -13,7 +13,7 @@ if(__name__=='__main__'):
     # beachte, dass man immer init() und systemAuswaehlen() aufrufen muss
     # ohne diese Aufrufe koennen keine Berechnungen durchgeführt werden
     
-    init(algorithms.quadratureContourIntegralCircleMittelpunkt, n, j)
+    init(algorithms.quadratureContourIntegralCircleGaussZwei, n, j)
     print("Da die Quadratur nicht mehr so empfindlich gegenüber Eigenwerten nahe der Integrationskurve ist, macht eine Quadraturformel mit mehr Teilintervallen kaum einen Unterschied mehr.")
     print("Alle folgenden Durchläufe werden mit der verschobenen Trapezformel durchgeführt.")
     print("Die ersten zwei sind wieder System 1 mit kleiner Schrittweite des Gradientenverfahrens, beim zweiten Plot wurde die Integrationskurve in mehr Teilintervalle aufgeteilt.\n")
