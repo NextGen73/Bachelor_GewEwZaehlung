@@ -1061,11 +1061,11 @@ Tag der Einreichung: \datum
                         \Ensure $s^*$ mit $J(s^*)=0$
                         \State wähle $s\in \R^n;$
                         \Repeat
-                              \State $d:=-\nabla J(s);$
-                              \State $s:=s+\lam_*d;$
+                              \State $d:=\nabla J(s);$
+                              \State $s:=s-\lam_*d;$
                         \Until{$J(s)=0;$}
                         \State $s^*:=s;$
-                  \Return $s^*;$
+                        \Return $s^*;$
                   \end{algorithmic}
             \end{algorithm}
 
@@ -1113,7 +1113,12 @@ Tag der Einreichung: \datum
 
             Die Ableitungen $\frac{d M}{d s}$ und $\frac{d K}{d s}$ werden durch eine Differenz, wie sie in \cite[S. 16 f.]{numerikGrossmann} vorgestellt wird, approximiert.
 
-            Wähle hier die Vorwärtsdifferenz $$(D^+u)(x):=[u(x+h)-u(x)]/h $$mit $h=0.1$.
+            Wähle hier die Vorwärtsdifferenz
+            \begin{equation}
+                  \label{def: DiffVerfahren}
+                  (D^+u)(x):=[u(x+h)-u(x)]/h
+            \end{equation}
+            mit $h=0.1$.
 
             Da im Allgemeinen $s\in \R^l$, werden hier aber partielle Ableitungen approximiert.
             Es gilt für die $i$-te partielle Ableitung
@@ -1383,28 +1388,145 @@ Tag der Einreichung: \datum
             Als nächstes wende man sich dem Gradientenverfahren zu:
             Die Schrittweite $\lambda_*$ soll nun nicht mehr fest sein, sondern möglichst optimal berechnet werden.
 
-            Werte daher nablaJ\_Stern() an den Stellen $x-d*t, t=\N*\lambda_*$ aus\footnote{obwohl $\lambda_*$ nicht mehr direkt die Schrittweite bestimmt, so benötigt man trotzdem eine Schrittweite, wie weit die Stellen auseinander liegen sollen.}.
+            Werte daher nablaJ\_Stern an den Stellen $x-d*t, t=\lambda_*\N$ an\footnote{obwohl $\lambda_*$ nicht mehr direkt die Schrittweite bestimmt, so benötigt man trotzdem eine Schrittweite, wie weit die berechneten Stellen auseinander liegen sollen}.
 
-            Die Ergebnisse sind auch in \textit{./Programmierung/Verbesserung\_dynamischeSchrittweite.py} .
+            Der Algorithmus zur Bestimmung des neuen Punktes ist wie folgt definiert:
+            \begin{algorithm}
+                  \caption{Bestimmung des nächsten Punktes}
+                  \label{alg: dynamischerPunkt}
 
-            Wie man sehen kann, wird die Eigenwertzählung innerhalb eines Schrittes minimiert. Dies war aber zu erwarten, da $s$ in System 1 ein Skalar war. Somit musste die negative Ableitung in die Richtung des argmin zeigen.
-            Nach der Defintion der Funktion kam der Design-Parameter innerhalb dieses Schrittes am argmin an.
+                  \begin{algorithmic}
+                        \Require $\nabla J(s), s, d, \lambda_*, \Omega$
+                        \Ensure $s^*$
+                        \State $s_{\text{alt}} = s;$
+                        \For {$i = 1,\dots,1000$}\Comment{stellt sicher, dass Schleife nicht unendlich läuft}
+                              \State $s_{\text{neu}} = s_{\text{alt}}-\lambda_* d$;
+                              \If{$s_{\text{neu}}\notin \Omega$}
+                                    \State\Return $s_{\text{neu}}$;
+                              \ElsIf{$|\nabla J(s_{\text{neu}})\cdot d^T| < 0.00001$}
+                                    \State\Return $s_{\text{neu}}$;
+                              \ElsIf{$\nabla J(s_{\text{neu}})\cdot d^T < 0$}
+                                    \If{$i=1$}
+                                          \State\Return $s_{\text{neu}}$;
+                                    \Else
+                                          \State\Return $s_{\text{alt}}$;
+                                    \EndIf
+                              \EndIf
+                              \State $s_{\text{alt}} = s_{\text{neu}}$;
+                        \EndFor
+                  \State\Return $s_{\text{neu}};$
+                  \end{algorithmic}
+            \end{algorithm}
 
-            An Plot 3 sieht man, dass sich die Minimierung extrem beschleunitgt hat, aber die Eigenwerte im Vergleich zu extrem breit auffächern:
-            In waren die Eigenwerte auf dem Intervall $[0,2.5]$ verteilt, hier ist es $[0,6]$. Dies kann auch durch die variable Schrittweite erklärt werden:
-            Während bei den Verfahren mt fester Schrittweite bei jeder Iteration eine neue Richtung berechnet wird, die ein argmin anvisiert, welches möglichst nah bei dem Startwert ist, so geht in dieser Iteration die Funktion die ganze Länge der ersten Richtung, bis der Rand der zulässigen Menge erreicht wurde, das Minimum hinter dem Wert liegt, oder dieser Wert die Eigenwertzählung minimiert.
+            Hierbei ist $s$ der alte Wert, $d$ die approximierte Ableitung an diesem Wert, $\lam_*$ die Schrittweite und $\Omega$ der zulässige Bereich des Design-Parameters $s$.
+            Diese Funktion gibt einen Wert s aus, der möglichst nahe an der optimalen Stelle ist.
+            An dieser Stelle würde laut \cite[S. 286]{optimierungBurkhard}
+            $$\nabla J(s)\cdot d^T = 0$$ gelten, da die Ableitung aber nur approximiert wurde, reiche hier 
+
+
+            Das Anwenden dieses Algorithmus zur Bestimmung des nächsten Punktes bringt folgende Ergebnisse:
+            \begin{table}[!ht]
+                  \centering
+                  \begin{tabular}{lllcc}
+                       System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
+                       \hline
+                       1 & $100$ & $0.05$ & $1$ & $10.4$ \\ 
+                       1 & $150$ & $0.05$ & $1$ & $17.26$ \\
+                       \hline
+                       1 & $100$ & $0.5$ & $1$ & $1.8$ \\
+                       1 & $150$ & $0.5$ & $1$ & $3.1$ \\
+                       \hline
+                       2 & $100$ & $0.05$ & $24$ & $16.7$ \\
+                       2 & $150$ & $0.05$ & $178$ & $62.0$ \\
+                       \hline
+                  \end{tabular}\\
+                  \captionof{table}{Kennzahlen bei Verwendung eines dynamischen Schrittweite}\label{tab: Ergebnisse_dynamischSchritt}
+            \end{table}
+
+            Die Ergebnisse sind auch in \textit{./Programmierung/Verbesserung\_dynamischeSchrittweite.py} zu finden.
+
+            Wie man sehen kann, wird die Eigenwertzählung bei System 1 innerhalb eines Schrittes minimiert.
+            Dies war aber zu erwarten, da $s$ in System 1 ein Skalar war.
+            Sofern die Ableitung hier immer in das gleiche Vorzeichen, gehen auch alle anderen Durchläufe aus Kapitel \ref{sec: Verbesserungen} bei System 1 immer nur in eine Richtung.
+            Somit macht hier das Verfahren in einem Schritt, was vorher in $n$ Schritten gemacht wurde.
+
+            Der Algorithmus kann aber auch hinderlich sein, wie man in Abb. \ref{fig: Plot_2_150_0.05_dynamischSchritt} sehen kann.
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_dynamischeSchrittweite/Plot_2_150_0.05.png}
+                  \caption{Plots zu System 2, $m=150$, $\lam_*=0.05$ bei Verwendung einer dynamischen Schrittweite}
+                  \label{fig: Plot_2_150_0.05_dynamischSchritt}
+            \end{figure}
+
+            Hier verändert sich die Verteilung der Eigenwert und auch die Eigenwertzählungen nur sehr langsam.
 
       \section{Approximation von der Ableitung von J durch ein Differenzenverfahren}
 
-            Zuletzt bemerke zuerst, dass die Auswertung der $m$ Stützstellen die meiste Zeit benötigt, hingegen die Berechnung der genauen gewichteten Eigenwertzählung immer sofort geschieht.
-            Approximiere daher $\nabla J$ durch die Anwendung eines Differenzenverfahren, wie es auch in Kapitel \ref{sec: Programmieren} auf $\frac {dM}{ds}$ angewendet wurde.
+            Zuletzt bemerke zuerst, dass die Approximation des Integrals durch die Quadraturformel die meiste Zeit benötigt, hingegen die genaue gewichtete Eigenwertzählung $J(s)$ sehr schnell berechnet werden kann.
+            Da aber keine explizite Abhängigkeit vom Design-Parameter $s$ besteht, ist diese Formel nur gut, um als Abbruchbedingung des Gradientenverfahrens zu dienen.
 
-            Die Ergebnisse sind:
+            Approximiere man aber $\nabla J$ durch die Anwendung eines Differenzenverfahren auf $J(s)$ aus (\ref{def: J original}), wie es in Kapitel \ref{sec: Programmieren}angewendet wurde, um $\frac {dM}{ds}$ zu approximieren,
+            so kann man diese Funktion nutzen, um die Berechnung von $\nabla J^*(s)$ und damit die Anwendung der Quadraturformel zu umgehen\footnote{man ersetzt also die Ableitung der Approximation von $J$ durch die Approximation der Ableitung von $J$}.
 
-            Man beachte die extrem kurze Rechenzeit.
-            Für System 2 könnte man die Anzahl an maximal möglichen Schritten pro Durchlauf erhöhen und außerdem die Ableitung genauer machen, indem h reduziert wird.
+            Da diese Berechnung sehr viel schneller ist, erhöhe die maximal mögliche Anzahl an Iterationen pro Durchlauf auf 100000.
+            Die Anzahl an Teilintervallen wird zwar nicht für die Berechnung an sich benötigt, aber die aufgerufene Funktion gibt für jeden Wert des Design-Parameters $s$ auch ein entsprechendes $J^*(s)$ zurück, um die Plots zu erstellen.
+            Um diesen Mehraufwand so gering wie möglich zu halten sei $m=1$. Die approximierte gewichtete Eigenwertzählung wird dadurch zwar sehr ungenau, aber hier wird sie für keinen Schritt des Gradientenverfahrens verwendet.
+            Die folgenden Ergebnisse können in \textit{./Programmierung/Verbesserung\_NablaJ.py} wiedergefunden werden.
+
+            \begin{table}[!ht]
+                  \centering
+                  \begin{tabular}{lllcc}
+                       System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
+                       \hline
+                       1 & $1$ & $0.05$ & $31$ & $0.02$ \\ 
+                       \hline
+                       1 & $1$ & $0.5$ & $4$ & $0.0$ \\
+                       \hline
+                       2 & $1$ & $0.05$ & $>100000$ & $>198$ \\
+                       2 & $1$ & $0.05$ & $>150000$ & $>428$ \\
+                       2 & $1$ & $0.05$ & $>300000$ & $>1233$ \\
+                       \hline
+                  \end{tabular}\\
+                  \captionof{table}{Kennzahlen bei Verwendung von $\nabla J(s)$}\label{tab: Ergebnisse_nablaJ}
+            \end{table}
+
+            Man beachte, dass diese Approximation für System 1 genau genug war, um ein Minimum innerhalb von 0.02 s zu finden.
+            Allerdings ist dieses Verfahren in dieser Form für System 2 unzureichend. Man könnte die Ableitung genauer approximieren, indem die Schrittweite $h$ aus (\ref{def: DiffVerfahren}) verringert.
+            Ferner würde vielleicht eine größere Schrittweite $\lambda_*$ helfen.
+
+            Für die Durchläufe für System 2 erkenne man auch, dass die Zeit nun nicht mehr proportional zu den gegangenen Schritten ist.
+            Dies liegt wahrscheinlich daran, dass nicht mehr alle Werte im Arbeitsspeicher gespeichert werden konnten, wodurch die Zugriffszeiten sich verlängerten.
+
+            Da solche Überlegungen aber auch bei den anderen Varianten nicht implementiert wurden, werden sie hier auch nicht betrachtet.
 \chapter{Auswertung}
 \label{sec: Auswertung}
+
+      In dieser Arbeit wurden in Kapitel \ref{sec: EW Problem_Futamura} der Matrix-Pencil, die Eigenwerte eines Matrix-Pencils, die allgemeine Schur-Zerlegung und die Identität von Futamura vorgestellt.
+      Während die Schur-Zerlegung für den Beweis der Identität von Futamura benötigt wird, liefert sie auch eine Aussage über die Eigenwerte des Matrix-Pencils.
+      Diese Identität erlaubt eine direkte Aussage über die Anzahl an Eigenwerten in einem Intervall, dafür muss aber ein Kurvenintegral berechnet werden.
+
+      In Kapitel \ref{sec: MS Matrizen} wurden die Systeme vorgestellt, welche in Kapitel \ref{sec: Programmieren} und \ref{sec: Verbesserungen} behandelt werden.
+      Um die Eigenwerte dieser Systeme zu berechnen, wurden die Massen- und Steifigkeitsmatrizen der Systeme berechnet und eine Formel für die Berechnung der Eigenkreisfrequenzen aufgestellt.
+      Durch eine Substitution in dieser Formel erhält man in () die Formel für die Eigenwerte des Matrix-Pencils $(K-\lambda M)$.
+
+      In Kapitel \ref{sec: EW Zählung} wurde die gewichtete Eigenwertzählung auf einem Intervall hergeleitet. Diese Funktion besitzt die Form aus (\ref{def: J original}) und ist einfach zu berechnen, hängt aber nicht direkt von dem Design-Parameter $s$ ab,
+      wodurch sie nicht so einfach für ein Minimierungsverfahren verwendet werden kann.
+
+      Durch die Identität von Futamura, dem Residuensatz und einer Quadraturformel erhält man in (\ref{def: JStern}) eine Approximation dieser Eigenwertzählung, welche direkt von $s$ abhängt.
+
+      Diese Approximation wird in Kapitel \ref{sec: Programmieren} genutzt, um die Eigenwerte der Systeme auf einem Intervall zu zählen und anschließend zu eliminieren.
+      
+      Als Quadraturformel wurde hier die normale Trapezformel verwendet, welche aber unzureichende Ergebnisse brachte.
+
+      Unter anderem wurde in Kapitel \ref{sec: Verbesserungen} diese Problem behoben.
+      Während in Kapitel \ref{sec: Programmieren} die Schrittweite des Gradientenverfahrens noch fest war, so wurde in Kapitel \ref{sec: Verbesserungen} ein Algorithmus definiert, der den nächsten Wert von $s$ dynamisch bestimmt.
+      Dieses Verfahren erlaubte es zwar die Eigenwerte des ersten Systems in einem Schritt aus dem gegebenen Intervall zu entfernen, aber es benötigt insgesamt mehr Zeit als ein analoges Gradientenverfahren mit fester Schrittweite.
+
+      Zuletzt wurde in Kapitel \ref{sec: Verbesserungen} auch eine Approximation der Ableitung von $J(s)$ eingeführt. Diese kann zwar die Eigenwertzählung von System 1 unglaublich schnell minimieren, sie versagte aber bei einem mehrdimensionalen Design-Parameter, wie er in System 2 genutzt wird.
+
+      Der schnellste Weg zur Minimierung der Eigenwertzählung ist daher eine möglichst genaue Quadraturformel, welche möglichst wenig Stützstellen benötigt, um ein gutes Ergebnis mit geringstem Zeitaufwand zu erhalten.
+
+      Damit sind offenbar die Gauss-Quadraturformeln gemeint.
 
 \chapter{Literaturverzeichnis}
 
