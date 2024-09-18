@@ -31,8 +31,3 @@ if(__name__=='__main__'):
     systemAuswaehlen(2)
     minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
     minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
-
-    print("Nehme nun eine größere Schrittweite für System 2")
-    print("Obwohl dadurch der Durchlauf extrem beschleunigt werden, so hat es zur Folge, dass die Eigenwerte sich extrem ausbreiten.")
-    print("Man sehe aber auch, dass die Entwicklung der Eigenwerte hier sehr gleichförmig verläuft.\n")
-    minimierenPlottenUndEckdatenAnzeigen(100, 0.5, dynamischSchritt=True)
