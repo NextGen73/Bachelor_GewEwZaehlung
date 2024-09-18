@@ -1147,26 +1147,29 @@ Tag der Einreichung: \datum
 
             Beim Ausführen des Programmes werden noch verschiedene andere Kennzahlen ausgegeben, aber hier soll zuerst die Anzahl an benötigten Iterationen und die benötigte Zeit ausreichen.
 
-            Es folgt eine Tabelle zur Verdeutlichung\\
+            Es folgt eine Tabelle zur Verdeutlichung:\\
 
-            \begin{tabular}{lllcc}
-                  \label{tab: Ergebnisse}
-                 System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
-                 \hline
-                 1 & $100$ & $0.05$ & $>10000$ & $>584$ \\ 
-                 1 & $150$ & $0.05$ & $>10000$ & $>830$ \\
-                 \hline
-                 1 & $100$ & $0.5$ & $>10000$ & $>561$ \\
-                 1 & $150$ & $0.5$ & $15$ & $1.2$ \\
-                 \hline
-                 2 & $100$ & $0.05$ & $150$ & $15.2$ \\
-                 2 & $150$ & $0.05$ & $>10000$ & $>1592$ \\
-                 \hline
-            \end{tabular}\\
+            \begin{table}[ht]
+                  \centering
+                  \begin{tabular}{lllcc}
+                       System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
+                       \hline
+                       1 & $100$ & $0.05$ & $>10000$ & $>584$ \\ 
+                       1 & $150$ & $0.05$ & $>10000$ & $>830$ \\
+                       \hline
+                       1 & $100$ & $0.5$ & $>10000$ & $>561$ \\
+                       1 & $150$ & $0.5$ & $15$ & $1.2$ \\
+                       \hline
+                       2 & $100$ & $0.05$ & $150$ & $15.2$ \\
+                       2 & $150$ & $0.05$ & $>10000$ & $>1592$ \\
+                       \hline
+                  \end{tabular}\\
+                  \captionof{table}{Kennzahlen der ersten Implementierung\label{tab: Ergebnisse}}
+            \end{table}
 
             Man kann schon hier erkennen, dass dieses Verfahren nur selten zum Erfolg führt
 
-            Man sieht schon hier an den drei zwei Durchläufen, dass Zeiten über 9 Minuten für ein System mit nur 8 Freiheitsgraden und einem skalarem Design-Parameter völlig unzureichend sind.
+            Man sieht schon hier an den oberen drei Durchläufen, dass Zeiten über 9 Minuten für ein System mit nur 8 Freiheitsgraden und einem skalarem Design-Parameter völlig unzureichend sind.
             Für die Ermittlung dieser Werte wurde die Begrenzung auf 10000 erhöht, wie man aber in den folgenden Abbildungen sehen kann, ändern die Schritte 501-10000 das Ergebnis nur unwesentlich. 
 
       \section{Grafiken und Erklärung}
@@ -1176,14 +1179,14 @@ Tag der Einreichung: \datum
             Nach dem Schritt verändern sich in diesen beiden Durchläufen bis Schritt 10000 weder die Eigenwert-Zählungen noch die Verteilung der Eigenwerte wesentlich.
             \begin{figure}[ht]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_100_0.05.png}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_100_0.05.png}
                   \caption{Plot zu System 1, $m=100$, $\lam_*=0.05$}
                   \label{fig: Plot_1_100_0.05}
             \end{figure}
 
             \begin{figure}[ht]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_150_0.05.png}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_150_0.05.png}
                   \caption{Plot zu System 1, $m=150$, $\lam_*=0.05$}
                   \label{fig: Plot_1_150_0.05}
             \end{figure}
@@ -1198,14 +1201,14 @@ Tag der Einreichung: \datum
 
             \begin{figure}[ht]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_100_0.5.png}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_100_0.5.png}
                   \caption{Plots zu System 1, $m=100$, $\lam_*=0.5$}
                   \label{fig: Plot_1_100_0.5}
             \end{figure}
 
             \begin{figure}[ht]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_1_150_0.5.png}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_150_0.5.png}
                   \caption{Plots zu System 1, $m=100$, $\lam_*=0.5$}
                   \label{fig: Plot_1_150_0.5}
             \end{figure}
@@ -1232,14 +1235,14 @@ Tag der Einreichung: \datum
 
             \begin{figure}[ht]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_2_100_0.05.png}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_2_100_0.05.png}
                   \caption{Plots zu System 2, $m=100$, $\lam_*=0.05$}
                   \label{fig: Plot_2_100_0.05}
             \end{figure}
 
             \begin{figure}[ht]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Plot_2_150_0.05.png}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_2_150_0.05.png}
                   \caption{Plots zu System 2, $m=150$, $\lam_*=0.05$}
                   \label{fig: Plot_2_150_0.05}
             \end{figure}
@@ -1253,8 +1256,8 @@ Tag der Einreichung: \datum
 \label{sec: Verbesserungen}
       In Kapitel \ref{sec: Programmieren} sind folgende Probleme deutlich zum Vorschein getreten:
       Einerseits ist die approximierte Zählung der Eigenwerte unzureichend, wenn sich ein Eigenwert in der Nähe der Intervallgrenzen befindet.
-      Am einfachsten ist dies an den Abbildungen \ref{fig: Plot_1_100_0.5}, \ref{fig: Plot_1_150_0.5} und \ref{fig: Plot_2_100_0.05} zu sehen:
-      Immer wenn ein Eigenwert in die Nähe der Intervallgrenze und damit der Integrationskurve kam, wurde die gewichtete Eigenwertzählung falsch approximiert, was dazu führte, dass die Systeme in einem Schritt sehr große Sprünge ausführten.
+      Am einfachsten ist dies an den Abbildungen \ref{fig: Plot_1_100_0.5} und \ref{fig: Plot_2_100_0.05} zu sehen:
+      Immer wenn ein Eigenwert in die Nähe der Intervallgrenze und damit der Integrationskurve kam, wurde die gewichtete Eigenwertzählung ungenau approximiert, was dazu führte, dass die Systeme in einem Schritt sehr große Sprünge ausführten.
       Auch das Verhalten des Eigenwerts in den Abbildungen \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05} kann damit erklärt werden. Hier kam es zwar nicht zu Sprüngen, aber wahrscheinlich verhinderte diese Quadraturformel, dass der Parameter so verändert wird, dass der Eigenwert das Intervall verlassen kann.
       Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5}, dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
       Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte sich ein Schritt des Verfahrens nahe an einer Lösung des Problems befinden.
@@ -1263,16 +1266,16 @@ Tag der Einreichung: \datum
 
       \section{Verbesserte Quadraturformeln}
             Man wende sich zuerst der Verbesserung der Quadraturformel zu.
-            Dadurch erhofft man sich, dass es keine großen Sprünge in der Verteilung der Eigenwerte mehr gibt, um zu gewährleisten, dass die Eigenwerte geordnet das Intervall verlassen und nicht per Zufall wie in Abb. \ref{fig: Plot_2_100_0.05}.
+            Dadurch erhofft man sich, großen Sprünge in der Verteilung der Eigenwerte zu vermeiden, um zu gewährleisten, dass die Eigenwerte geordnet das Intervall verlassen und nicht per Zufall wie in Abb. \ref{fig: Plot_2_100_0.05}.
 
-            Man nutze daher eine Quadraturformel, welche das Integral zwar approximiert, aber nicht an den Stellen $\lambda_a$ oder $\lam_b$ ausgewertet wird.
+            Man nutze daher eine Quadraturformel, welche das Integral zwar approximiert, aber nicht an den Stellen $\lambda_a$ und $\lam_b$ ausgewertet wird.
 
             Die einfachste Quadraturformel, die dies bewerkstelligt ist die \zitat{Mittelpunkts-Regel}\cite[S. 526]{numerikHermann}:
 
             Sei dazu $\gamma_k, k=0,\dots,m-1$ wie in (\ref{def: gamma_k}). Nach (\ref{eqn: Teilintegral Kurve zu Intergral normal}) gilt:
             \begin{align*}
                   \int_{\gamma_k} L(z, s)\ dz =& \int_{2\pi \frac{k}{m}}^{2\pi\frac{k+1}{m}}L(\Tilde z_0+\Tilde r\exp(it), s)i\Tilde r \exp(it)\ dt\\
-                  \approx& L(\Tilde z_0+\Tilde r\exp(\frac{2\pi i}{m}(k+\frac{1}{2})), s)i\Tilde r \exp(\frac{2\pi i}{m}(k+\frac{1}{2})) \frac{2\pi}{m}\\
+                  \approx& L(\Tilde z_0+\Tilde r\exp\klammer{\frac{2\pi i}{m}(k+\frac{1}{2})}, s)i\Tilde r \klammer{\frac{2\pi i}{m}(k+\frac{1}{2})} \frac{2\pi}{m}\\
                   =& L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}}) \frac{2\pi i}{m}
             \end{align*}
 
@@ -1284,20 +1287,40 @@ Tag der Einreichung: \datum
                   =&  \frac{1}{2\pi i}\left[\frac{2\pi i}{m}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}})\right]\label{def: Mittelpunkts-Regel, angewendet}
             \end{align}
 
-            Wobei wieder die Faktoren vor der Summe nicht gekürzt wurden, da der erste Faktor von der Anwendung des Residuensatzes stammt und der zweite Faktor ein Teil der Quadraturformel ist\footnote{falls man die Faktoren kürzt, erhält man die Stützstellen $z_k$ und Gewichte $\w_k$ aus \cite[S. 128]{grundlageFutamura}. Die $\w_k$ werden dort zwar als Gewichte einer Quadraturformel bezeichnet, sie sind aber eher die Gewichte einer Quadraturformel mit dem Faktor $\frac{1}{2\pi i}$ multipliziert.}.
+            Wobei wieder die Faktoren vor der Summe nicht gekürzt wurden, da der erste Faktor von der Anwendung des Residuensatzes stammt und der zweite Faktor ein Teil der Quadraturformel ist\footnote{falls man die Faktoren kürzt, erhält man die Stützstellen $z_k$ und Gewichte $\w_k$ aus \cite[S. 128]{grundlageFutamura}}.
 
             Durch die Verwendung dieser Quadraturformel erhält man folgende Ergebnisse:
 
-            \begin{tabular}{lllll}
-                  
-            \end{tabular}
+            \begin{table}[!ht]
+                  \centering
+                  \begin{tabular}{lllcc}
+                       System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
+                       \hline
+                       1 & $100$ & $0.05$ & $142$ & $3.7$ \\ 
+                       1 & $150$ & $0.05$ & $143$ & $5.3$ \\
+                       \hline
+                       1 & $100$ & $0.5$ & $15$ & $0.5$ \\
+                       1 & $150$ & $0.5$ & $15$ & $0.7$ \\
+                       \hline
+                       2 & $100$ & $0.05$ & $300$ & $13.9$ \\
+                       2 & $150$ & $0.05$ & $289$ & $21.7$ \\
+                       \hline
+                  \end{tabular}\\
+                  \captionof{table}{Kennzahlen bei Verwendung der Mittelpunkts-Regel}\label{tab: Ergebnisse_Mittelpunkt}
+            \end{table}
 
-            Die Ergebnisse können auch in der Datei \textit{./Programmierung/Verbesserung\_Mittelpunkt.py} nachvollzogen werden.
+            Die Ergebnisse und die zugehörigen Plots können auch in der Datei \textit{./Programmierung/Verbesserung\_Mittelpunkt.py} betrachtet werden.
 
-            Wie man sehen kann, erfolgen die Berechnungen der ersten beiden Durchläufe nun viel schneller, da nur 15 Schritte benötigt werden.
-            Die Intervallgrenze stellt nun kein Hindernis für den Eigenwert mehr dar.
-            Auch alle anderen Durchläufe sind nun zuverlässiger, siehe 3. und 4. welche nun beide in wenigen Schritten ein Ergebnis liefern.
+            Wie man sehen kann, erfolgen die Berechnungen der ersten zwei Durchläufe nun viel schneller, da nur 142-143 Schritte benötigt werden.
+            Man beachte auch, dass hier in den Durchläufen zu System 1 die Anzahl an benötigten Iterationen um den Faktor dividiert wird, um welchen die Schrittweite $\lam_*$ multipliziert wird, was auf die Eindimensionalität von Design-Parameter $s$ zurückzuführen ist.
+            In den Durchläufen zu System 2 sieht man zudem, dass sich die Anzahl an Iterationen für $m=100$ im Vergleich zu Tabelle \ref{tab: Ergebnisse} verdoppelt, allerdings ist dies auf die Tatsache zurückzuführen, dass der Verlauf der Eigenwerte keine plötzlichen Sprünge mehr ausführt, wie sie in Abb. \ref{fig: Plot_2_100_0.05} zu sehen waren.
 
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_Mittelpunkt/Plot_2_100_0.05.png}
+                  \caption{Plot zu System 2, $m=100$, $\lam_*=0.05$, Mittelpunkts-Regel verwendet}
+                  \label{fig: Plot_2_Mittelpunkt}
+            \end{figure}
 
             Natürlich wären diese Durchläufe auch schneller, wenn sie kein Ergebnis bringen, da hier die Funktion nur an einer Stelle auszuwerten ist.
 
@@ -1307,22 +1330,54 @@ Tag der Einreichung: \datum
             \end{align}
             mit $z_{k,\pm}:=\Tilde z_0+\Tilde r\exp\klammer{\frac{\pi I}{\sqrt{3}m}(2\sqrt 3 k+\sqrt 3 \pm 1)}$
 
-            Diese Formel erhält man durch Anwenden von \cite[S. 526]{numerikHermann} mit $u= \frac{2\pi}{m}(k+\frac 1 2)$ und $v=\frac \pi m$.
+            Diese Formel erhält man durch Anwenden der Zweipunkt-Formel aus \cite[S. 526]{numerikHermann} mit $u= \frac{2\pi}{m}(k+\frac 1 2)$ und $v=\frac \pi m$.
 
             Es folgen die Ergebnisse des Programms \textit{./Programmierung/Verbesserung\_Gauss2.py}.
 
+            \begin{table}[!ht]
+                  \centering
+                  \begin{tabular}{lllcc}
+                       System & $m$ & $\lambda_*$ & Iterationen & Zeit in s\\
+                       \hline
+                       1 & $100$ & $0.05$ & $145$ & $7.5$ \\ 
+                       1 & $150$ & $0.05$ & $145$ & $10.3$ \\
+                       \hline
+                       1 & $100$ & $0.5$ & $15$ & $0.9$ \\
+                       1 & $150$ & $0.5$ & $15$ & $1.1$ \\
+                       \hline
+                       2 & $100$ & $0.05$ & $112$ & $11.9$ \\
+                       2 & $150$ & $0.05$ & $63$ & $9.3$ \\
+                       \hline
+                  \end{tabular}\\
+                  \captionof{table}{Kennzahlen bei Verwendung der Zweipunkt-Formel}\label{tab: Ergebnisse_Gauss2}
+            \end{table}
 
-            Obwohl diese Quadraturformel eine Gauss-Legendre-Quadratur und somit optimal ist, ergibt sich in der Performance zu der Mittelpunkts-Regel kaum ein Unterschied.
-            Man kann sogar so weit gehen und sagen, dass die Mittelpunkts-Regel besser ist, da sie weniger Zeit in Anspruch nimmt.
+            Obwohl die Zweipunkt-Formel eine \zitat{Gaußsche Quadraturformel}\cite[S. 523]{numerikHermann} ist und damit einen optimalen Genauigkeitsgrad von 5 besitzt (vgl. \cite[S. 522f.]{numerikHermann}), so ist der Unterschied zur Mittelpunkts-Regel in den Durchläufen zu System 1 gering.
+            In den letzten beiden Plots kann aber festgestellt werden, dass sich die Anzahl an benötigten Iteration stark verringert.
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_Mittelpunkt/Plot_2_100_0.05.png}
+                  \caption{Plot zu System 2,$m=100$, $\lam_*=0.05$, Zweipunkt-Formel verwendet}
+                  \label{fig: Plot_2_150_0.05_Gauss2}
+            \end{figure}
+
+            Ferner sehe man in Abb. \ref{fig: Plot_2_150_0.05_Gauss2}, dass sich die Eigenwerte nun nicht mehr wiederholen, wie es in Abb. \ref{fig: Plot_2_Mittelpunkt} der Fall war.
+            Man nehme daher für die Minmierung der Eigenwerte in dem restlichen Kapitel immer die Zweipunkt-Formel.
 
             Die Tatsache, dass diese zwei Quadraturformeln nicht bei $\lam_a$ und $\lam_b$ ausgewertet werden und sie deshalb besser sind, kann man auch an Programm
-            \textit{./Programmierung/Vergleich Quadraturformeln.py} sehen. Dort wurde noch die verschobene Trapezregel angewendet. Diese Trapezregel nutzt nicht mehr die Werte $z_k$ als Stützstellen, sondern die $s_{k+\frac 1 2}$.
+            \textit{./Programmierung/Vergleich Quadraturformeln.py} sehen. Dort wurde noch die verschobene Trapezregel angewendet, welche die Stütztellen $z_{k+\frac 1 2}$ statt $z_k$ verwendet.
             Allein dies macht einen gewaltigen Unterschied:
 
-            Für eine immer näher an $\lambda_b = 1$ rückende Polstelle, wächst die alte Trapezformel sehr stark an. Alle anderen Quadraturformeln gehen stattdessen gegen 0.5.
-            Auch hier liegen die Ergebnisse der Mittelpunkts-Regel und der Zweipunkt-Formel sehr dicht beieinander.
+            Für eine immer näher an $\lambda_b = 1$ rückende Polstelle wächst die Trapezformel aus (\ref{def: JStern}) sehr stark an. Alle anderen Quadraturformeln nähern sich stattdessen $0.5$.
+            Wie auch in den Durchläufen zu System 1 liegen die Ergebnisse der Mittelpunkts-Regel und der Zweipunkt-Formel sehr dicht beieinander.
+            Wie man aber auch sehen kann, ist die höhere Genauigkeit bei System 2 nun von großer Bedeutung:
+            Die Durchläufe mit der Zweipunkt-Formel benötigen viel weniger Iterationen und sind daher schneller.
+            Ferner kommt dazu, dass nun auch die Wahl von $m$ eine Rolle spielt: in den Tabellen \ref{tab: Ergebnisse_Mittelpunkt} und \ref{tab: Ergebnisse_Gauss2} verringert sich die Anzahl an Iterationen bei erhöhter Anzahl an Stützstellen.
+            Aufgrund des damit verbundenen erhöhten Rechenaufwands benötigt der letzte Durchlauf aus Tabelle \ref{tab: Ergebnisse_Mittelpunkt} aber noch mehr Zeit als der vorletzte.
+            Bei der Zweipunkt-Formel wurden aber so viele Schritte eingespart, dass nun der letzte Durchlauf weniger Zeit beansprucht als der Durchlauf mit $m=100$.
 
-            Verwende daher ab nun immer die Mittelpunkts-Regel, um zu einem schnellstmöglichen Ergebnis zu kommen.
+            Verwende daher ab nun immer die Zweipunkt-Formel, um zu einem bestmöglichen Ergebnis zu kommen.
 
       \section{dynamische Schrittweite}
             Als nächstes wende man sich dem Gradientenverfahren zu:
