@@ -37,15 +37,6 @@
 \addbibresource{Literatur.bib}
 \graphicspath{{src/}}
 
-% \newcommand{\bild}[2]{\includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}}
-\newcommand{\bild}[4]{
-      \begin{figure}[!htp]
-            \centering
-            \includegraphics[width=#2\textwidth,height=#2\textheight,keepaspectratio]{#1}
-            \caption{#3}
-            #4
-      \end{figure}
-}
 \newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
 \newcommand{\N}{\mathbb N}
@@ -540,7 +531,7 @@ Tag der Einreichung: \datum
       Es kommt daher zu keiner Interferenz und Überlagerung, was für große mechanische Systeme katastrophal sein kann.
 
       In dieser Ausarbeitung werden die folgenden Systeme untersucht:
-      \begin{figure}[ht]
+      \begin{figure}[h!t]
             \centering
             \begin{minipage}[ht]{0.49\linewidth}
                   \centering
@@ -609,7 +600,12 @@ Tag der Einreichung: \datum
 % Schemas, Kraftschemas,...
             Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht.
 
-            \bild{Federkraft und Trägheitskraft.png}{0.3}{wirkende Kräfte an Masse mit Feder}{\label{fig: KräfteAnFeder}}
+            \begin{figure}[h!t]
+                  \centering
+                  \includegraphics[width=0.2\textwidth, keepaspectratio]{./Federkraft und Trägheitskraft.png}
+                  \caption{wirkende Kräfte an einer Masse mit Feder \cite{BildKräfteFeder}}
+                  \label{fig: KräfteAnFeder}
+            \end{figure}
 
             In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und demnach gilt $F_L = c\cdot z$ (vgl. \cite{federkraft}).
 
@@ -619,11 +615,11 @@ Tag der Einreichung: \datum
             Betrachte nun ein System mit 3 Massen, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
             Anhand dieses Systems soll eine allgemeines Kräftegleichgewicht aufgestellt werden.
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \begin{minipage}[ht]{0.49\linewidth}
                         \centering
-                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./src/3 Massen System.png}
+                        \includegraphics[width=0.7\textwidth, keepaspectratio]{./3 Massen System.png}
                         \caption{System mit 3 Massen}
                         \label{fig: 3 Massen System}
                   \end{minipage}
@@ -1182,17 +1178,17 @@ Tag der Einreichung: \datum
             Betrachte zuerst die ersten beiden Plots.
             Um die folgenden Ausführungen zu unterstützen, wird nur die Verteilung der Eigenwerte bis zum 200. Schritt gezeigt.
             Nach dem Schritt verändern sich in diesen beiden Durchläufen bis Schritt 10000 weder die Eigenwert-Zählungen noch die Verteilung der Eigenwerte wesentlich.
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_100_0.05.png}
-                  \caption{Plot zu System 1, $m=100$, $\lam_*=0.05$}
+                  \caption{Plot zu System 1, $m=100$, $\lambda_*=0.05$}
                   \label{fig: Plot_1_100_0.05}
             \end{figure}
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_150_0.05.png}
-                  \caption{Plot zu System 1, $m=150$, $\lam_*=0.05$}
+                  \caption{Plot zu System 1, $m=150$, $\lambda_*=0.05$}
                   \label{fig: Plot_1_150_0.05}
             \end{figure}
 
@@ -1204,17 +1200,17 @@ Tag der Einreichung: \datum
 
             Bei den nächsten beiden Durchläufen betrachte nur die Schritte 0 bis 19. 
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_100_0.5.png}
-                  \caption{Plots zu System 1, $m=100$, $\lam_*=0.5$}
+                  \caption{Plots zu System 1, $m=100$, $\lambda_*=0.5$}
                   \label{fig: Plot_1_100_0.5}
             \end{figure}
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_150_0.5.png}
-                  \caption{Plots zu System 1, $m=100$, $\lam_*=0.5$}
+                  \caption{Plots zu System 1, $m=100$, $\lambda_*=0.5$}
                   \label{fig: Plot_1_150_0.5}
             \end{figure}
 
@@ -1238,17 +1234,17 @@ Tag der Einreichung: \datum
             Betrachte nun die letzten zwei Durchläufe:
             Es wurde sich hier auf die Schritte 50-150 beschränkt, um diese im Detail sehen zu können.
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_2_100_0.05.png}
-                  \caption{Plots zu System 2, $m=100$, $\lam_*=0.05$}
+                  \caption{Plots zu System 2, $m=100$, $\lambda_*=0.05$}
                   \label{fig: Plot_2_100_0.05}
             \end{figure}
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_2_150_0.05.png}
-                  \caption{Plots zu System 2, $m=150$, $\lam_*=0.05$}
+                  \caption{Plots zu System 2, $m=150$, $\lambda_*=0.05$}
                   \label{fig: Plot_2_150_0.05}
             \end{figure}
 
@@ -1320,10 +1316,10 @@ Tag der Einreichung: \datum
             Man beachte auch, dass hier in den Durchläufen zu System 1 die Anzahl an benötigten Iterationen um den Faktor dividiert wird, um welchen die Schrittweite $\lam_*$ multipliziert wird, was auf die Eindimensionalität von Design-Parameter $s$ zurückzuführen ist.
             In den Durchläufen zu System 2 sieht man zudem, dass sich die Anzahl an Iterationen für $m=100$ im Vergleich zu Tabelle \ref{tab: Ergebnisse} verdoppelt, allerdings ist dies auf die Tatsache zurückzuführen, dass der Verlauf der Eigenwerte keine plötzlichen Sprünge mehr ausführt, wie sie in Abb. \ref{fig: Plot_2_100_0.05} zu sehen waren.
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_Mittelpunkt/Plot_2_100_0.05.png}
-                  \caption{Plot zu System 2, $m=100$, $\lam_*=0.05$, Mittelpunkts-Regel verwendet}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Mittelpunkt/Plot_2_100_0.05.png}
+                  \caption[Plot zu System 2, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel]{Plot zu System 2, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel verwendet}
                   \label{fig: Plot_2_Mittelpunkt}
             \end{figure}
 
@@ -1360,10 +1356,10 @@ Tag der Einreichung: \datum
             Obwohl die Zweipunkt-Formel eine \zitat{Gaußsche Quadraturformel}\cite[S. 523]{numerikHermann} ist und damit einen optimalen Genauigkeitsgrad von 5 besitzt (vgl. \cite[S. 522f.]{numerikHermann}), so ist der Unterschied zur Mittelpunkts-Regel in den Durchläufen zu System 1 gering.
             In den letzten beiden Plots kann aber festgestellt werden, dass sich die Anzahl an benötigten Iteration stark verringert.
 
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_Mittelpunkt/Plot_2_100_0.05.png}
-                  \caption{Plot zu System 2, $m=100$, $\lam_*=0.05$, Zweipunkt-Formel verwendet}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Gauss2/Plot_2_100_0.05.png}
+                  \caption[Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel]{Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel verwendet}
                   \label{fig: Plot_2_150_0.05_Gauss2}
             \end{figure}
 
@@ -1454,10 +1450,10 @@ Tag der Einreichung: \datum
             Somit macht hier das Verfahren in einem Schritt, was vorher in $n$ Schritten gemacht wurde.
 
             Der Algorithmus kann aber auch hinderlich sein, wie man in Abb. \ref{fig: Plot_2_150_0.05_dynamischSchritt} sehen kann.
-            \begin{figure}[ht]
+            \begin{figure}[h!t]
                   \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Verbesserung_dynamischeSchrittweite/Plot_2_150_0.05.png}
-                  \caption{Plots zu System 2, $m=150$, $\lam_*=0.05$ bei Verwendung einer dynamischen Schrittweite}
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./dynamischSchritt/Plot_2_150_0.05.png}
+                  \caption[Plots zu System 2, $m=150$, $\lambda_*=0.05$, dynamische Schrittweite]{Plots zu System 2, $m=150$, $\lambda_*=0.05$ bei Verwendung einer dynamischen Schrittweite}
                   \label{fig: Plot_2_150_0.05_dynamischSchritt}
             \end{figure}
 
@@ -1531,11 +1527,17 @@ Tag der Einreichung: \datum
 
       Damit sind offenbar die Gauss-Quadraturformeln gemeint.
 
-\chapter{Literaturverzeichnis}
+      Es gibt aber offenbar noch andere Möglichkeiten die Minimierung zu beschleunigen.
+      Man könnte einerseits ein anderes Minimierungsverfahren nutzen, wie das Newton-Verfahren (siehe \cite[S. 290]{optimierungBurkhard}).
+      Für dieses Verfahren bräuchte man zwar die zweite Ableitung von $J$ oder $J^*$, es könnte sich aber positiv auf die Rechenzeit auswirken.
 
-      \printbibliography
-% es fehlt Bilderverzeichniss
+      Zudem könnte man für Systeme mit einer hohen Anzahl an Freiheitsgraden die Spur aus $L(z,s)$, wie es in (\ref{eqn: vollständigeAblL}) vorkommt.
+      Dazu wäre Hutchinson's Schätzer (vgl. \cite[S. 142]{hutch++Meyer}), oder dessen Erweiterung \zitat{Hutch++}\cite[S. 142]{hutch++Meyer} nützlich.
 
+
+\printbibliography
+
+\listoffigures
 %%
 %% Erscheint auf letzter Seite
 %%
