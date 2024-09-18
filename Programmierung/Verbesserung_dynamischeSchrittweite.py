@@ -1,5 +1,4 @@
-from algorithms import minimierenPlottenUndEckdatenAnzeigen, systemAuswaehlen, init
-import algorithms
+from Funktionen import minimierenPlottenUndEckdatenAnzeigen, systemAuswaehlen, init, quadratureContourIntegralCircleGaussZwei
 
 # Dimension der Masse- und Steifigkeitsmatrix, damit auch Anzahl an Massen in System und Anzahl Freiheitsgrade
 n = 8
@@ -13,7 +12,7 @@ if(__name__=='__main__'):
     # beachte, dass man immer init() und systemAuswaehlen() aufrufen muss
     # ohne diese Aufrufe koennen keine Berechnungen durchgeführt werden
     
-    init(algorithms.quadratureContourIntegralCircleGaussZwei, n, j)
+    init(quadratureContourIntegralCircleGaussZwei, n, j)
     print("An dem folgenden Beispiel kann man sehen, dass durch die variable Schrittweite hier erreicht wird, dass das Verfahren nach einem Schritt fertig ist.")
     print("Das ist aber nicht verwunderlich, da der Parameter eindimensional ist.\n")
     # System 1 mit Standardwerten initialisieren

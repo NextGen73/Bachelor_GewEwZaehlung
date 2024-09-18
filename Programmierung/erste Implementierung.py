@@ -1,5 +1,4 @@
-from algorithms import minimierenPlottenUndEckdatenAnzeigen, systemAuswaehlen, init
-import algorithms
+from Funktionen import minimierenPlottenUndEckdatenAnzeigen, systemAuswaehlen, init, quadratureContourIntegralCircleTrapez
 
 # Dimension der Masse- und Steifigkeitsmatrix, damit auch Anzahl an Massen in System und Anzahl Freiheitsgrade
 n = 8
@@ -13,7 +12,7 @@ if(__name__=='__main__'):
     # beachte, dass man immer init() und systemAuswaehlen() aufrufen muss
     # ohne diese Aufrufe koennen keine Berechnungen durchgeführt werden
     
-    init(algorithms.quadratureContourIntegralCircleTrapez, n, j)
+    init(quadratureContourIntegralCircleTrapez, n, j)
     print("An den folgenden 2 Beispielen kann man sehen, dass eine genauere Quadratur hier keinen richtigen Unterschied machen muss.")
     print("Beachte, wie Eigenwert 2 sich beide Male langsam der Intervallgrenze nähert, es aber nicht schafft sie zu überqueren.\n")
     # System 1 mit Standardwerten initialisieren

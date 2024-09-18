@@ -1,4 +1,4 @@
-import algorithms
+import Funktionen
 from math import pi
 
 zweiPiI = 2j*pi
@@ -10,10 +10,10 @@ print("\n\ndie Integrationskurve ist immer r(t)={exp(it): t \\in [0, 2*pi]}, sie
 for s in sArray:
     print("integriere f(z)=1/(z-",s,"):\n")
 
-    print("einfache Trapezformel: ", algorithms.quadratureContourIntegralCircleTrapez(f, s, 100)/zweiPiI)
-    print("Mittelpunktformel: ", algorithms.quadratureContourIntegralCircleMittelpunkt(f, s, 100)/zweiPiI)
-    print("verschobene Trapezformel: ", algorithms.quadratureContourIntegralCircleTrapezNeu(f, s, 100)/zweiPiI)
-    print("2 Punktformel nach Gauss: ", algorithms.quadratureContourIntegralCircleGaussZwei(f, s, 100)/zweiPiI)
+    print("einfache Trapezformel: ", Funktionen.quadratureContourIntegralCircleTrapez(f, s, 100)/zweiPiI)
+    print("Mittelpunktformel: ", Funktionen.quadratureContourIntegralCircleMittelpunkt(f, s, 100)/zweiPiI)
+    print("verschobene Trapezformel: ", Funktionen.quadratureContourIntegralCircleTrapezNeu(f, s, 100)/zweiPiI)
+    print("2 Punktformel nach Gauss: ", Funktionen.quadratureContourIntegralCircleGaussZwei(f, s, 100)/zweiPiI)
     print("")
 
 print("wie man sehen kann, wächst die einfache Trapezformel immer weiter, je näher sich die Polstelle der Integrationskurve nähert")
