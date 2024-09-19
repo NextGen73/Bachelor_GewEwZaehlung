@@ -373,23 +373,25 @@ def minimierenPlottenUndEckdatenAnzeigen(anzahlTeilintervalle, schrittweiteGrad=
 
     anzahlIterationen = len(EWungewichtet)-1
 
+    plots.rc('font', size = 15)
     # der angezeigt Plot wird aus einem oberen und unteren Plot bestehen
     fig,(axo,axu) = plots.subplots(2, sharex=True)
     # dieser Plot zeigt, wie sich die Eigenwert-Zaehlungen waehrend des Minimierungsverfahrens entwickeln
     axo.set_title("Zählung der Eigenwerte auf dem Intervall ["+str(lambda_a)+", "+str(lambda_b)+"]")
-    axo.plot(schritte, EWgenau.real, 'r-', label="genau, gewichtet")
-    axo.plot(schritte, EWapprox.real, 'g--', label="approx, gewichtet")
-    axo.plot(schritte, EWungewichtet, 'b-', label="genau, ungewichtet")
+    axo.plot(schritte, EWgenau.real, 'b-', label="genau, gewichtet", linewidth=2)
+    line, = axo.plot(schritte, EWapprox.real, 'r--', label="approx, gewichtet", linewidth=2)
+    line.set_dashes([5,6])
+    axo.plot(schritte, EWungewichtet, 'g-', label="genau, ungewichtet", linewidth=2)
     axo.legend()
 
     # dieser Plot zeigt, wie sich die Eigenwerte waehrend der Minimierung veraendern
     axu.set_title("Entwicklung der Eigenwerte bezüglich ["+str(lambda_a)+", "+str(lambda_b)+"]")
     for i in range(n):
         verlaufEinEigenwert = eigenwerte[:,i]
-        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i])
+        axu.plot(schritte, verlaufEinEigenwert, label="Ew "+str(i+1), color=colors[i], linewidth=2)
 
-    axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k')
-    axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k')
+    axu.plot(schritte,np.full(anzSchritte,lambda_a), 'k:', linewidth=3)
+    axu.plot(schritte,np.full(anzSchritte,lambda_b), 'k:', linewidth=3)
     # axu.legend()
 
     # Plot anzeigen
