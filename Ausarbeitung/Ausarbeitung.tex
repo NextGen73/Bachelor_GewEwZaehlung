@@ -1103,11 +1103,12 @@ Tag der Einreichung: \datum
       \section{Implementation}
             Die folgenden Programme wurden mit Python geschrieben. Hauptsächlich wird das Paket \zitat{numpy} genutzt, welches Berechnungen von Matrizen sehr vereinfacht.
 
-            Bei Unwissenheit über einige Funktionen von Python wurden \textit{https://numpy.org/doc/stable/} und \textit{https://stackoverflow.com/} verwendet.
+            Bei Unwissenheit über einige Funktionen von Python wurden\linebreak
+            \textit{https://numpy.org/doc/stable/} und \textit{https://stackoverflow.com/} verwendet.
 
-            Die verschiedenen übergreifenden Funktionen, die von allen Programmen verwendet werden, findet man in \cite[\textit{./Programmierung/Funktionen.py}]{github}.
+            Die verschiedenen übergreifenden Funktionen, die von allen Programmen verwendet werden, findet man in \mbox{\cite[\textit{./Funktionen.py}]{github}}.
 
-            In Kapitel \ref{sec: Programmieren} wird ausschließlich die Datei \cite[\textit{./Programmierung/erste Implementierung.py}]{github} behandelt.
+            In Kapitel \ref{sec: Programmieren} wird ausschließlich die Datei \mbox{\cite[\textit{./erste Implementierung.py}]{github}} behandelt.
             In dieser Datei werden sechs Durchläufe des Minimierungsverfahrens durchgeführt, beschrieben und die Plots gezeigt.
             Verbesserungen aus Kapitel \ref{sec: Verbesserungen} werden in den anderen Dateien zu finden sein.
             
@@ -1117,7 +1118,7 @@ Tag der Einreichung: \datum
             
             Bei den Programmen gibt es eine Begrenzung für die Anzahl an Schritten pro Durchlauf der Minimierung.
             Falls ein Durchlauf mehr als 500 Schritte benötigen sollte, um zu einem Ergebnis zu kommen, wird er abgebrochen, damit ein einzelner Durchlauf nicht zu viel Zeit beansprucht.
-            Diese Begrenzung kann man umgehen, indem man in Zeile 15 in \text{./erste Implementierung.py} den Wert des Arguments \nolinebreak[4]{\zitat{maxIter}} beliebig verändert.
+            Diese Begrenzung kann man umgehen, indem man in Zeile 15 in \text{./erste Implementierung.py} den Wert des Arguments \mbox{\zitat{maxIter}} beliebig verändert.
             Man beachte aber, dass für nicht-positive Werte keine Begrenzung vorhanden ist.
             Das Verfahren wird in diesem Fall solange ausgeführt, bis es zu einem Ergebnis kommt, oder manuell abgebrochen wird.
             Diese Sperre wurde auf 10000 erhöht, um die Ergebnisse in Tabelle \ref{tab: Ergebnisse} zu erhalten.
@@ -1258,29 +1259,31 @@ Tag der Einreichung: \datum
 \label{sec: Verbesserungen}
       In Kapitel \ref{sec: Programmieren} sind folgende Probleme deutlich zum Vorschein getreten:
       Einerseits ist die approximierte Zählung der Eigenwerte unzureichend, wenn sich ein Eigenwert in der Nähe der Intervallgrenzen befindet.
-      Am einfachsten ist dies an den Abbildungen \ref{fig: Plot_1_100_0.5} und \ref{fig: Plot_2_100_0.05} zu sehen:
+      Am einfachsten ist dies an den Abbildungen \ref{fig: Plot_1_100_0.5}, \ref{fig: Plot_1_150_0.5} und \ref{fig: Plot_2_100_0.05} zu sehen:
       Immer wenn ein Eigenwert in die Nähe der Intervallgrenze und damit der Integrationskurve kam,
       wurde die gewichtete Eigenwertzählung ungenau approximiert, was dazu führte, dass die Systeme in einem Schritt sehr große Sprünge ausführten.
       Auch das Verhalten des Eigenwerts in den Abbildungen \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05} kann damit erklärt werden.
-      Hier kam es zwar nicht zu Sprüngen, aber wahrscheinlich verhinderte diese Quadraturformel, dass der Parameter so verändert wird,
-      dass der Eigenwert das Intervall verlassen kann.
+      Hier kam es zwar nicht zu Sprüngen, aber die Quadraturformel verhinderte, dass der Parameter \s genug verändert wird,
+      sodass der Eigenwert das Intervall verlassen kann\footnote{die Tatsache, dass dieses Verhalten in der Quadraturformel begründet ist,
+      kann in \mbox{\cite[\textit{./Verbesserung\_Trapez.py}]{github}} gesehen werden, dort wurden die Stützstellen der Trapezformel aus Kapitel \ref{sec: Programmieren} so verschoben, dass keine Stützstelle sich in der Nähe von $\lambda_a$ und $\lambda_b$ befindet}.
       Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5},
       dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
       Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte sich ein Schritt des Verfahrens nahe an einer Lösung des Problems befinden.
-      Man sehe zudem, dass sich viele der Durchläufe über lange Strecken kaum verändern.
+      Man sehe zudem, dass sich viele der Durchläufe mit kurzen Schrittweiten $\lambda_*$ über lange Strecken kaum verändern.
+      Um dem vorzubeugen berechne die Schrittweite des Gradientenverfahrens dynamisch, wie es auch im klassischen Gradientenverfahren \cite[S. 285 f.]{optimierungBurkhard} üblich ist.
       Zuletzt sind diese langen Zeiten für Probleme mit einstelligen Freiheitsgraden nicht wünschenswert,
-      da einige Systeme $n>1.000.000$ Freiheitsgrade einbeziehen (vgl. \cite[S. 359]{maschinendynamikDresig}).
+      da einige tatsächlich verwendete Berechnungsmodelle $n>1.000.000$ Freiheitsgrade besitzen (vgl. \cite[S. 359]{maschinendynamikDresig}).
 
       \section{Verbesserte Quadraturformeln}
             Man wende sich zuerst der Verbesserung der Quadraturformel zu.
-            Dadurch erhofft man sich, großen Sprünge in der Verteilung der Eigenwerte zu vermeiden, um zu gewährleisten,
-            dass die Eigenwerte geordnet das Intervall verlassen und nicht per Zufall wie in Abb. \ref{fig: Plot_2_100_0.05}.
+            Man erhofft sich hier, Ungenauigkeiten, die auftreten, wenn sich ein Eigenwert dem Intervallrand nähert, zu verringern, um große Sprünge in der Verteilung der Eigenwerte zu vermeiden.
+            Durch verbesserte Quadraturformeln sollen die Eigenwerte das Intervall geordnet verlassen und nicht per Zufall/ während eines Schrittes wie in Abb. \ref{fig: Plot_2_100_0.05}.
 
             Man nutze daher eine Quadraturformel, welche das Integral zwar approximiert, aber nicht an den Stellen $\lambda_a$ und $\lam_b$ ausgewertet wird.
 
             Die einfachste Quadraturformel, die dies bewerkstelligt ist die \zitat{Mittelpunkts-Regel}\cite[S. 526]{numerikHermann}:
 
-            Sei dazu $\gamma_k, k=0,\dots,m-1$ wie in (\ref{def: gamma_k}). Nach (\ref{eqn: Teilintegral Kurve zu Intergral normal}) gilt:
+            Sei dazu $\gamma_k, k=0,\dots,m-1$ wie in (\ref{def: gamma_k}), nach (\ref{eqn: Teilintegral Kurve zu Intergral normal}) gilt:
             \begin{align*}
                   \int_{\gamma_k} L(z, s)\ dz =& \int_{2\pi \frac{k}{m}}^{2\pi\frac{k+1}{m}}L(\Tilde z_0+\Tilde r\exp(it), s)i\Tilde r \exp(it)\ dt\\
                   \approx& L(\Tilde z_0+\Tilde r\exp\klammer{\frac{2\pi i}{m}(k+\frac{1}{2})}, s)i\Tilde r \klammer{\frac{2\pi i}{m}(k+\frac{1}{2})} \frac{2\pi}{m}\\
@@ -1288,17 +1291,18 @@ Tag der Einreichung: \datum
             \end{align*}
 
             wobei die Definition $z_{k+\frac{1}{2}}:= \Tilde z_0+\Tilde r\exp(\frac{2\pi i}{m}(k+\frac{1}{2})), k=0,\dots,m$
-            und die Formel für die Mittelpunkts-Regel aus \cite[S. 526]{numerikHermann} verwendet wurde.
+            und die Formel der Mittelpunkts-Regel aus \cite[S. 526]{numerikHermann} verwendet wurde.
 
             Es gilt für $J(s)$:
             \begin{align}
-                  J(s) =& \frac{1}{2\pi i}\sum_{k=0}^{m-1} \int_{\gamma_k} L(z, s)\ dz = \frac{1}{2\pi i}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}}) \frac{2\pi i}{m}\nonumber\\
-                  =&  \frac{1}{2\pi i}\left[\frac{2\pi i}{m}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}})\right]\label{def: Mittelpunkts-Regel, angewendet}
+                  J(s) =& \frac{1}{2\pi i}\sum_{k=0}^{m-1} \int_{\gamma_k} L(z, s)\ dz \approx \frac{1}{2\pi i}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}}) \frac{2\pi i}{m}\nonumber\\
+                  =&  \frac{1}{2\pi i}\left[\frac{2\pi i}{m}\sum_{k=0}^{m-1} L(z_{k+\frac{1}{2}}, s)(\Tilde z_0-z_{k+\frac{1}{2}})\right]=:J^*_{\text{Mittel}}(s)\label{def: JSternMittel}
             \end{align}
 
             Wobei wieder die Faktoren vor der Summe nicht gekürzt wurden, da der erste Faktor von der Anwendung des Residuensatzes stammt
             und der zweite Faktor ein Teil der Quadraturformel ist
-            \footnote{falls man die Faktoren kürzt, erhält man die Stützstellen $z_k$ und Gewichte $\w_k$ aus \cite[S. 128]{grundlageFutamura}}.
+            \footnote{falls man die Faktoren kürzen würde, erhält man die Stützstellen $z_k$ und Gewichte $\w_k$ aus \cite[S. 128]{grundlageFutamura},
+            das Kürzen würde die Berechnung zwar beschleunigen, aber die Berechnung der $J^*$ wurde in \cite[\textit{./Funktionen.py}]{github} so implementiert, dass jede Quadraturformel genutzt werden kann}.
 
             Durch die Verwendung dieser Quadraturformel erhält man folgende Ergebnisse:
 
@@ -1320,32 +1324,55 @@ Tag der Einreichung: \datum
                   \captionof{table}{Kennzahlen bei Verwendung der Mittelpunkts-Regel}\label{tab: Ergebnisse_Mittelpunkt}
             \end{table}
 
-            Die Ergebnisse und die zugehörigen Plots können auch in der Datei \textit{./Programmierung/Verbesserung\_Mittelpunkt.py} betrachtet werden.
+            Die Ergebnisse und die zugehörigen Plots können auch in der Datei\linebreak
+            \mbox{\cite[\textit{./Verbesserung\_Mittelpunkt.py}]{github}} betrachtet werden.
 
-            Wie man sehen kann, erfolgen die Berechnungen der ersten zwei Durchläufe nun viel schneller, da nur 142-143 Schritte benötigt werden.
-            Man beachte auch, dass hier in den Durchläufen zu System 1 die Anzahl an benötigten Iterationen um den Faktor dividiert wird,
-            um welchen die Schrittweite $\lam_*$ multipliziert wird, was auf die Eindimensionalität von Design-Parameter $s$ zurückzuführen ist.
+            Es fällt auf, dass die Minimierung in den ersten zwei Durchläufe im Vergleich zu den Durchläufen aus Tabelle \ref{tab: Ergebnisse} nun viel schneller erfolgen, da nur 142-143 Schritte benötigt werden.
+            Natürlich wären diese Durchläufe auch schneller, wenn sie alle zu keinem Ergebnis kommen würden, da hier die Funktion pro Teilintervall nur an einer Stelle auszuwerten ist.
+
+            Wie man ferner sehen kann, besteht in System 1 eine indirekte Proportionalität zwischen Schrittweite $\lambda_*$ und der Anzahl an Schritten, was auf die Eindimensionalität von Design-Parameter $s$ zurückzuführen ist.
             In den Durchläufen zu System 2 sieht man zudem, dass sich die Anzahl an Iterationen für $m=100$ im Vergleich zu Tabelle \ref{tab: Ergebnisse} verdoppelt,
             allerdings ist dies auf die Tatsache zurückzuführen, dass der Verlauf der Eigenwerte keine plötzlichen Sprünge mehr ausführt, wie sie in Abb. \ref{fig: Plot_2_100_0.05} zu sehen waren.
+
+            Zuletzt sei angemerkt, dass sich die Zeiten zwischen 2 Durchläufen mit unterschiedlicher Anzahl an Teilintervallen $m$ ungefähr im Verhältnis $1:1,5$ befinden.
+
+            Die folgende Abbildung zeigt, wie sich die Eigenwerte des ersten Durchlaufs verändern. Da ab nun alle Plots von System 1 sehr ähnlich zueinander sind,
+            sei Abb. \ref{fig: Plot_1_100_0.05_Mittelpunkt} in diesem Abschnitt der einzige Plot zu System 1.
+
+            \begin{figure}[ht]
+                  \centering
+                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./Mittelpunkt/Plot_1_100_0.05.png}
+                  \caption{System 1, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel verwendet}
+                  \label{fig: Plot_1_100_0.05_Mittelpunkt}
+            \end{figure}
+
+            Der zweite Eigenwert verlässt in Abb. \ref{fig: Plot_1_100_0.05_Mittelpunkt} langsam das Intervall und hat keine Probleme die Intervallgrenze zu überqueren.
+            Der Verlauf der Eigenwertzählungen ist hier zwar nicht abgebildet, aber an der Abwesenheit von Sprüngen kann man schließen, dass die approximiere gewichtete Eigenwertzählung die genaue hier überall gut approximiert. 
+            Betrachte nun die Durchläufe zu System 1:
 
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Mittelpunkt/Plot_2_100_0.05.png}
-                  \caption[Plot zu System 2, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel]{Plot zu System 2, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel verwendet}
-                  \label{fig: Plot_2_Mittelpunkt}
+                  \caption[System 2, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel]{System 2, $m=100$, $\lambda_*=0.05$, Mittelpunkts-Regel verwendet}
+                  \label{fig: Plot_2_100_0.05_Mittelpunkt}
             \end{figure}
 
-            Natürlich wären diese Durchläufe auch schneller, wenn sie kein Ergebnis bringen, da hier die Funktion nur an einer Stelle auszuwerten ist.
+            In Abb. \ref{fig: Plot_2_100_0.05_Mittelpunkt} kann man sehen, dass immer Sprünge auftreten, wenn ein Eigenwert sich einer Intervallgrenze nähert und die Approximation der gewichteten Eigenwertzählung ungenau wird\footnote{siehe auch \cite[\textit{./Verbesserung\_Mittelpunkt.py}]{github}}.
+            Weiterhin wird durch Ausführen des Programmes klar, dass sich die Eigenwerte zwischen den Durchläufen von System 2 stark unterscheiden.
+            Diese Instabilität der Minimierung kann nicht verhindert werden.
+            Wir werden nun versuchen, die beobachteten Sprünge zu unterbinden. Nutze dazu eine genauere Quadraturformel
 
-            Nehme daher als zweites Beispiel die \zitat{Zweipunkt-Formel}\cite[S. 526]{numerikHermann}. Analog zu (\ref{def: JSternTrapez}) und (\ref{def: Mittelpunkts-Regel, angewendet}) folgt:
+            Nehme daher als zweites Beispiel die \zitat{Zweipunkt-Formel}\cite[S. 526]{numerikHermann}. Analog zu (\ref{def: JSternTrapez}) und (\ref{def: JSternMittel}) folgt:
             \begin{align}
-                  J(s) = \frac 1 {2\pi i}\left[\frac{\pi i \Tilde r}{m}\sum_{k=0}^{m-1}\klammer{L(z_{k,-}, s)\exp\klammer{-\frac{\pi i}{\sqrt{3}m}}+L(z_{k,+}, s)\exp\klammer{\frac{\pi i}{\sqrt{3}m}}}\right]
+                  J(s) \approx& \frac 1 {2\pi i}\left[\frac{\pi i \Tilde r}{m}\sum_{k=0}^{m-1}\klammer{L(z_{k,-}, s)\exp\klammer{-\frac{\pi i}{\sqrt{3}m}}+L(z_{k,+}, s)\exp\klammer{\frac{\pi i}{\sqrt{3}m}}}\right]\nonumber\\
+                  =&: J^*_{\text{Gauss}}(s)
             \end{align}
             mit $z_{k,\pm}:=\Tilde z_0+\Tilde r\exp\klammer{\frac{\pi I}{\sqrt{3}m}(2\sqrt 3 k+\sqrt 3 \pm 1)}$
 
-            Diese Formel erhält man durch Anwenden der Zweipunkt-Formel aus \cite[S. 526]{numerikHermann} mit $u= \frac{2\pi}{m}(k+\frac 1 2)$ und $v=\frac \pi m$.
+            Diese Formel erhält man durch Anwenden der Zweipunkt-Formel aus \cite[S. 526]{numerikHermann} und Einsetzen von
+            $$u= \frac{a+b}{2} = \frac{2\pi}{m}(k+\frac 1 2)\text{ und }v=\frac{b-a}{2}=\frac \pi m$$
 
-            Es folgen die Ergebnisse des Programms \textit{./Programmierung/Verbesserung\_Gauss2.py}.
+            Es folgen die Ergebnisse des Programms \textit{./Verbesserung\_Gauss2.py}.
 
             \begin{table}[!ht]
                   \centering
@@ -1368,79 +1395,58 @@ Tag der Einreichung: \datum
             Obwohl die Zweipunkt-Formel eine \zitat{Gaußsche Quadraturformel}\cite[S. 523]{numerikHermann} ist
             und damit einen optimalen Genauigkeitsgrad von 5 besitzt (vgl. \cite[S. 522f.]{numerikHermann}),
             so ist der Unterschied zur Mittelpunkts-Regel in den Durchläufen zu System 1 gering.
-            In den letzten beiden Plots kann aber festgestellt werden, dass sich die Anzahl an benötigten Iteration stark verringert.
-
+            Im Vergleich zu Tabelle \ref{tab: Ergebnisse_Mittelpunkt} bemerke man aber, dass sich die benötigten Zeiten bei System 1 verdoppelten.
+            Dies war zu erwarten, wenn die doppelte Anzahl an Funktionswerten pro Teilintervall berechnet wird.
+            In den Durchläufen zu System 2 kann aber festgestellt werden, dass sich die Anzahl an benötigten Iteration stark verringert.
+            Betrachte dazu auch Abb. \ref{fig: Plot_2_100_0.05_Gauss2}.
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Gauss2/Plot_2_100_0.05.png}
                   \caption[Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel]{Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel verwendet}
-                  \label{fig: Plot_2_150_0.05_Gauss2}
+                  \label{fig: Plot_2_100_0.05_Gauss2}
             \end{figure}
 
-            Ferner sehe man in Abb. \ref{fig: Plot_2_150_0.05_Gauss2}, dass sich die Eigenwerte nun nicht mehr wiederholen,
-            wie es in Abb. \ref{fig: Plot_2_Mittelpunkt} der Fall war.
-            Man nehme daher für die Minmierung der Eigenwerte in dem restlichen Kapitel immer die Zweipunkt-Formel.
-
-            Die Tatsache, dass diese zwei Quadraturformeln nicht bei $\lam_a$ und $\lam_b$ ausgewertet werden und sie deshalb besser sind,
-            kann man auch an Programm \textit{./Programmierung/Vergleich Quadraturformeln.py} sehen.
-            Dort wurde noch die verschobene Trapezregel angewendet, welche die Stütztellen $z_{k+\frac 1 2}$ statt $z_k$ verwendet.
-            Allein dies macht einen gewaltigen Unterschied:
-
-            Für eine immer näher an $\lambda_b = 1$ rückende Polstelle wächst die Trapezformel aus (\ref{def: JSternTrapez}) sehr stark an.
-            Alle anderen Quadraturformeln nähern sich stattdessen $0.5$.
-            Wie auch in den Durchläufen zu System 1 liegen die Ergebnisse der Mittelpunkts-Regel und der Zweipunkt-Formel sehr dicht beieinander.
-            Wie man aber auch sehen kann, ist die höhere Genauigkeit bei System 2 nun von großer Bedeutung:
-            Die Durchläufe mit der Zweipunkt-Formel benötigen viel weniger Iterationen und sind daher schneller.
+            Man sieht in Abb. \ref{fig: Plot_2_100_0.05_Gauss2}, dass sich die Eigenwerte hier von Anfang an schnell auf den Intervallrand zubewegene,
+            im Gegensatz zu Abb. \ref{fig: Plot_2_100_0.05_Mittelpunkt}, wo die Eigenwerte sich in den Schritten 40 bis 200 wenig bis kaum veränderten.
+            Durch die bessere Approximation kann trotz des erhöhten Rechenaufwands, der mit der Zweipunkt-Formel entsteht, die benötigte Zeit stark reduziert werden.
             Ferner kommt dazu, dass nun auch die Wahl von $m$ eine Rolle spielt: in den Tabellen \ref{tab: Ergebnisse_Mittelpunkt} 
             und \ref{tab: Ergebnisse_Gauss2} verringert sich die Anzahl an Iterationen bei erhöhter Anzahl an Stützstellen.
-            Aufgrund des damit verbundenen erhöhten Rechenaufwands benötigt der letzte Durchlauf aus Tabelle \ref{tab: Ergebnisse_Mittelpunkt} aber noch mehr Zeit als der vorletzte.
-            Bei der Zweipunkt-Formel wurden aber so viele Schritte eingespart, dass nun der letzte Durchlauf weniger Zeit beansprucht als der Durchlauf mit $m=100$.
+            Man nehme daher für die Minmierung der Eigenwerte in dem restlichen Kapitel immer die Zweipunkt-Formel.
 
-            Verwende daher ab nun immer die Zweipunkt-Formel, um zu einem bestmöglichen Ergebnis zu kommen.
+            Die Tatsache, dass diese zwei Quadraturformeln nicht bei $\lam_a$ und $\lam_b$ ausgewertet werden und sie deshalb genauer sind,
+            kann auch in Programm \textit{./Vergleich Quadraturformeln.py} gesehen werden.
+            Dort wurde ebenfalls die verschobene Trapezregel betrachtet, welche die Stütztellen $z_{k+\frac 1 2}$ statt $z_k$ verwendet.
+            Allein dies macht einen gewaltigen Unterschied:
+
+            Für eine immer näher an das Kurvenintegral rückende Polstelle wächst die Approximation $J^*_{\text{Trapez}}$ aus (\ref{def: JSternTrapez}) sehr stark an.
+            Alle anderen Quadraturformeln nähern sich stattdessen $0,5$.
+            Wie auch in den Durchläufen zu System 1 liegen die Ergebnisse der Mittelpunkts-Regel und der Zweipunkt-Formel sehr dicht beieinander.
 
       \section{dynamische Schrittweite}
             Als nächstes wende man sich dem Gradientenverfahren zu:
             Die Schrittweite $\lambda_*$ soll nun nicht mehr fest sein, sondern möglichst optimal berechnet werden.
 
-            Wende daher $\nabla J^*(s)$ an den Stellen $s-d*t, t=\lambda_*\N$ an\footnote{obwohl $\lambda_*$ nicht mehr direkt die Schrittweite bestimmt,
-            so benötigt man trotzdem eine Schrittweite, wie weit die berechneten Stellen auseinander liegen sollen}.
+            Berechne daher $\nabla J^*(s_\text{neu})$ für $s_\text{neu} = s_\text{alt}-d*\lambda_*$\footnote{$d$ wie in Algorithmus \ref{alg: steilster Abstieg}} und entscheide aufgrund dessen, ob:
+            \begin{itemize}
+                  \item dieser Wert $(s_\text{neu})$ zurückgegeben wird,
+                  \item der vorherige Wert $(s_\text{alt})$ zurückgegeben wird oder
+                  \item man noch einen Schritt geht.
+            \end{itemize}
+            
+            Offenbar bestimmt $\lambda_*$ nicht mehr direkt die Schrittweite, sie bestimmt aber die Entfernung zweier Punkte $s_\text{neu}$.
 
-            Der Algorithmus zur Bestimmung des neuen Punktes ist in \textit{./Programmierung/Funktionen.py} in der Funktion \textit{schrittGradientenverfahren} definiert.
-            \begin{algorithm}[h!t]
-                  \caption{Bestimmung des nächsten Punktes}
-                  \label{alg: dynamischerPunkt}
+            Der Algorithmus zur Bestimmung des neuen Punktes ist in \cite[\textit{./Funktionen.py}]{github} in der Funktion \textit{schrittGradientenverfahren} definiert.
 
-                  \begin{algorithmic}
-                        \Require $\nabla J(s), s, d, \lambda_*, \Omega$
-                        \Ensure $s^*$
-                        \State $s_{\text{alt}} = s;$
-                        \For {$i = 1,\dots,1000$}\Comment{stellt sicher, dass Schleife nicht unendlich läuft}
-                              \State $s_{\text{neu}} = s_{\text{alt}}-\lambda_* d$;
-                              \If{$s_{\text{neu}}\notin \Omega$}
-                                    \State\Return $s_{\text{neu}}$;
-                              \ElsIf{$|\nabla J(s_{\text{neu}})\cdot d^T| < 0.00001$}
-                                    \State\Return $s_{\text{neu}}$;
-                              \ElsIf{$\nabla J(s_{\text{neu}})\cdot d^T < 0$}
-                                    \If{$i=1$}
-                                          \State\Return $s_{\text{neu}}$;
-                                    \Else
-                                          \State\Return $s_{\text{alt}}$;
-                                    \EndIf
-                              \EndIf
-                              \State $s_{\text{alt}} = s_{\text{neu}}$;
-                        \EndFor
-                  \State\Return $s_{\text{neu}};$
-                  \end{algorithmic}
-            \end{algorithm}
-
-            Diese Funktion gibt einen Wert s aus, der möglichst nahe an der optimalen Stelle ist.
+            Diese Funktion gibt einen Wert \s aus, der möglichst nahe an der optimalen Stelle bezüglich Richtung $d$ ist.
             Die optimale Stelle würde laut \cite[S. 286]{optimierungBurkhard}
             $$\nabla J(s)\cdot d^T = 0$$
-            erfüllen, da die Ableitung aber nur approximiert wurde, soll hier die Bedingung
+            erfüllen, der nächste Schritt würde dann garantiert senkrecht auf diesem Schritt stehen.
+            Da man nur eine endliche Zahl an Stellen auswerten kann, findet man diese Stelle fast sicher nicht.
+            Daher soll die Bedingung
             $$|\nabla J(s)\cdot d^T| < 0.00001$$
             ausreichen.
             Es besteht weiterhin die Möglichkeit, dass $s$ die zulässige Menge $\Omega$ verlässt, oder man über einen optimalen Parameter springt.
-            Diese Fälle werden auch in der obigen Funktion behandelt.
+            Auch diese Fälle werden in der Funktion \textit{schrittGradientenverfahren} behandelt.
 
             Das Anwenden dieses Algorithmus zur Bestimmung des nächsten Punktes bringt folgende Ergebnisse:
             \begin{table}[!ht]
@@ -1461,40 +1467,40 @@ Tag der Einreichung: \datum
                   \captionof{table}{Kennzahlen bei Verwendung eines dynamischen Schrittweite}\label{tab: Ergebnisse_dynamischSchritt}
             \end{table}
 
-            Die Ergebnisse sind auch in \textit{./Programmierung/Verbesserung\_dynamischeSchrittweite.py} zu finden.
+            Die Ergebnisse sind auch in \cite[\textit{./Verbesserung\_dynamischeSchrittweite.py}]{github} zu finden.
 
-            Wie man sehen kann, wird die Eigenwertzählung bei System 1 innerhalb eines Schrittes minimiert.
+            Wie man sehen kann, wird die Eigenwertzählung bei allen Durchläufen zu System 1 innerhalb eines Schrittes minimiert.
             Dies war aber zu erwarten, da $s$ in System 1 ein Skalar war.
-            Sofern die Ableitung hier immer in das gleiche Vorzeichen, gehen auch alle anderen Durchläufe aus Kapitel \ref{sec: Verbesserungen} bei System 1 immer nur in eine Richtung.
+            Sofern die Ableitung hier immer das gleiche Vorzeichen besitzt, gehen auch alle anderen Durchläufe aus Kapitel \ref{sec: Verbesserungen} bei System 1 immer nur in eine Richtung.
             Somit macht hier das Verfahren in einem Schritt, was vorher in $n$ Schritten gemacht wurde.
 
-            Der Algorithmus kann aber auch hinderlich sein, wie man in Abb. \ref{fig: Plot_2_150_0.05_dynamischSchritt} sehen kann.
-            \begin{figure}[h!t]
-                  \centering
-                  \includegraphics[width=0.9\textwidth, keepaspectratio]{./dynamischSchritt/Plot_2_150_0.05.png}
-                  \caption[Plots zu System 2, $m=150$, $\lambda_*=0.05$, dynamische Schrittweite]{Plots zu System 2, $m=150$, $\lambda_*=0.05$ bei Verwendung einer dynamischen Schrittweite}
-                  \label{fig: Plot_2_150_0.05_dynamischSchritt}
-            \end{figure}
+            Hier benötigt der zweite Durchlauf zu System 2 mehr Schritte als der der vergleichbare Durchlauf aus Tabelle \ref{tab: Ergebnisse_Gauss2} und die Minimierung dauert dabei noch länger,
+            da jeder Schritt des Gradientenverfahrens hier zusätzlich aus Unterschritten (der Bestimmung des optimalen Parameters) besteht.
 
-            Hier verändert sich die Verteilung der Eigenwert und auch die Eigenwertzählungen nur sehr langsam.
+            Insgesamt lohnt sich eine dynamische Schrittweite in diesem Problem nicht, da keine einfache Möglichkeit besteht, die optimale Schrittweite zu bestimmen.
+            Für die Bestimmung der optimalen Schrittweite werden hier die Schritte in die Richtung $d$ gegangen, aber schon nach dem ersten Schritt ist diese Richtung im Allgemeinen nicht optimal.
+            Es kommt auch zu keiner Reduktion der Rechendauer, da nach jedem dieser Unterschritte wieder $\nabla J(s)$ bestimmt wird.
 
       \section{Approximation der Ableitung der gewichteten Eigenwertzählung}
 
             Zuletzt bemerke zuerst, dass die Approximation des Integrals durch die Quadraturformel die meiste Zeit benötigt,
             hingegen die genaue gewichtete Eigenwertzählung $J(s)$ sehr schnell berechnet werden kann.
-            Da aber keine explizite Abhängigkeit vom Design-Parameter $s$ besteht, ist diese Formel nur gut, um als Abbruchbedingung des Gradientenverfahrens zu dienen.
+            Da aber keine explizite Abhängigkeit vom Design-Parameter $s$ besteht, ist diese Formel nur gut, um als Bedingung für das Ende des Gradientenverfahrens zu dienen.
 
-            Approximiere man aber $\nabla J$ durch die Anwendung eines Differenzenverfahren auf $J(s)$ aus (\ref{def: J original}),
-            wie es in Kapitel \ref{sec: Programmieren}angewendet wurde, um $\frac {dM}{ds}$ zu approximieren,
-            so kann man diese Funktion nutzen, um die Berechnung von $\nabla J^*(s)$ und damit die Anwendung der Quadraturformel zu umgehen
+            Approximiert man aber $\nabla J$ durch die Anwendung eines Differenzenverfahren auf $J(s)$ aus (\ref{def: J original}),
+            wie es in Kapitel \ref{sec: Programmieren} angewendet wurde, um $\frac {dM}{ds}$ zu approximieren,
+            so kann diese Approximation genutzt werden, um die Berechnung von $\nabla J^*(s)$ und damit die Anwendung der Quadraturformel zu umgehen
             \footnote{man ersetzt also die Ableitung der Approximation von $J$ durch die Approximation der Ableitung von $J$}.
 
             Da diese Berechnung sehr viel schneller ist, erhöhe die maximal mögliche Anzahl an Iterationen pro Durchlauf auf 100000.
-            Die Anzahl an Teilintervallen wird zwar nicht für die Berechnung an sich benötigt, aber die aufgerufene Funktion gibt für jeden Wert des Design-Parameters $s$
-            auch ein entsprechendes $J^*(s)$ zurück, um die Plots zu erstellen.
+            Die Anzahl an Teilintervallen wird zwar nicht für die Berechnung an sich benötigt, aber bei jeder Iteration des Gradientenverfahrens wird für den aktuellen Wert des Design-Parameters $s$
+            ein entsprechendes $J^*(s)$ berechnet und gespeichert, um den Verlauf der approximierten gewichteten Eigenwertzählung in dem oberen Plot abzubilden.
             Um diesen Mehraufwand so gering wie möglich zu halten sei $m=1$. Die approximierte gewichtete Eigenwertzählung wird dadurch zwar sehr ungenau,
             aber hier wird sie für keinen Schritt des Gradientenverfahrens verwendet.
-            Die folgenden Ergebnisse können in \textit{./Programmierung/Verbesserung\_NablaJ.py} wiedergefunden werden.
+            Nehme daher für System 1 nicht vier Durchläufe, sondern nur zwei, da die Unterscheidung bezüglich $m$ entfällt.
+            Den vierten Durchlauf findet man zwar nicht in dem Programm \mbox{\cite[\textit{./Verbesserung\_NablaJ.py}]{github}}, man kann ihn aber durch Veränderung des Werts von Argument \zitat{maxIter} in Zeile 15 berechnen lassen.
+            Dieser Durchlauf wird nicht immer durchgeführt, da er zu viel Zeit in Anspruch nehmen.
+            Die folgenden Ergebnisse können auch in \mbox{\textit{./Verbesserung\_NablaJ.py}} wiedergefunden werden.
 
             \begin{table}[!ht]
                   \centering
@@ -1506,8 +1512,7 @@ Tag der Einreichung: \datum
                        1 & $1$ & $0.5$ & $4$ & $0.01$ \\
                        \hline
                        2 & $1$ & $0.05$ & $>100000$ & $>198$ \\
-                       2 & $1$ & $0.05$ & $>150000$ & $>428$ \\
-                       2 & $1$ & $0.05$ & $>300000$ & $>1233$ \\
+                       2 & $1$ & $0.05$ & $>150000$ & $>630$ \\
                        \hline
                   \end{tabular}\\
                   \captionof{table}{Kennzahlen bei Verwendung von $\nabla J(s)$}\label{tab: Ergebnisse_nablaJ}
@@ -1516,12 +1521,14 @@ Tag der Einreichung: \datum
             Man beachte, dass diese Approximation für System 1 genau genug war, um ein Minimum innerhalb von 0.03 s zu finden.
             Allerdings ist dieses Verfahren in dieser Form für System 2 unzureichend. Man könnte die Ableitung genauer approximieren,
             indem die Schrittweite $h$ aus (\ref{def: DiffVerfahren}) verringert.
-            Ferner würde vielleicht eine größere Schrittweite $\lambda_*$ helfen.
+            Ferner würde vielleicht eine größere Schrittweite $\lambda_*$ helfen, um (ähnlich wie bei System 1) die Anzahl an Iterationen zu verringern.
+            Solche Überlegungen werden in dieser Arbeit aber nicht weiter ausgeführt.
 
             Für die Durchläufe für System 2 erkenne man auch, dass die Zeit nun nicht mehr proportional zu den gegangenen Schritten ist.
-            Dies liegt wahrscheinlich daran, dass nicht mehr alle Werte im Arbeitsspeicher gespeichert werden konnten, wodurch die Zugriffszeiten sich verlängerten.
+            Dies liegt wahrscheinlich daran, dass nicht mehr alle Werte im Arbeitsspeicher gespeichert werden konnten, wodurch sich die Zugriffszeiten verlängern.
 
-            Da solche Überlegungen aber auch bei den anderen Varianten nicht implementiert wurden, werden sie hier auch nicht betrachtet.
+            Diese Variante hat somit zwar sehr viel Potenzial (siehe Durchläufe zu System 1), ist aber in der jetzigen Form nicht für alle Probleme genau genug.
+
 \chapter{Auswertung}
 \label{sec: Auswertung}
 
@@ -1532,24 +1539,21 @@ Tag der Einreichung: \datum
 
       In Kapitel \ref{sec: MS Matrizen} wurden die Systeme vorgestellt, welche in Kapitel \ref{sec: Programmieren} und \ref{sec: Verbesserungen} behandelt werden.
       Um die Eigenwerte dieser Systeme zu berechnen, wurden die Massen- und Steifigkeitsmatrizen der Systeme berechnet und eine Formel für die Berechnung der Eigenkreisfrequenzen aufgestellt.
-      Durch eine Substitution in dieser Formel erhält man in () die Formel für die Eigenwerte des Matrix-Pencils $(K-\lambda M)$.
+      Durch eine Substitution in dieser Formel erhält man in (\ref{eqn: allg EW Problem mit lam}) die Formel für die Eigenwerte des Matrix-Pencils $(K-\lambda M)$.
 
       In Kapitel \ref{sec: EW Zählung} wurde die gewichtete Eigenwertzählung auf einem Intervall hergeleitet. Diese Funktion besitzt die Form aus (\ref{def: J original})
-      und ist einfach zu berechnen, hängt aber nicht direkt von dem Design-Parameter $s$ ab,
-      wodurch sie nicht so einfach für ein Minimierungsverfahren verwendet werden kann.
+      und ist einfach zu berechnen, hängt aber nicht direkt von dem Design-Parameter Verwendung findet.
 
       Durch die Identität von Futamura, dem Residuensatz und einer Quadraturformel erhält man in (\ref{def: JSternTrapez}) eine Approximation dieser Eigenwertzählung,
       welche direkt von $s$ abhängt.
 
       Diese Approximation wird in Kapitel \ref{sec: Programmieren} genutzt, um die Eigenwerte der Systeme auf einem Intervall zu zählen und anschließend zu eliminieren.
       
-      Als Quadraturformel wurde hier die normale Trapezformel verwendet, welche aber unzureichende Ergebnisse brachte.
+      Als Quadraturformel wurde in Kapitel \ref{sec: Programmieren} die normale Trapezformel verwendet, welche aber unzureichende Ergebnisse brachte (siehe Tabelle \ref{tab: Ergebnisse}).
 
       Unter anderem wurde in Kapitel \ref{sec: Verbesserungen} diese Problem behoben.
-      Während in Kapitel \ref{sec: Programmieren} die Schrittweite des Gradientenverfahrens noch fest war, so wurde in Kapitel \ref{sec: Verbesserungen} ein Algorithmus definiert,
-      der den nächsten Wert von $s$ dynamisch bestimmt.
-      Dieses Verfahren erlaubte es zwar die Eigenwerte des ersten Systems in einem Schritt aus dem gegebenen Intervall zu entfernen,
-      aber es benötigt insgesamt mehr Zeit als ein analoges Gradientenverfahren mit fester Schrittweite.
+      Auch wurde in Kapitel \ref{sec: Verbesserungen} das Gradientenverfahren aus Algorithmus \ref{alg: steilster Abstieg} weiterentwickelt, sodass die Schrittweite nun dynamisch berechnet wird.
+      Durch mangelnde Möglichkeiten, diese Schrittweite effizient zu berechnen, war dieses Verfahren nicht so effektiv wie das in Kapitel \ref{sec: Programmieren} vorgestellte Gradientenverfahren.
 
       Zuletzt wurde in Kapitel \ref{sec: Verbesserungen} auch eine Approximation der Ableitung von $J(s)$ eingeführt.
       Diese kann zwar die Eigenwertzählung von System 1 unglaublich schnell minimieren, sie versagte aber bei einem mehrdimensionalen Design-Parameter, wie er in System 2 genutzt wird.
@@ -1557,15 +1561,20 @@ Tag der Einreichung: \datum
       Der schnellste Weg zur Minimierung der Eigenwertzählung ist daher eine möglichst genaue Quadraturformel,
       welche möglichst wenig Stützstellen benötigt, um ein gutes Ergebnis mit geringstem Zeitaufwand zu erhalten.
 
-      Damit sind offenbar die Gauss-Quadraturformeln gemeint.
+      Für eindimensionale Design-Parameter kann das Verfahren durch die Approximation von $\nabla J(s)$ stark beschleunigt werden.
+      Für einen Parameter $\s\in \R^l, l>1$ kann diese Approximation auch weiterhelfen, allerdings wurde dieser Ansatz für mehrdimensionale Parameter nicht weiter verfolgt.
+
+      Für alle Design-Parameter kann aber die Funktion $\nabla J^*$ mit einer entsprechend genauen Quadraturformel verwendet werden, um die Eigenwertzählung kontrolliert zu minimieren.
+      Dieses Verfahren dauert zwar länger, bringt aber verlässlich gute Ergebnisse (siehe Tabelle \ref{tab: Ergebnisse_Mittelpunkt} und \ref{tab: Ergebnisse_Gauss2}).
 
       Es gibt aber offenbar noch andere Möglichkeiten die Minimierung zu beschleunigen.
       Man könnte einerseits ein anderes Minimierungsverfahren nutzen, wie das Newton-Verfahren (siehe \cite[S. 290]{optimierungBurkhard}).
       Für dieses Verfahren bräuchte man zwar die zweite Ableitung von $J$ oder $J^*$, es könnte sich aber positiv auf die Rechenzeit auswirken.
 
-      Zudem könnte man für Systeme mit einer hohen Anzahl an Freiheitsgraden die Spur aus $L(z,s)$, wie es in (\ref{eqn: vollständigeAblL}) vorkommt.
+      Zudem könnte man für Systeme mit einer hohen Anzahl an Freiheitsgraden die Spur aus $L(z,s)$, wie es in (\ref{eqn: vollständigeAblL}) vorkommt, approximieren.
+      Man erhofft sich dadurch, die Komplexität der Funktion und ebenso die benötigte Zeit zu verringern (vgl. \cite[S. 128]{grundlageFutamura}).
       Dazu wäre Hutchinson's Schätzer (vgl. \cite[S. 142]{hutch++Meyer}), oder dessen Erweiterung \zitat{Hutch++}\cite[S. 142]{hutch++Meyer} nützlich.
-
+      Solche Überlegungen könnten in einer weiterführenden Arbeit behandelt und mit den hier erhaltenen Ergebnissen verglichen werden.
 
 \printbibliography
 
