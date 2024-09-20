@@ -15,6 +15,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{dsfont} % für charakteristische 1
+\usepackage{acro}
 
 %%
 %% Pflichtangaben -bitte hier einsetzen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -51,6 +52,15 @@
 \newcommand{\Res}{\text{Res}}
 \newcommand{\interior}{\text{int}}
 
+
+\acsetup{
+      list / display = all 
+}
+
+\DeclareAcronym{Abb}{
+      short = Abb.,
+      long = Abbildung,
+      tag = abbrev}
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
 
@@ -143,6 +153,9 @@ Tag der Einreichung: \datum
 \clearpage
 \listofsymbols
 \clearpage
+\listoffigures
+\bigskip
+\listoftables
 
 \chapter{Einleitung}
 \label{sec: Einleitung}
@@ -166,7 +179,7 @@ Tag der Einreichung: \datum
 
       In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches \s so verändern soll, dass alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
 
-      Verbesserungen zu der Implementierung folgen in Kapitel \ref{sec: Verbesserungen}.
+      Verbesserungen zu der Implementierung folgen in Kapitel \ref{sec: Verbesserungen} und die Zusammenfassung der Erkenntnisse in Kapitel \ref{sec: Auswertung}.
 
 \chapter{Das allgemeine Eigenwertproblem und die Identität von Futamura}
 \label{sec: EW Problem_Futamura}
@@ -1571,25 +1584,26 @@ Tag der Einreichung: \datum
       Dazu wäre Hutchinson's Schätzer (vgl. \cite[S. 142]{hutch++Meyer}), oder dessen Erweiterung \zitat{Hutch++}\cite[S. 142]{hutch++Meyer} nützlich.
       Solche Überlegungen könnten in einer weiterführenden Arbeit behandelt und mit den hier erhaltenen Ergebnissen verglichen werden.
 
-\printbibliography
+\chapter*{Verzeichnisse}
+      \printbibliography
+      \printacronyms[name=Abkürzungsverzeichnis, include={abbrev}]
+      %%
+      %% Erscheint auf letzter Seite
+      %%
+      \chapter*{Erkl\"{a}rung}
+      \thispagestyle{empty}
+      Hiermit erkl\"{a}re ich, dass ich die am \datum\ eingereichte Bachelorarbeit zum Thema
+      \emph{\thema} unter Betreuung von \betreuer\ selbstst\"{a}ndig erarbeitet,
+      verfasst und Zitate kenntlich gemacht habe. Andere als die angegebenen Hilfsmittel
+      wurden von mir nicht benutzt.
 
-\listoffigures
-%%
-%% Erscheint auf letzter Seite
-%%
-\chapter*{Erkl\"{a}rung}
-\thispagestyle{empty}
-Hiermit erkl\"{a}re ich, dass ich die am \datum\ eingereichte Bachelorarbeit zum Thema
-\emph{\thema} unter Betreuung von \betreuer\ selbstst\"{a}ndig erarbeitet,
-verfasst und Zitate kenntlich gemacht habe. Andere als die angegebenen Hilfsmittel
-wurden von mir nicht benutzt.
+      \bigskip \bigskip \bigskip \bigskip \bigskip
 
-\bigskip \bigskip \bigskip \bigskip \bigskip
+      Dresden, \datum\ \hfill Unterschrift
 
-Dresden, \datum\ \hfill Unterschrift
-
-\normalsize
+      \normalsize
 \end{document}
 
 
 
+\ac{Abb}
