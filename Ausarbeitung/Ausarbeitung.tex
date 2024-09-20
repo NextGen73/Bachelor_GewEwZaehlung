@@ -147,31 +147,26 @@ Tag der Einreichung: \datum
 \chapter{Einleitung}
 \label{sec: Einleitung}
       
-      Diese Ausarbeitung beschäftigt sich mit numerischen Verfahren, um sicherzustellen, dass für ein gegebenes mechanisches System keine Eigenwerte in einem vorgegebenem festen Intervall liegen.
-% hier muss noch einiges getan werden
-      Damit kann sichergestellt werden, dass die Eigenfrequenzen des Systems nicht so liegen, dass es zu einer Selbsterregung kommt.
+      Die Berechnung von Eigenfrequenzen hat in der Mechanik einen besonderen Stand:
 
-      % Um diese Anforderung zu erfüllen, werden die Eigenwerte des Matrix-Pencils auf diesem Intervall gewichtet gezählt. Man erhält ein Minimierungsproblem,
-      % in welchem es gilt, einen Design-Paramerter so anzupassen, dass auf dem Intervall kein Eigenwert des entsprechenden Systems mehr vorhanden ist.
-      % Dazu werden in den Kapiteln \ref{sec: MS Matrizen} und \ref{sec: EW Problem} die theoretischen Grundlagen gelegt.
-      % Anschließend werden in Kapitel \ref{sec: Quellen} die entscheidende Identität von Futamura und wichtige Überlegungen ausgeführt.
+      Falls eine Erregerfrequenz nahe einer Eigenfrequenz des mechanischen Systems liegt, tritt Resonanz auf (vgl. \cite[S. 435]{maschinendynamikDresig}).
+      Aufgrund der Resonanz reichen kleine Kräfte aus, um ein mechanisches System in so große Schwingung zu versetzen, dass die Materialien beschädigt werden können.
+      In Extremfällen kann Resonanz auch zur Zerstörung des Systems führen, ein Beispiel dafür ist die Broughton Suspension Bridge, welche einstürzte, weil eine Armee im Gleichschritt über sie marschierte (vgl. \cite{brücken}).
 
-      % Daraufhin werden diese Überlegungen in Kapitel \ref{sec: Programmieren} anhand verschiedener Beispiele implementiert und getestet.
+      Daher ist es von entscheidender Relevanz, die Eigenfrequenzen eines mechanischen Systems so weit weg von den Bereichen der möglichen Erregerfrequenzen zu legen, wie möglich (vg. \cite[S. 520]{maschinendynamikDresig}).
+      Dies kann durch viele Maßnahmen erfolgen, aber bei den meisten werden die Steifigkeit und die Massen so verändert, dass sich die Eigenfrequenzen von diesen Bereichen wegbewegen.
 
-      Die Auswertung und Verbesserung der Implementation folgt in Kapitel \ref{sec: Verbesserungen}.
+      Um diese Systeme formal zu beschreiben, kann man die Massen- und Steifigkeitsmatrix eines Systems bestimmen, anhand derer können durch die Berechnung von bestimmten Eigenwerten die Eigenfrequenzen ermittelt werden.
+      Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt werden soll und mit \s bezeichnet wird.
 
-      % In dieser Ausarbeitung werden die gewichtete Zählung von Eigenwerten auf einem Intervall behandelt, um sicherzustellen,
-      % dass bei einem vorgegebenem mechanischem System keine Eigenwerte in einem bestimmten festen Intervall liegen.
-      % Dazu wird in den ersten Kapiteln die nötige Theorie anhand der Quellen \cite{grundlageFutamura} und \cite{hauptteilTkachuk} beschrieben.
-      % Hier werden Matrix-Pencil und das allgemeinerte Eigenwertproblem verwendet, um 
-      % Hierzu nutzt man die Identität von Futamura, um die Zählung der Eigenwerte auf die zugrundeliegenden Matrizen zurückzuführen.
+      Diese Ausarbeitung beschäftigt sich daher mit der Zählung von Eigenwerten auf einem vorgegebenen Intervall. Dazu werden in Kapitel \ref{sec: EW Problem_Futamura} wichtige Aussagen vorgestellt, welche die Berechnung der Eigenwerte und somit auch der Eigenfrequenzen vereinfachen.
+      In Kapitel \ref{sec: MS Matrizen} werden zwei einfache Beispielsysteme aufgestellt und die zugehörigen Massen- und Steifigkeitsmatrizen berechnet.
 
+      Anschließend werden in Kapitel \ref{sec: EW Zählung} Formeln zur Zählung der Eigenwerte hergeleitet und so umgestellt, dass diese Formel direkt vom Design-Parameter \s abhängt.
 
-      % und anschließend in Kapitel \ref{sec: Programmieren} in Python angewendet.
-      % Daraufhin werden in Kapitel \ref{sec: Verbesserungen} die Ergebnisse kritisch betrachtet und weitere Algorithmen eingeführt, um die Berechnungen zu beschleunigen.
-      Zum Schluss werden in Kapitel \ref{sec: Auswertung} die Ergebnisse wiederholt und ein Ausblick in weiterführende Themen gegeben.
+      In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches \s so verändern soll, dass alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
 
-      Ferner werden in Kapitel \ref{sec: Verbesserungen} eine Approximation der Matrix-Spur vorgestellt und ebenfalls implementiert.
+      Verbesserungen zu der Implementierung folgen in Kapitel \ref{sec: Verbesserungen}.
 
 \chapter{Das allgemeine Eigenwertproblem und die Identität von Futamura}
 \label{sec: EW Problem_Futamura}
