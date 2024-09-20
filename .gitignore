@@ -50,5 +50,6 @@
 *.xdv
 *.xdy
 *.xlg
+*.bcf-SAVE-ERROR
 
 Programmierung/__pycache__/
