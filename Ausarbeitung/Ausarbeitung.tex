@@ -27,7 +27,7 @@
 \newcommand{\betreuer}{Prof. Dr. Oliver Sander}
 \newcommand{\institut}{Institut für Numerische Mathematik}
 \newcommand{\thema}{Gewichtete Eigenwert-Zählung auf einem Intervall}
-\newcommand{\datum}{19.\ 09.\ 2024} %Format tt.\ mm.\ jjjj
+\newcommand{\datum}{20.\ 09.\ 2024} %Format tt.\ mm.\ jjjj
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -197,7 +197,7 @@ Tag der Einreichung: \datum
                   $\AlamB, \lambda \in \C$ Matrix-Pencil genannt.
             \end{definition}
 
-            Diese Menge vom matrizen wird auch mit $(A, B)$ bezeichnet (siehe \cite[S. 37w]{regularMatrixPencil}).
+            Diese Menge vom Matrizen wird auch mit $(A, B)$ bezeichnet (siehe \cite[S. 37w]{regularMatrixPencil}).
 
             Laut \cite[S. 375]{matrixGolub} seien die Eigenwerte von $\AlamB$ diejenigen $\lambda \in\C$, für die gelte:
             \begin{equation}
@@ -270,7 +270,7 @@ Tag der Einreichung: \datum
             \end{definition}
 
             Hier ist $Q^H$ die Adjungierte von $Q$, also die Matrix, die durch komplexe Konjugation und Transponierung von $Q$ entsteht.
-            Man bemerke, dass die komplexe Konfugation auf jeden Eintrag der Matrix $Q$ einzeln angewendet wird, siehe \cite[S. 14]{matrixGolub}.
+            Man bemerke, dass die komplexe Konjugation auf jeden Eintrag der Matrix $Q$ einzeln angewendet wird, siehe \cite[S. 14]{matrixGolub}.
 
             Mithilfe dieser Definition kann nun die allgemeine Schur-Zerlegung vorgestellt werden, welche für den Beweis der Identität von Futamura
             in Kapitel \ref{sec: Futamura} benötigt wird.
@@ -297,7 +297,7 @@ Tag der Einreichung: \datum
             Nach den Vorbereitungen der vorherigen Abschnitte kann nun die Identität von Futamura beschrieben und gezeigt werden.
 
             Für den Beweis von Theorem \ref{thrm: IdentitätFutamura} benötigt man noch einige Aussagen über obere Dreiecksmatrizen,
-            $X_{ij}$ bezeichne in diesem Abschnitt den Eintag der Matrix $X$ in Zeile $i$ und Spalte $j$.
+            $X_{ij}$ bezeichne in diesem Abschnitt den Eintrag der Matrix $X$ in Zeile $i$ und Spalte $j$.
 
             \begin{lemma}
                   \label{Hilfslemma_Futamura: Inv Dreieck}
@@ -520,7 +520,7 @@ Tag der Einreichung: \datum
 
             Beachte, dass nach Definition die Federkraft entgegen der Auslenkung wirkt, da bei Auslenkung die Feder in die Ruhelage zurückkehren will.
                   
-            Die Trägheitskraft $F_T$ ist nach \cite{trägheitskraft} definiert durch:
+            Der Betrag $F_T$ der Trägheitskraft ist nach \cite{trägheitskraft} definiert durch:
             \begin{equation}
                   \label{eqn: Trägheitskraft}
                   F_T = m\cdot a
@@ -1082,7 +1082,7 @@ Tag der Einreichung: \datum
                   =&:J_{\text{Tr}}^*(s)\nonumber
             \end{align}
 
-            Der Index \zitat{Tr} steht hier für die verwendete Quadraturformel: die Trapezformel.
+            Der Index \zitat{Tr} steht hier für die verwendete Quadraturformel: die Trapezregel.
             In der Implementierung wird nur eine Funktion \zitat{JStern} definiert, diese kann aber jede beliebige Quadraturformel nutzen, um \J zu approximieren.
             Man kann leicht sehen, dass mit der Summen- und Faktorregel für Ableitungen
             $$\nabla J_{\text{Tr}}^*(s) = \frac{1}{2\pi i}\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\left[\klammer{\partial_s L(z_k, s)+\partial_s L(z_{k+1}, s)\,
@@ -1137,7 +1137,7 @@ Tag der Einreichung: \datum
             und somit der Genauigkeit der Quadraturformel unterscheiden.
             Auch unterscheiden sich diese Durchläufe in der Schrittweite des Gradientenverfahrens $\lam_*$.
 
-            Beim Ausführen des Programmes werden noch verschiedene andere Kennzahlen, wie der Endpunkt des Design-Parameters, ausgegeben,
+            Beim Ausführen des Programms werden noch verschiedene andere Kennzahlen, wie der Endpunkt des Design-Parameters, ausgegeben,
             hier werden aber nur die Anzahl an benötigten Iterationen und die dafür benötigte Zeit betrachtet.
             Die Zeit misst nur die Zeit, die für die Minimierung benötigt wird.
             Aufarbeitungen, wie das anschließende Berechnen der Eigenwerte, werden hier nicht gemessen. \\
@@ -1176,7 +1176,7 @@ Tag der Einreichung: \datum
             Der untere Plot zeigt jeweils das vorgegebene Intervall und die Verteilung der Eigenwerte.
             Oft werden nur Ausschnitte gezeigt, um die Eigenwerte innerhalb diese Intervalls deutlicher zu erkennen.
             Es ist daher möglich, dass nicht alle Eigenwerte abgebildet werden.
-            Die kompletten Abbildungen kann man aber durch Ausführen des Programmes \textit{erste Implementierung.py} erhalten.
+            Die kompletten Abbildungen kann man aber durch Ausführen des Programms \textit{erste Implementierung.py} erhalten.
             
             Für diese beiden Durchläufe beschränke man sich auf die Verteilung der Eigenwerte.
             \begin{figure}[h!t]
@@ -1199,7 +1199,7 @@ Tag der Einreichung: \datum
             Man sehe zuerst, dass sich der betrachtete Eigenwert dem oberen Rand des Intervalls ($\lam_b$) nähert, aber ihn nicht überschreitet.
             Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man in Tabelle \ref{tab: Ergebnisse} erkennen kann.
             Diese Durchläufe unterscheiden sich so minimal voneinander, dass die Unterschiede nur durch sehr starke Vergrößerung sichtbar werden.
-            Dies kann man sich ebenfalls durch Ausführung des Programmes klar machen.
+            Dies kann man sich ebenfalls durch Ausführung des Programms klar machen.
 
             Bei den nächsten beiden Durchläufen betrachte nur die Schritte 0 bis 17. 
 
@@ -1224,7 +1224,7 @@ Tag der Einreichung: \datum
             Man sehe aber auch, dass die approximierte gewichtete Eigenwertzählung bei beiden Durchläufen in Schritt 15 sehr stark von der genauen abweicht.
             Dies kann sehr wahrscheinlich auf die verwendete Quadraturformel zurückgeführt werden:
             Bei beiden Quadraturformeln wird L(z,s) an den Stellen $z=\lambda_a$ und $z=\lambda_b$ ausgewertet.
-            Falls aber ein Eigenwert sich nahe des Intervallrandes befindet, so befindet sich eine Stütztelle nahe einer Polstelle.
+            Falls aber ein Eigenwert sich nahe des Intervallrands befindet, so befindet sich eine Stützstelle nahe einer Polstelle.
             Das führt zu unerwünschten Erscheinungen:
             In Abb. \ref{fig: Plot_1_100_0.5} wird die gewichtete Eigenwertzählung bei Schritt 15 viel zu hoch approximiert,
             in Abb. \ref{fig: Plot_1_150_0.5} wird sie bei Schritt 15 negativ.
@@ -1273,7 +1273,7 @@ Tag der Einreichung: \datum
       Auch das Verhalten des Eigenwerts in den Abbildungen \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05} kann damit erklärt werden.
       Hier kam es zwar nicht zu Sprüngen, aber die Quadraturformel verhinderte, dass der Parameter \s genug verändert wird,
       sodass der Eigenwert das Intervall verlassen kann\footnote{die Tatsache, dass dieses Verhalten in der Quadraturformel begründet ist,
-      kann in \mbox{\cite[\textit{./Verbesserung\_Trapez.py}]{github}} gesehen werden, dort wurden die Stützstellen der Trapezformel aus Kapitel \ref{sec: Programmieren} so verschoben, dass keine Stützstelle sich in der Nähe von $\lambda_a$ und $\lambda_b$ befindet}.
+      kann in \mbox{\cite[\textit{./Verbesserung\_Trapez.py}]{github}} gesehen werden, dort wurden die Stützstellen der Trapezregel aus Kapitel \ref{sec: Programmieren} so verschoben, dass keine Stützstelle sich in der Nähe von $\lambda_a$ und $\lambda_b$ befindet}.
       Ferner sieht man anhand der Abbildungen \ref{fig: Plot_1_100_0.05}, \ref{fig: Plot_1_150_0.05} und \ref{fig: Plot_1_150_0.5},
       dass eine größere Schrittweite des Gradientenverfahrens deutlich bessere Ergebnisse hervorbringen kann.
       Allerdings ist eine zu hohe Schrittweite nicht immer von Vorteil, sollte sich ein Schritt des Verfahrens nahe an einer Lösung des Problems befinden.
@@ -1366,9 +1366,9 @@ Tag der Einreichung: \datum
             \end{figure}
 
             In Abb. \ref{fig: Plot_2_100_0.05_Mittelpunkt} kann man sehen, dass immer Sprünge auftreten, wenn ein Eigenwert sich einer Intervallgrenze nähert und die Approximation der gewichteten Eigenwertzählung ungenau wird\footnote{siehe auch \cite[\textit{./Verbesserung\_Mittelpunkt.py}]{github}}.
-            Weiterhin wird durch Ausführen des Programmes klar, dass sich die Eigenwerte zwischen den Durchläufen von System 2 stark unterscheiden.
+            Weiterhin wird durch Ausführen des Programms klar, dass sich die Eigenwerte zwischen den Durchläufen von System 2 stark unterscheiden.
             Diese Instabilität der Minimierung kann nicht verhindert werden.
-            Wir werden nun versuchen, die beobachteten Sprünge zu unterbinden. Nutze dazu eine genauere Quadraturformel
+            Wir werden nun versuchen, die beobachteten Sprünge zu unterbinden. Nutze dazu eine genauere Quadraturformel.
 
             Nehme daher als zweites Beispiel die \zitat{Zweipunkt-Formel}\cite[S. 526]{numerikHermann}. Analog zu (\ref{def: JSternTrapez}) und (\ref{def: JSternMittel}) folgt:
             \begin{align}
@@ -1414,16 +1414,16 @@ Tag der Einreichung: \datum
                   \label{fig: Plot_2_100_0.05_Gauss2}
             \end{figure}
 
-            Man sieht in Abb. \ref{fig: Plot_2_100_0.05_Gauss2}, dass sich die Eigenwerte hier von Anfang an schnell auf den Intervallrand zubewegene,
+            Man sieht in Abb. \ref{fig: Plot_2_100_0.05_Gauss2}, dass sich die Eigenwerte hier von Anfang an schnell auf den Intervallrand zubewegen,
             im Gegensatz zu Abb. \ref{fig: Plot_2_100_0.05_Mittelpunkt}, wo die Eigenwerte sich in den Schritten 40 bis 200 wenig bis kaum veränderten.
             Durch die bessere Approximation kann trotz des erhöhten Rechenaufwands, der mit der Zweipunkt-Formel entsteht, die benötigte Zeit stark reduziert werden.
             Ferner kommt dazu, dass nun auch die Wahl von $m$ eine Rolle spielt: in den Tabellen \ref{tab: Ergebnisse_Mittelpunkt} 
             und \ref{tab: Ergebnisse_Gauss2} verringert sich die Anzahl an Iterationen bei erhöhter Anzahl an Stützstellen.
-            Man nehme daher für die Minmierung der Eigenwerte in dem restlichen Kapitel immer die Zweipunkt-Formel.
+            Man nehme daher für die Minimierung der Eigenwerte in dem restlichen Kapitel immer die Zweipunkt-Formel.
 
             Die Tatsache, dass diese zwei Quadraturformeln nicht bei $\lam_a$ und $\lam_b$ ausgewertet werden und sie deshalb genauer sind,
             kann auch in Programm \textit{./Vergleich Quadraturformeln.py} gesehen werden.
-            Dort wurde ebenfalls die verschobene Trapezregel betrachtet, welche die Stütztellen $z_{k+\frac 1 2}$ statt $z_k$ verwendet.
+            Dort wurde ebenfalls die verschobene Trapezregel betrachtet, welche die Stützstellen $z_{k+\frac 1 2}$ statt $z_k$ verwendet.
             Allein dies macht einen gewaltigen Unterschied:
 
             Für eine immer näher an das Kurvenintegral rückende Polstelle wächst die Approximation $J^*_{\text{Trapez}}$ aus (\ref{def: JSternTrapez}) sehr stark an.
@@ -1557,7 +1557,7 @@ Tag der Einreichung: \datum
 
       Diese Approximation wird in Kapitel \ref{sec: Programmieren} genutzt, um die Eigenwerte der Systeme auf einem Intervall zu zählen und anschließend zu eliminieren.
       
-      Als Quadraturformel wurde in Kapitel \ref{sec: Programmieren} die normale Trapezformel verwendet, welche aber unzureichende Ergebnisse brachte (siehe Tabelle \ref{tab: Ergebnisse}).
+      Als Quadraturformel wurde in Kapitel \ref{sec: Programmieren} die normale Trapezregel verwendet, welche aber unzureichende Ergebnisse brachte (siehe Tabelle \ref{tab: Ergebnisse}).
 
       Unter anderem wurde in Kapitel \ref{sec: Verbesserungen} diese Problem behoben.
       Auch wurde in Kapitel \ref{sec: Verbesserungen} das Gradientenverfahren aus Algorithmus \ref{alg: steilster Abstieg} weiterentwickelt, sodass die Schrittweite nun dynamisch berechnet wird.
@@ -1603,7 +1603,3 @@ Tag der Einreichung: \datum
 
       \normalsize
 \end{document}
-
-
-
-\ac{Abb}
