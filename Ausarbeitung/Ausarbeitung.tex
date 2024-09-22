@@ -95,7 +95,6 @@
       \newsym[Matrix-Pencil, $\lambda\in C$]{AlamB}{A-\lambda\,B}
       \newsym[Eigenwerte des Matrix-Pencils $A-\lambda B$]{lamAB}{\lambda(A,B)}
       \newsym[Eigenwerte der Matrix $A$]{lamA}{\lambda(A)}
-      \newsym[Spur der Matrix $A$]{trA}{\tr(A)}
       \newsym[Massenmatrix]{M}{M}
       \newsym[Steifigkeitsmatrix]{K}{K}
       \newsym[Federkraft]{FL}{\overrightarrow{F_L}}
@@ -109,7 +108,7 @@
       \newsym[positiv orientierter Kreis in der komplexen Ebene]{gamm}{\gamma}
       \newsym[Durch Quadraturformel approximierte Funktion $J(s)$]{JStern}{J^*(s)}
 \closesymdef
-% man könnte noch J^*, ..., lambda(A,B), lambda(A), i einbauen
+% man könnte noch i einbauen
 
 \allowbreak
 \begin{document}
@@ -170,14 +169,14 @@ Tag der Einreichung: \datum
       Dies kann durch viele Maßnahmen erfolgen, aber bei den meisten werden die Steifigkeit und die Massen so verändert, dass sich die Eigenfrequenzen von diesen Bereichen wegbewegen.
 
       Um diese Systeme formal zu beschreiben, kann man die Massen- und Steifigkeitsmatrix eines Systems bestimmen, anhand derer können durch die Berechnung von bestimmten Eigenwerten die Eigenfrequenzen ermittelt werden.
-      Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt werden soll und mit \s bezeichnet wird.
+      Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt wird und mit \s bezeichnet wird.
 
       Diese Ausarbeitung beschäftigt sich daher mit der Zählung von Eigenwerten auf einem vorgegebenen Intervall. Dazu werden in Kapitel \ref{sec: EW Problem_Futamura} wichtige Aussagen vorgestellt, welche die Berechnung der Eigenwerte und somit auch der Eigenfrequenzen vereinfachen.
       In Kapitel \ref{sec: MS Matrizen} werden zwei einfache Beispielsysteme aufgestellt und die zugehörigen Massen- und Steifigkeitsmatrizen berechnet.
 
       Anschließend werden in Kapitel \ref{sec: EW Zählung} Formeln zur Zählung der Eigenwerte hergeleitet und so umgestellt, dass diese Formel direkt vom Design-Parameter \s abhängt.
 
-      In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches \s so verändern soll, dass alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
+      In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches den Parameter \s so verändern soll, dass alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
 
       Verbesserungen zu der Implementierung folgen in Kapitel \ref{sec: Verbesserungen} und die Zusammenfassung der Erkenntnisse in Kapitel \ref{sec: Auswertung}.
 
