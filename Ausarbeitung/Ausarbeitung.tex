@@ -165,8 +165,10 @@ Tag der Einreichung: \datum
       Aufgrund der Resonanz reichen kleine Kräfte aus, um ein mechanisches System in so große Schwingung zu versetzen, dass die Materialien beschädigt werden können.
       In Extremfällen kann Resonanz auch zur Zerstörung des Systems führen, ein Beispiel dafür ist die Broughton Suspension Bridge, welche einstürzte, weil eine Armee im Gleichschritt über sie marschierte (vgl. \cite{brücken}).
 
-      Daher ist es von entscheidender Relevanz, die Eigenfrequenzen eines mechanischen Systems so weit weg von den Bereichen der möglichen Erregerfrequenzen zu legen, wie möglich (vg. \cite[S. 520]{maschinendynamikDresig}).
-      Dies kann durch viele Maßnahmen erfolgen, aber bei den meisten werden die Steifigkeit und die Massen so verändert, dass sich die Eigenfrequenzen von diesen Bereichen wegbewegen.
+      Daher ist es von entscheidender Relevanz, durch bestimmte Maßnahmen die Eigenfrequenzen eines mechanischen Systems so weit weg von den Bereichen der möglichen Erregerfrequenzen zu legen, wie möglich (vg. \cite[S. 520]{maschinendynamikDresig}).
+      Man definiere daher ein Intervall \wAwB, in welchem zum Schluss keine Eigenfrequenzen liegen sollen.
+      
+      % Dies kann durch viele Maßnahmen erfolgen, aber bei den meisten werden die Steifigkeit und die Massen so verändert, dass sich die Eigenfrequenzen von diesen Bereichen wegbewegen.
 
       Um diese Systeme formal zu beschreiben, kann man die Massen- und Steifigkeitsmatrix eines Systems bestimmen, anhand derer können durch die Berechnung von bestimmten Eigenwerten die Eigenfrequenzen ermittelt werden.
       Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier \zitat{Design-Parameter} \cite[S. 2]{hauptteilTkachuk}\footnote{Übersetzung des Autors} genannt wird und mit \s bezeichnet wird.
@@ -730,21 +732,20 @@ Tag der Einreichung: \datum
 \label{sec: EW Zählung}
 % vielleicht eher Finden der Zielfunktion nennen
       Nun wende man sich dem Finden einer Zielfunktion zu, die die Anzahl der Eigenwerte auf einem Intervall beschreibt.
-      Diese gesuchte Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) ab und wird offenbar minimal,
+      Diese gesuchte Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) abhängen und wird offenbar minimal,
       wenn kein Eigenwert des Matrix-Pencils in dem Intervall liegt.
-
+% zitat
       \section{Vorüberlegungen}
             Die in diesem Abschnitt erwähnten Schritte stammen aus \cite[S. 2-4]{hauptteilTkachuk}.
 
             Betrachte Gleichung (\ref{eqn: allg EW Problem mit lam}), durch die Definition $\lam = \w^2$ verändert sich auch das Intervall, welches man betrachtet:
-            $$\lamAlamB:=\wAwB$$
-% \w_a und \w_b nicht erklärt
+            $$\lamAlamB:=\wAwB\,.$$
             Definiere nun die Funktion $h$ wie folgt:
-            $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)$$
+            $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)\,.$$
 
-            Da man nur daran interessiert ist, ob ein Eigenwert in dem Intervall liegt oder nicht, definiere
+            Da man erstmal daran interessiert ist, wie viele Eigenwerte auf dem Intervall liegen, definiere
 
-            $$\mu := \sum_{j\in N} h(\lambda_j)$$
+            $$\mu := \sum_{j\in N} h(\lambda_j)\,.$$
 
             Nach Kapitel \ref{sec: Formel EW} gilt aber $N=\{1,\dots,n\}$.\\
             Obwohl diese Funktion die Anzahl der Eigenwerte korrekt beschreibt, gibt es einige Schwachstellen, sollte man diese Funktion minimieren wollen:
@@ -753,24 +754,24 @@ Tag der Einreichung: \datum
             Diese Probleme kann man teilweise umgehen, indem man die Funktion auf dem Intervall $[\lambda_a, \lambda_b]$ gewichtet.
 
             Um die Eigenwerte effektiv aus dem Intervall zu entfernen, nutze eine Gewichtungsfunktion, die auf dem ganzen Intervall positiv und konkav ist (vgl. \cite[S. 3]{hauptteilTkachuk}).
+% zitat
             Diese Funktion sorgt dafür, dass Eigenwerte in der Mitte des Intervalls stärker ins Gewicht fallen
             und somit die Eigenwerte zuerst aus der Mitte des Intervalls zum Rand gehen und ihn anschließend überqueren.
             Nach \cite[S. 3]{hauptteilTkachuk} sei die Funktion
             $$g(z) = -(z-((1+\alpha)\lambda_a -\alpha\lambda_b))(z-((1+\alpha)\lambda_b-\alpha\lambda_a))$$
             sehr geeignet, man könnte aber auch andere Funktionen definieren, die diese Eigenschaften besitzen.
-            In den Funktionen stellt $\alpha>0$ einen Parameter dar, der dafür sorgt, dass die Funktion auf \lamAlamB positiv ist.
-            $\alpha$ wird Inflationsparameter (vgl. \cite[S. 3]{hauptteilTkachuk}) genannt.
-% Inflationsparameter
+            Hierbei ist $\alpha>0$ einen Parameter, der sicherstellt, dass die Funktion $g(z)$ auf \lamAlamB positiv ist.
+            Der Parameter $\alpha$ wird \zitat{Inflationsparameter} \cite[S. 3]{hauptteilTkachuk}\footnote{Übersetzung des Autors} genannt.
 
             Man findet so die erste Funktion, welche man mit Verfahren der Optimierung sinnvoll minimieren könnte:
             \begin{equation}
                   \label{def: J original}
-                  J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)
+                  J(s) = \sum_{j=1}^n g(\lambda_j)h(\lambda_j)\,.
             \end{equation}
 
             Für diese Formel benötigt man allerdings alle Eigenwerte, diese müssten vorher berechnet werden.
             Auch hängen weder $g$ noch $h$ explizit von $s$ ab, daher kann die Funktion \J in dieser Form zwar zur gewichteten Zählung der Eigenwerte benutzt werden,
-            aber nur über Umwege gibt diese Funktion an, in welche Richtung man gehen sollte, um die gewichtete Eigenwertzählung schnellstmöglich zu minimieren.
+            aber nur über Umwege kann man $\nabla J(s)$ berechnen, was nötig wäre, um die gewichtete Eigenwertzählung schnellstmöglich zu minimieren.
             
             Das Ziel ist daher eine Funktion, die explizit von \s abhängt, aber trotzdem die Eigenwerte gewichtet zählt.
             Dazu wird die Identität von Futamura aus Theorem \ref{thrm: IdentitätFutamura} benutzt.
@@ -786,36 +787,35 @@ Tag der Einreichung: \datum
             definiert, ein Kurvenintegral über diese Funktion sei
             \begin{equation}
                   \label{eqn: IntZielfunktionMitPolstellen}
-                  \frac{1}{2\pi i}\int_\gamma L(z, s)\ dz
+                  \frac{1}{2\pi i}\int_\gamma L(z, s)\ dz\,.
             \end{equation}
 
             Um den Residuensatz sinnvoll anwenden zu können, muss die Kurve \gamm das Intervall \lamAlamB einschließen.
-            Da aber alle Eigenwerte reell sind, so ist für $\gamma$ ein Kreis, welcher durch die Punkte $\lam_a$ und $\lam_b$ geht, optimal\footnote{dadurch wird sichergestellt,
+            Da aber alle Eigenwerte reell sind, so ist für $\gamma$ ein Kreis, welcher durch die Punkte $\lam_a$ und $\lam_b$ geht, gut geeignet\footnote{dadurch wird sichergestellt,
             dass kein Eigenwert, der außerhalb des Intervalls \lamAlamB liegt, mit in die Zählung eingeht}.
 
             Allerdings muss zunächst gezeigt werden, dass diese Gleichung tatsächlich die Eigenwerte in dem Intervall gewichtet zählt, dafür benötigt man den Residuensatz,
             welcher im nächsten Abschnitt vorgestellt und angewendet wird.
 
       \section{Der Residuensatz und dessen Anwendung}
-            Dieses Kapitel behandelt ausschließlich den Residuensatz und die Argumente, warum er auf (\ref{eqn: IntZielfunktionMitPolstellen}) anwendbar ist.
+            Dieses Kapitel behandelt ausschließlich den Residuensatz, die Argumente, warum er auf (\ref{eqn: IntZielfunktionMitPolstellen}) anwendbar ist und die Anwendung selbst.
             Obwohl $L$ durch die Verteilung der Eigenwerte auch von dem Design-Parameter $s$ abhängt, vernachlässige diese Abhängigkeit in diesem Abschnitt.
 
-            \begin{theorem}(Theorem 9.2 (Residue theorem)\cite[S. 141]{complexAnalysis})\\
+            \begin{theorem}(Theorem 9.2 (Residue theorem), \cite[S. 141]{complexAnalysis})\\
                   \label{thrm: Residuensatz}
                   Sei $f$ analytisch auf $\Omega$, mit Ausnahme der isolierten Singularitäten $a_1,\dots,a_n$. Wenn für einen Kreis $\gamma\subseteq\C$
                   die Bedingungen $\gamma \sim 0$ und $a_j\notin \gamma,\ j=1,\dots,n$ erfüllt sind, dann
-                  $$\int_\gamma f(z)\ dz = 2\pi i\sum_{k=1}^{n} n(\gamma, a_k)\Res_{a_k}f$$
+                  $$\int_\gamma f(z)\ dz = 2\pi i\sum_{k=1}^{n} n(\gamma, a_k)\Res_{a_k}f\,.$$
             \end{theorem}
             Beweis: siehe \cite[S. 142]{complexAnalysis}
 
             Die folgenden Aussagen erklären die Voraussetzungen und das Resultat des Theorems und stammen aus \cite{complexAnalysis}.
             Die Aussagen und Definitionen werden nur kurz angeschnitten, da man sie in dieser Ausarbeitung nur für den Residuensatz (Theorem \ref{thrm: Residuensatz})
-            und Gleichung (\ref{eqn: IntZielfunktionMitPolstellen}) verwendet. Die Beweise sind ebenfalls dort wiederzufinden.
+            und Gleichung (\ref{eqn: IntZielfunktionMitPolstellen}) verwendet. Die Beweise sind ebenfalls in \cite{complexAnalysis} wiederzufinden.
             \begin{itemize}
 % nicht alle sind fett markiert
                   \item \textbf{analytisch in }$\mathbf{z:}$ ist eine Eigenschaft von komplexen Funktionen, die besagt, dass man die Funktion als eine Potenzreihe um $z$ entwickeln kann.
-                        Für $L(z, s)$ reicht aber folgende Aussage (vgl. \cite[S. 24]{complexAnalysis}):
-% man müsste die Funktion referenzieren
+                        Für $L(z, s)$ reicht aber folgende Aussage aus \cite[S. 24]{complexAnalysis}:
                         Für Polynome $p(z)$ und $q(z)$ sei die rationale Funktion $L(z):=\frac{p(z)}{q(z)}$ analytisch auf $\{z\in\C: q(z)\ne 0\}$.
                         
                         Offenbar ist $L(z)$ eine rationale Funktion:
@@ -823,12 +823,12 @@ Tag der Einreichung: \datum
                         $$L(z) = \frac{p(z)}{q(z)}$$
                         mit 
                         \begin{align*}
-                              p(z) &= \sum_{j=1}^{n}\prod_{\underset{i\ne j}{i=1}}^{n} z-\lambda_i,\\
-                              q(z) &= \prod_{i=1}^{n} z-\lambda_i
+                              p(z) &= \sum_{j=1}^{n}\prod_{\underset{i\ne j}{i=1}}^{n} z-\lambda_i\text{ und}\\
+                              q(z) &= \prod_{i=1}^{n} z-\lambda_i\,.
                         \end{align*}
 
-                        Offenbar sind $p$ und $q$ Polynome und $\{z: q(z)\ne 0\} = \C\setminus\{\lambda_i, i=1,\dots,n\}$
-                        Daher ist $L$ analytisch auf $\C$ bis auf $\lambda_1,\dots,\lambda_n$
+                        Offenbar sind $p$ und $q$ Polynome und $\{z: q(z)\ne 0\} = \C\setminus\{\lambda_i, i=1,\dots,n\}$.
+                        Daher ist $L$ analytisch auf $\C$ bis auf $\lambda_1,\dots,\lambda_n$.
                   \item $\mathbf{b}$\textbf{ isolierte Singularität}:
                         Laut \cite[S. 74]{complexAnalysis} habe $L$ eine isolierte Singularität bei $\lambda_i$, wenn $L(\lambda_i)$ nicht definiert
                         und $L$ analytisch für $0<|z-\lambda_i|<\epsilon$ mit $\epsilon>0$ sei.
@@ -840,27 +840,26 @@ Tag der Einreichung: \datum
                               L \text{ analytisch für } 0<|z-\lambda_i|<\widetilde{\epsilon},\quad i=1,\dots,n
                         \end{equation}
                         mit
-                        $$\widetilde{\epsilon}:= \frac{1}{2}\,\min_{\underset{\lambda_i\ne \lambda_j}{i,j\in \{1,\dots,n\}} } |\lambda_i-\lambda_j|$$
-% alternative: \min_{\lambda_i,\lambda_j\in\lambda(K,M): \lambda_i\ne\lambda_j}
-                        Für den Fall, dass ein Eigenwert doppelt vorkommt, so ist der Eigenwert trotzdem eine isolierte Singularität,
+                        $$\widetilde{\epsilon}:= \frac{1}{2}\,\min_{\underset{\lambda_i\ne \lambda_j}{i,j\in \{1,\dots,n\}} } |\lambda_i-\lambda_j|\,.$$
+                        Sollte ein einzelner Eigenwert mehrfach vorkommt, so ist dieser Eigenwert trotzdem eine isolierte Singularität,
                         da die Definition dies erlaubt.
 % aus den Fingern gesaugt
                   \item $\mathbf{\frac{1}{2\pi i}\int_{\gamma} \frac 1 {z-a}\ dz:}$
                         Dieses Integral ist zwar nicht direkt für Theorem \ref{thrm: Residuensatz} von Bedeutung, allerdings wird es hier mehrmals benötigt.
 
                         Sei $z_0\in\C,\ r>0\text{ und }\gamma=\{z_0+r e^{it}: t\in [0,2\pi]\}$ (vgl. \cite[S. 48]{complexAnalysis}),
-                        laut Proposition 4.13 aus \cite[S. 48]{complexAnalysis} gelte:
+                        laut Proposition 4.13 aus \cite[S. 48]{complexAnalysis} gelte
                         \begin{equation}
                               \label{hilfe: complexAnalysis_IntegralEinsDurchX}
                               \frac{1}{2\pi i}\int_\gamma \frac 1 {z-a}\ dz = \begin{cases}
                                     1 & \text{: } |a-z_0|<r \\
                                     0 & \text{: } |a-z_0|>r
-                                    \end{cases}
+                                    \end{cases}\,.
                         \end{equation}
                   \item $\mathbf{n(\gamma, a)}$:
                         Sei $\gamma$ ein Kreis und $a\in \C\setminus \gamma$.
                         Nach Definition 5.4 aus \cite[S. 65]{complexAnalysis} ist die Windungsnummer $n(\gamma,a)$ von $\gamma$ über $a$ wie folgt definiert:
-                        $$n(\gamma,a):= \frac{1}{2\pi i}\int_\gamma \frac{1}{\xi-a}\ d\xi$$
+                        $$n(\gamma,a):= \frac{1}{2\pi i}\int_\gamma \frac{1}{\xi-a}\ d\xi\,.$$
 
                         Man erkenne, dass mit (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}) gilt:
                         \begin{equation}
@@ -868,19 +867,19 @@ Tag der Einreichung: \datum
                               n(\gamma,a) = \begin{cases}
                                     1& \text{ : }a\in B_r(z_0)\\
                                     0& \text{ : }a\notin\overline {B_r(z_0)}
-                              \end{cases}
+                              \end{cases}\,.
                         \end{equation}
                         Hierbei benötigt man das $\gamma$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}),
                         damit der Kreis in positive Richtung durchlaufen wird und kein Punkt (bis auf $z=z_0+r$) mehrmals vorkommt.
                   \item $\mathbf{\gamma \sim 0}$:
-                        Durch Anwenden von Definition 5.5 aus \cite[S. 67]{complexAnalysis} folgt:
-                        $$\gamma \sim 0 \Leftrightarrow n(\gamma, a)=0\ \forall a\notin \C$$
+                        Nach Definition 5.5 aus \cite[S. 67]{complexAnalysis} folgt
+                        $$\gamma \sim 0 \Leftrightarrow n(\gamma, a)=0\ \forall a\notin \C\,.$$
 % aber hier ist nicht wirklich Omega gleich \C, es gibt ja noch die Polstellen
                         Offenbar gilt für alle $\alpha \in \C^C$
-                        $$n(\gamma, \alpha) = 0$$
+                        $$n(\gamma, \alpha) = 0\,.$$
 
                   \item $\mathbf{\Res_af}$:
-                        Nach Beispiel 9.3 aus \cite[S. 142]{complexAnalysis} gilt für eine einfache Polstelle:
+                        Nach Beispiel 9.3 aus \cite[S. 142]{complexAnalysis} gilt für eine einfache Polstelle\footnote{es gibt hier nur einfache Polstellen, da nach (\ref{eqn: ZielfunktionMitPolstellen}) kein Term der Form $\frac{1}{(z-\nu)^r},\ r>1$ vorkommen kann}:
                         \begin{equation}
                               \label{hilfe: complexAnalysis_Residuum}
                               \Res_af = \lim_{z\to a} (z-a)f(z)
@@ -892,27 +891,27 @@ Tag der Einreichung: \datum
                               =& g(\lambda_i)
                         \end{align*}
 
-                        Für ein beliebiges $\widetilde \lambda \in \C$\footnote{falls $\widetilde{\lambda}$ keiner der Eigenwerte ist,
-                        dann gilt offenbar $P_{\widetilde \lambda} = \varnothing$} sei
-                        $$P_{\widetilde \lambda} :=\{i\in\{1,\dots,n\}: \lambda_i = \widetilde{\lam}\}$$
+%                         Für ein beliebiges $\widetilde \lambda \in \C$ sei \footnote{falls $\widetilde{\lambda}$ keiner der Eigenwerte ist,
+%                         dann gilt offenbar $P_{\widetilde \lambda} = \varnothing$}
+%                         $$P_{\widetilde \lambda} :=\{i\in\{1,\dots,n\}: \lambda_i = \widetilde{\lam}\}\,.$$
 
-                        Dann gilt:
-                        \begin{align*}
-                              L(z) =& \sum_{i=1}^{n} \frac{g(z)}{z-\lam_i}
-                              = \sum_{i\in P_{\widetilde \lambda}} \frac{g(z)}{z-\widetilde{\lambda}}+\sum_{N^C\cap\{1,\dots,n\}}\frac{g(z)}{z-\lam_i}\\
-                              =& \frac{|P_{\widetilde \lambda}| g(z)}{z-\widetilde{\lambda}}+\sum_{N^C\cap\{1,\dots,n\}}\frac{g(z)}{z-\lam_i}
-                        \end{align*}
+%                         Dann gilt
+%                         \begin{align*}
+%                               L(z) =& \sum_{i=1}^{n} \frac{g(z)}{z-\lam_i}
+%                               = \sum_{i\in P_{\widetilde \lambda}} \frac{g(z)}{z-\widetilde{\lambda}}+\sum_{N^C\cap\{1,\dots,n\}}\frac{g(z)}{z-\lam_i}\\
+%                               =& \frac{|P_{\widetilde \lambda}| g(z)}{z-\widetilde{\lambda}}+\sum_{N^C\cap\{1,\dots,n\}}\frac{g(z)}{z-\lam_i}\,.
+%                         \end{align*}
 
-                        Und für $\Res_{\widetilde{\lam}}L(z)$ folgt:
-                        $$\Res_{\widetilde{\lam}}L(z) = |P_{\widetilde \lambda}|\ g(\widetilde{\lam})$$
-% ist vllt alles unnütz gewesen
-                        Für mehrfach vorkommende Eigenwerte entstehen somit keine Änderungen. 
+%                         Und für $\Res_{\widetilde{\lam}}L(z)$ folgt
+%                         $$\Res_{\widetilde{\lam}}L(z) = |P_{\widetilde \lambda}|\ g(\widetilde{\lam})\,.$$
+% % ist vllt alles unnütz gewesen
+%                         Für mehrfach vorkommende Eigenwerte entstehen somit keine Änderungen. 
             \end{itemize}
 
-            Damit wurde gezeigt, dass der Residuensatz auf die Funktion $L$ angewendet werden kann.
+            Damit wurde gezeigt, dass der Residuensatz auf die Funktion $L$ angewendbar ist.
 
             Mit dem Residuensatz (Theorem \ref{thrm: Residuensatz}) gilt folglich für (\ref{eqn: IntZielfunktionMitPolstellen}):
-            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} n(\gamma, \lambda_k) \Res_{\lambda_k}L = \sum_{k=1}^{n} n(\gamma, \lambda_k) g(\lambda_k)$$
+            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} n(\gamma, \lambda_k) \Res_{\lambda_k}L = \sum_{k=1}^{n} n(\gamma, \lambda_k) g(\lambda_k)\,.$$
 
             mit \begin{align}
                   \gamma =& \{\Tilde{z_0} + \Tilde r\exp(i t): t\in [0,2\pi]\},\label{def: gamma}\\
@@ -948,7 +947,7 @@ Tag der Einreichung: \datum
             Um nun die Abhängigkeit von \s zu offenbaren, nutze die Identität von Futamura (Theorem \ref{thrm: IdentitätFutamura}), wodurch folgt     
             \begin{align}
                   J(s) =&\, \frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \frac 1 {2\pi i}\int_\gamma g(z)\sum_{j\in N} \frac{1}{z-\lam_j}\ dz\nonumber\\
-                  =&\, \frac 1 {2\pi i}\int_\gamma g(z)\tr((zM(s)-K(s))\inv M(s))\ dz\label{eqn: JGleichIntTr}
+                  =&\, \frac 1 {2\pi i}\int_\gamma g(z)\tr((zM(s)-K(s))\inv M(s))\ dz\,.\label{eqn: JGleichIntTr}
             \end{align}
 
             Diese Funktion hängt nun explizit von $s$ ab und kann daher in Kapitel \ref{sec: Programmieren} minimiert werden.
@@ -959,15 +958,15 @@ Tag der Einreichung: \datum
                   \frac{\partial L(z,s)}{\partial s} = g(z) \frac{\partial}{\partial s}\klammer{\tr(\underbrace{(zM-K)\inv M}_{=:B(z, s)})}
             \end{equation}
 
-            und es gilt für $\frac{\partial}{\partial s} \klammer{\tr(B(z, s))}$:
+            und es gilt für $\frac{\partial}{\partial s} \klammer{\tr(B(z, s))}$
             $$\frac{\partial}{\partial s} \klammer{\tr(B(z, s))} = \frac{\partial}{\partial s} \klammer{\sum_{i=1}^n (B(z, s))_{ii}}
-            = \sum_{i=1}^n \frac{\partial}{\partial s} (B(z,s))_{ii} = \tr\klammer{\frac{\partial}{\partial s} B(z,s)}$$
+            = \sum_{i=1}^n \frac{\partial}{\partial s} (B(z,s))_{ii} = \tr\klammer{\frac{\partial}{\partial s} B(z,s)}\,.$$
             
-            Ferner gilt für $\frac{\partial}{\partial s} B(z, s)$:
+            Ferner gilt für die Ableitung von $B(z,s)$
             \begin{align*}
                   \frac{\partial}{\partial s} B(z, s) =& \frac{\partial D}{\partial s} \ M + D \ \frac{dM}{ds}\\
                   =& - D \frac{d}{ds}(zM-K) D + D \ \frac{dM}{ds}\\
-                  =& D \ \frac{dM}{ds} - D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D
+                  =& D \ \frac{dM}{ds} - D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D\,.
             \end{align*}
 
             Wobei der Lesbarkeit halber $D:=(zM-K)\inv$ gilt und im 2. Schritt die Formel
@@ -980,7 +979,7 @@ Tag der Einreichung: \datum
             Die endgültige Formel für die Ableitung von $L$ ist
             \begin{equation}
                   \label{eqn: vollständigeAblL}
-                  \frac{\partial L(z,s)}{\partial s} = g(z)\,\klammer{\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}}
+                  \frac{\partial L(z,s)}{\partial s} = g(z)\,\klammer{\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}}\,.
             \end{equation}
 % man könnte noch auf die Wohldefiniertheit eingehen, da es mit den Dimensionen passt, aber es geht erstmal
             
