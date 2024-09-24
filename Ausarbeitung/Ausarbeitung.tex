@@ -8,7 +8,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{amsmath, amsfonts, amssymb, amsthm} %% mathematics tools
 \usepackage{csquotes}
-\usepackage[draft]{listofsymbols}
+\usepackage[final]{listofsymbols}
 \usepackage[backend=biber, sorting=none, style=iso-numeric]{biblatex} %% Literature citing engine
 \usepackage{subcaption}
 \usepackage{graphicx}
@@ -103,8 +103,8 @@
       \newsym[Eigenkreisfrequenz]{w}{\omega}
       \newsym[vorgegebenes Intervall]{wAwB}{[\omega_a,\omega_b]}
       \newsym[Eigenwert des Matrix-Pencils, definiert durch $\lambda:=\omega^2$]{lam}{\lambda}
-      \newsym[Intervall, definiert durch $\lbrack\lambda_a,\lambda_b\rbrack := \lbrack\omega_a,\omega_b\rbrack$]{lamAlamB}{[\lambda_a,\lambda_b]}
-      \newsym[Funtion, die Eigenwerte auf $\lbrack\lambda_a,\lambda_b\rbrack$ gewichtet zählt]{J}{J(s)}
+      \newsym[Intervall, definiert durch $\lbrack\lambda_a,\lambda_b\rbrack := \lbrack\omega_a^2,\omega_b^2\rbrack$]{lamAlamB}{[\lambda_a,\lambda_b]}
+      \newsym[Funktion, die Eigenwerte auf $\lbrack\lambda_a,\lambda_b\rbrack$ gewichtet zählt]{J}{J(s)}
       \newsym[positiv orientierter Kreis in der komplexen Ebene]{gamm}{\gamma}
       \newsym[Durch Quadraturformel approximierte Funktion $J(s)$]{JStern}{J^*(s)}
 \closesymdef
@@ -169,7 +169,7 @@ Tag der Einreichung: \datum
       Dies kann durch viele Maßnahmen erfolgen, aber bei den meisten werden die Steifigkeit und die Massen so verändert, dass sich die Eigenfrequenzen von diesen Bereichen wegbewegen.
 
       Um diese Systeme formal zu beschreiben, kann man die Massen- und Steifigkeitsmatrix eines Systems bestimmen, anhand derer können durch die Berechnung von bestimmten Eigenwerten die Eigenfrequenzen ermittelt werden.
-      Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt wird und mit \s bezeichnet wird.
+      Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier \zitat{Design-Parameter} \cite[S. 2]{hauptteilTkachuk}\footnote{Übersetzung des Autors} genannt wird und mit \s bezeichnet wird.
 
       Diese Ausarbeitung beschäftigt sich daher mit der Zählung von Eigenwerten auf einem vorgegebenen Intervall. Dazu werden in Kapitel \ref{sec: EW Problem_Futamura} wichtige Aussagen vorgestellt, welche die Berechnung der Eigenwerte und somit auch der Eigenfrequenzen vereinfachen.
       In Kapitel \ref{sec: MS Matrizen} werden zwei einfache Beispielsysteme aufgestellt und die zugehörigen Massen- und Steifigkeitsmatrizen berechnet.
@@ -178,7 +178,7 @@ Tag der Einreichung: \datum
 
       In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches den Parameter \s so verändern soll, dass alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
 
-      Verbesserungen zu der Implementierung folgen in Kapitel \ref{sec: Verbesserungen} und die Zusammenfassung der Erkenntnisse in Kapitel \ref{sec: Auswertung}.
+      Verbesserungen der Implementierung folgen in Kapitel \ref{sec: Verbesserungen} und die Zusammenfassung der Erkenntnisse in Kapitel \ref{sec: Auswertung}.
 
 \chapter{Das allgemeine Eigenwertproblem und die Identität von Futamura}
 \label{sec: EW Problem_Futamura}
@@ -192,145 +192,154 @@ Tag der Einreichung: \datum
       
             \begin{definition}(pencil, vgl. \cite[S. 375]{matrixGolub})
                   \label{def: pencil}
+
                   Seien $A$ und $B$ Matrizen in $\C^{n\times n}$, dann wird die Menge aller Matrizen der Form
                   $\AlamB, \lambda \in \C$ Matrix-Pencil genannt.
             \end{definition}
 
-            Diese Menge vom Matrizen wird auch mit $(A, B)$ bezeichnet (siehe \cite[S. 37w]{regularMatrixPencil}).
+            Diese Menge vom Matrizen wird auch mit $(A, B)$ bezeichnet (siehe \cite[S. 373]{regularMatrixPencil}).
 
-            Laut \cite[S. 375]{matrixGolub} seien die Eigenwerte von $\AlamB$ diejenigen $\lambda \in\C$, für die gelte:
+            Laut \cite[S. 375]{matrixGolub} seien die Eigenwerte von $\AlamB$ diejenigen $\lambda \in\C$, für die
             \begin{equation}
                   \label{eqn: allg EW Problem}
-                  (\AlamB)x=0,\quad x\ne 0
+                  (\AlamB)x=0,\quad x\ne 0\, .
             \end{equation}
             
-            Hier wird $x\in\C^n$ Eigenvektor genannt.
+            gelte, $x\in\C^n$ wird dann \zitat{Eigenvektor} \cite[S. 375]{matrixGolub}\footnote{Übersetzung des Autors} genannt.
             Man beachte, dass für $B=\In$ die Gleichung (\ref{eqn: allg EW Problem}) zu
-            $$(A-\lambda\In)x=0 \Leftrightarrow Ax = \lambda x,$$
-            wird, also genau die Form des \zitat{speziellen Eigenwertproblems}(vgl. \cite[S. 381]{maschinendynamikDresig}).
+            $$(A-\lambda\In)x=0 \Leftrightarrow Ax = \lambda x$$
+            wird, also genau die Form des \zitat{speziellen Eigenwertproblems} \cite[S. 381]{maschinendynamikDresig}.
             Da für ein spezielles Eigenwertproblem die Menge \lamA gesucht wird,
             wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: allg EW Problem}) erfüllen,
-            auch \zitat{allgemeines Eigenwertproblem}\cite[S. 380]{maschinendynamikDresig} genannt, da sie eine größere Klasse von Gleichungen abdeckt.
-            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: allg EW Problem}) das lineare homogene Gleichungssystem
+            auch \zitat{allgemeines Eigenwertproblem} \cite[S. 380]{maschinendynamikDresig} genannt, da sie eine größere Klasse von Gleichungen abdeckt.
+            Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: allg EW Problem}) das Gleichungssystem
             $$Cx=0,\quad x\ne 0$$
-% linear, homogen Quelle oder Allgemeinwissen
-            Nach einem Resultat aus der linearen Algebra gilt:
-% welches Resultat?
+            Da
             $$\det(C)\ne 0 \Leftrightarrow Cx=0 \text{ hat als einzige Lösung }x=0$$
-            Durch Kontraposition folgt:
-            $$\det(C)=0 \Leftrightarrow \exists x\ne 0: Cx=0$$
-
-            % Somit sucht man die Eigenwerte des Matrix-Pencils, in dem man die Nullstellen des Polynoms $\det(\AlamB)$ berechnet\footnote{Man könnte das Polynom $\det(\AlamB)$ als eine Art charakteristisches Polynom des Matrix-Pencils $\AlamB$ betrachten, ähnlich dem charakteristischen Polynom $f(A)$ einer Matrix $A$}.
+            gilt\footnote{Beweis: $\det(C)\ne 0 \Leftrightarrow C \text{ regulär} \Leftrightarrow \text{Lösung von }Cx=b:\ x=C\inv b$}, folgt durch Kontraposition:
+            $$\det(C)=0 \Leftrightarrow \exists x\ne 0: Cx=0\, .$$
             
             Somit kann durch Finden einer Nullstelle $\lambda'$ des Polynoms $\det(A-\lambda B)$ sichergestellt werden, dass ein zugehöriger Vektor $x'\ne 0$ existiert,
             sodass $\lam'$ und $x'$ Gleichung (\ref{eqn: allg EW Problem}) lösen.
             Man findet die Eigenwerte des Matrix-Pencils also durch die Berechnung der Nullstellen dieses Polynoms.
 
-            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Matrix-Pencils $\AlamB$ auch wie folgt definiert:
+            Daher wird in \cite[S. 375]{matrixGolub} die Menge der Eigenwerte des Matrix-Pencils $\AlamB$ auch als
             \begin{equation}
                   \label{def: EW Pencil}
                   \lamAB:=\{z\in\C:\ \det(A - zB) = 0\}
             \end{equation}
 
-            Laut \cite[S. 375]{matrixGolub} gelte zudem:
+            definiert. Laut \cite[S. 375]{matrixGolub} gelte zudem:
             \begin{equation}
                   \label{eqn: n EW äquiv rang B n}
-                  \AlamB \text{ hat }n\text{ Eigenwerte}\Leftrightarrow \rang(B)=n
+                  \AlamB \text{ hat }n\text{ Eigenwerte}\Leftrightarrow \rang(B)=n\, .
             \end{equation}
             Dieses Resultat ist für Kapitel \ref{sec: EW Zählung} relevant und kann mithilfe von Theorem \ref{thrm: allg Schur Zerlegung} leicht gezeigt werden.
 
-            Man benötigt für die Identität von Futamura aus Kapitel \ref{sec: Futamura} zudem eine weitere Definition:
+            Man benötigt für die Identität von Futamura aus Kapitel \ref{sec: Futamura} obendrein:
             \begin{definition}(Regulärer Matrix-Pencil, vgl. \cite[S. 376]{regularMatrixPencil})\\
                   \label{def: regulärer Pencil}
                   Ein Matrix-Pencil $A-\lambda B$ wird regulär genannt, wenn $A,B\in \Cnn$ und
-                  $$\exists \lam\in\C:\det(A-\lambda B)\ne 0$$ 
+                  $$\exists \lam\in\C:\det(A-\lambda B)\ne 0$$
+                  gilt.
             \end{definition}
 
             \begin{remark}
                   \label{bem: B reg impl pencil reg}
-                  Diese Definition bedeutet insbesondere, dass der Matrix-Pencil regulär ist, falls B regulär ist, denn es gilt:
+                  Diese Definition bedeutet insbesondere, dass der Matrix-Pencil regulär ist, falls B regulär ist.
+
+                  Beweis:
                   \begin{align*}
                         B\text{ regulär} \Leftrightarrow & \rang(B)=n\Leftrightarrow |\lambda(A,B)| = n<|\C|\\
-                        \Rightarrow & \exists z\in\C\setminus\lambda(A,B): \det(A+zB) \ne 0 \Leftrightarrow \AlamB \text{ regulär}
+                        \Rightarrow & \exists z\in\C\setminus\lambda(A,B): \det(A+zB) \ne 0 \Leftrightarrow \AlamB \text{ regulär}\qed
                   \end{align*}
-                  Wobei (\ref{eqn: n EW äquiv rang B n}) und die Überabzählbarkeit von $\C$ verwendet wurde.
+                  wobei (\ref{eqn: n EW äquiv rang B n}) und die Überabzählbarkeit von $\C$ verwendet wurde.
                   Diese Aussage kann auch in \cite[S. 376]{regularMatrixPencil} gefunden werden.
             \end{remark}
             
-% man kann auch noch Korollar 2.3.11 (LinAlg Werner, S. 50) ansprechen
-
       \section{Die Schur-Zerlegung}
-            In diesem Abschnitt wird eine weitere wichtige Aussage vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt wird.
-            Dazu benötigt man allerdings noch die Definition der unitären Matrizen:
-% Name vergeben
-            \begin{definition}(\cite[S. 73]{matrixGolub})
+            In diesem Abschnitt wird eine wichtige Zerlegung vorgestellt, die für Kapitel \ref{sec: Futamura} benötigt wird.
+            Dazu benötigt man noch die Definition der unitären Matrizen:
+            \begin{definition}(Unitary Matrices, \cite[S. 73]{matrixGolub})
+
                   Sei $Q \in\C^{n\times n}$, dann wird $Q$ unitär genannt, wenn
-                  $$Q^HQ = QQ^H=\In$$
+                  $$Q^HQ = QQ^H=\In\, .$$
             \end{definition}
 
             Hier ist $Q^H$ die Adjungierte von $Q$, also die Matrix, die durch komplexe Konjugation und Transponierung von $Q$ entsteht.
-            Man bemerke, dass die komplexe Konjugation auf jeden Eintrag der Matrix $Q$ einzeln angewendet wird, siehe \cite[S. 14]{matrixGolub}.
+            Man bemerke, dass die komplexe Konjugation auf jeden Eintrag der Matrix $Q$ einzeln angewendet wird (vgl. \cite[S. 14]{matrixGolub}).
 
             Mithilfe dieser Definition kann nun die allgemeine Schur-Zerlegung vorgestellt werden, welche für den Beweis der Identität von Futamura
             in Kapitel \ref{sec: Futamura} benötigt wird.
 %hier kann noch viel mehr erzählt werden: die Eigenschaft der Eigenwerte ist von entscheidender Relevanz
             \begin{theorem}(Generalized Schur Decompositon, \cite[S. 377]{matrixGolub})
                   \label{thrm: allg Schur Zerlegung}
+
                   Seien $A, B \in \C^{n\times n}$, dann existieren $Q$ und $Z$ unitär, sodass
                   \begin{equation}
                         \label{eqn: allg Schur_Resultat}
                         Q^H\,AZ = T,\quad Q^H\, BZ = S
                   \end{equation}
                   mit $T$ und $S$ obere Dreiecksmatrizen.
-                  Falls für ein $k\in \{1,\dots, n\}\ t_{kk}=s_{kk}=0$, dann gilt $\lambda(A, B) = \C$, sonst
+
+                  Falls ein $k\in \{1,\dots, n\}$ existiert, sodass $t_{kk}=s_{kk}=0$, dann gilt $\lambda(A, B) = \C$, sonst
                   \begin{equation}
                         \label{eqn: EW Pencil nach Schur}
-                        \lambda(A, B) = \{t_{ii}/s_{ii}:\, s_{ii}\ne 0\}
+                        \lambda(A, B) = \{t_{ii}/s_{ii}:\, s_{ii}\ne 0\}\, .
                   \end{equation}
             \end{theorem}
-            Beweis: siehe \cite[S. 377]{matrixGolub}\qed
+            Beweis: siehe \cite[S. 377]{matrixGolub}.\qed
       
       \section{Die Identität von Futamura}
       \label{sec: Futamura}
 
             Nach den Vorbereitungen der vorherigen Abschnitte kann nun die Identität von Futamura beschrieben und gezeigt werden.
 
-            Für den Beweis von Theorem \ref{thrm: IdentitätFutamura} benötigt man noch einige Aussagen über obere Dreiecksmatrizen,
+            Für den Beweis von Theorem \ref{thrm: IdentitätFutamura} benötigt man noch einige Aussagen über obere Dreiecksmatrizen.
             $X_{ij}$ bezeichne in diesem Abschnitt den Eintrag der Matrix $X$ in Zeile $i$ und Spalte $j$.
 
             \begin{lemma}
                   \label{Hilfslemma_Futamura: Inv Dreieck}
-                  Die Inverse einer oberen Dreiecksmatrix $A$ ist eine obere Dreiecksmatrix
+                  Die Inverse einer oberen Dreiecksmatrix $A$ ist eine obere Dreiecksmatrix.
             \end{lemma}
-            Beweis: Anwenden des Gauß-Jordan-Algorithmus zur Bestimmung der Inversen auf $(A|\In)$ mit $A$ rechte obere Dreiecksmatrix\qed
+            Beweis: Anwenden des Gauß-Jordan-Algorithmus zur Bestimmung der Inversen auf $(A|\In)$ mit $A$ rechte obere Dreiecksmatrix.\qed
 % man könnte auch mit Gramerschen Regel argumentieren, aber da ist es schwer zu beweisen, dass die Kofaktoren null sind
 % hier gibt es noch Verbesserungsbedarf
 
             \begin{lemma}
                   \label{Hilfslemma_Futamura: Prod Dreieck}
                   Seien X und Y obere Dreiecksmatrizen, dann gilt:
-                  $$(XY)_{ii} = X_{ii}\, Y_{ii}$$
+                  $$(XY)_{ii} = X_{ii}\, Y_{ii}\, .$$
             \end{lemma}
             Beweis:
-            $$(XY)_{ii} = \sum_{k=1}^n X_{ik}Y_{ki} = \sum_{k=I}^{n}X_{ik}Y_{ki} = \sum_{k=I}^{i}X_{ik}Y_{ki} = X_{ii} Y_{ii}$$
-            wobei verwendet wurde, dass für eine obere Dreiecksmatrix $A$ nach Definition gilt:
-            $A_{ij} = 0 \text{ für }i>j$\qed
+            $$(XY)_{ii} = \sum_{k=1}^n X_{ik}Y_{ki} = \sum_{k=I}^{n}X_{ik}Y_{ki} = \sum_{k=I}^{i}X_{ik}Y_{ki} = X_{ii} Y_{ii},$$
+            wobei verwendet wurde, dass für eine obere Dreiecksmatrix $A$ nach Definition\linebreak
+            ${A_{ij} = 0 \text{ für }i>j}$ gilt.\qed
 
             \begin{lemma}
                   \label{Hilfslemma_Futamura: Diag Inv Dreieck}
-                  Für eine invertierbare obere Dreiecksmatrix X gilt:
-                  $$(X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
+                  Für eine invertierbare obere Dreiecksmatrix X gilt
+                  $$(X\inv)_{ii} = \frac 1 {X_{ii}}\,.$$
             \end{lemma}
             Beweis: Sei $i\in\{1,\dots,n\}$ fest, dann gilt
-            $$\In = X\,X\inv \Rightarrow 1 = X_{ii}(X\inv)_{ii} \Rightarrow (X\inv)_{ii} = \frac 1 {(X)_{ii}}$$
+            $$\In = X\,X\inv \Rightarrow 1 = X_{ii}(X\inv)_{ii} \Rightarrow (X\inv)_{ii} = \frac 1 {(X)_{ii}}\,.$$
             Hier wurde Lemma \ref{Hilfslemma_Futamura: Prod Dreieck} und
             $$X \text{ invertierbar}\Rightarrow \det X = \prod_{k=1}^{n}X_{kk}\ne 0\Rightarrow X_{kk}\ne 0\quad \forall k=1,\dots,n$$
             verwendet.\qed\\
 
             Das folgende Theorem wird in Kapitel \ref{sec: EW Zählung} von entscheidender Relevanz sein,
             da durch diese Aussage in dieser Arbeit die Verteilung der Eigenwerte von $(A, B)$ auf den Design-Parameter \s zurückgeführt werden kann.
-% besser erklären, geht natürlich nicht für alle Pencil
-            \begin{theorem}(vgl. \cite[S. 127]{grundlageFutamura})
+            Dieses Theorem lehnt sich stark an die Identität von Futamura aus \cite[S. 127]{grundlageFutamura} an, hier wurde aber die Menge $N$ eingeführt, um nicht beweisen zu müssen, 
+            dass
+            \begin{align*}
+                  s_{ii} \begin{cases}
+                        \ne 0 & : i\le n'\\
+                        = 0 & : i>n'
+                  \end{cases}
+            \end{align*}
+            gilt.
+
+            \begin{theorem}(Identität von Futamura)
                   \label{thrm: IdentitätFutamura}\\
                   Seien $A, B\in\Cnn, z\in \C$, sodass $(zB-A)$ ein regulärer Matrix-Pencil ist, dann gibt es unitäre Matrizen $Q$ und $U \in\Cnn$, sodass
                   $$A = QTU^H,\quad B=QSU^H$$
@@ -343,22 +352,22 @@ Tag der Einreichung: \datum
                   $S$ und $T$ sind hier obere Dreiecksmatrizen.
             \end{theorem}
 
-            \begin{remark}
-                  \label{Bem: matrixPencilRegulärWennNegativRegulär}
-                  Es gilt folgende Äquivalenz:
-                  $$(\lambda B-A)\text{ regulär} \Leftrightarrow (A-\lam B)\text{ regulär}$$ 
-            \end{remark}
-            Beweis:\\
-            Offenbar gilt:
-            $$(\lambda B-A) = -(A-\lam B) = (-\In) (A-\lam B)$$
-            Nach Satz 4.24 und Korollar 4.23 aus \cite[S. 80]{LinAlgWerner} gilt:
-            \begin{align*}
-                  \det(\lam B-A) =& \det((-\In) (A-\lam B)) = \det(-\In)\det(A-\lam B)\\
-                   =& \underbrace{(-1)^n}_{\ne 0} \det(A-\lam B)
-            \end{align*}
-            Es folgt für ein $\lam'\in\C$:
-            $$\det(\lam' B-A)\ne 0 \Leftrightarrow \det(A-\lam'B)\ne 0$$
-            Nach Anwendung der Definition \ref{def: regulärer Pencil} folgt Behauptung.\qed\\
+            % \begin{remark}
+            %       \label{Bem: matrixPencilRegulärWennNegativRegulär}
+            %       Es gilt folgende Äquivalenz:
+            %       $$(\lambda B-A)\text{ regulär} \Leftrightarrow (A-\lam B)\text{ regulär}$$ 
+            % \end{remark}
+            % Beweis:\\
+            % Offenbar gilt:
+            % $$(\lambda B-A) = -(A-\lam B) = (-\In) (A-\lam B)$$
+            % Nach Satz 4.24 und Korollar 4.23 aus \cite[S. 80]{LinAlgWerner} gilt:
+            % \begin{align*}
+            %       \det(\lam B-A) =& \det((-\In) (A-\lam B)) = \det(-\In)\det(A-\lam B)\\
+            %        =& \underbrace{(-1)^n}_{\ne 0} \det(A-\lam B)
+            % \end{align*}
+            % Es folgt für ein $\lam'\in\C$:
+            % $$\det(\lam' B-A)\ne 0 \Leftrightarrow \det(A-\lam'B)\ne 0$$
+            % Nach Anwendung der Definition \ref{def: regulärer Pencil} folgt Behauptung.\qed\\
 
             Beweis Theorem \ref{thrm: IdentitätFutamura}:
             Nach Theorem \ref{thrm: allg Schur Zerlegung} existieren unitäre Matrizen $Q$ und $U\in\Cnn$, sodass nach entsprechender Multiplikation gilt:
@@ -379,18 +388,18 @@ Tag der Einreichung: \datum
             Es folgt:
             \begin{align*}
                   (zB-A)\inv B =& (z\,QSU^H-QTU^H)\inv QSU^H = (Q(zS-T)U^H)\inv QSU^H \\
-                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv
+                  =& U(zS-T)\inv Q^H\,QSU^H = U(zS-T)\inv S\,U\inv\,.
             \end{align*}
 
             Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.\\
-            Da die Spur invariant unter Ähnlichkeitstransformation ist\footnote{vgl. 3. Exercise unter Example 1.3.5 in \cite{matrixSpur}}, gilt
+            Da die Spur invariant unter Ähnlichkeitstransformation ist (vgl. \cite[Exercise unter Example 1.3.5]{matrixSpur}), gilt
 % Fussnote irgendwie schlecht
             \begin{equation}
                   \label{eqn: Haltepunkt Bew Futamura}
                   \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}
             \end{equation}
 
-            Es sei $$N:=\{i=1,\dots,n: s_{ii}\ne 0\}$$
+            Es sei $$N:=\{i=1,\dots,n: s_{ii}\ne 0\}\,.$$
             Mit den Lemmata \ref{Hilfslemma_Futamura: Inv Dreieck}, \ref{Hilfslemma_Futamura: Prod Dreieck} und
             \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
             \begin{align*}
@@ -416,76 +425,67 @@ Tag der Einreichung: \datum
 
             \begin{align*}
                   \tr((zB-A)\inv B) =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i\in N}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
-                  =& \sum_{i\in N} \frac{1}{z-\lambda_i}
-            \end{align*}\qed
+                  =& \sum_{i\in N} \frac{1}{z-\lambda_i}\,.\qed
+            \end{align*}
 
             \begin{remark}
                   Hier wurde nicht die originale Identität von Futamura gezeigt, da nicht bewiesen wurde, dass
                   \begin{align*}
-                        s_{ii} = \begin{cases}
+                        s_{ii} \begin{cases}
                               \ne 0 & : i\le |N|\\
-                              0 & : i>|N|
-                        \end{cases}
+                              = 0 & : i>|N|
+                        \end{cases}\,.
                   \end{align*}
                   Für diese Ausarbeitung spielt es aber keine Rolle, da man immer einen Matrix-Pencil $(A, B)$ mit regulärer Matrix $B$ verwenden wird.
-                  Nach Bemerkung \ref{bem: B reg impl pencil reg} ist daher immer $N=\{1,\dots, n\}$
+                  Nach Bemerkung \ref{bem: B reg impl pencil reg} ist daher immer $N=\{1,\dots, n\}$.
             \end{remark}
 
             Nach Theorem \ref{thrm: allg Schur Zerlegung} und der Definition von $N$ gilt für einen regulären Matrix-Pencil:
 
-            $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\} = \{\lambda_i: i\in N\}$$
-            somit sind die Eigenwerte eines regulären Matrix-Pencils genau die Polstellen der Funktion $\tr((zB-A)\inv B)$.
+            $$\lambda(A, B) = \left\{\frac{t_{ii}}{s_{ii}} : s_{ii}\ne 0\right\} = \{\lambda_i: i\in N\}\,.$$
+            Somit sind die Eigenwerte eines regulären Matrix-Pencils genau die Polstellen der Funktion $\tr((zB-A)\inv B)$.
 
             In Kapitel \ref{sec: EW Zählung} wird daher das Residuentheorem auf ein Kurvenintegral\\
             über $\tr((zB-A)\inv B)$ angewendet, um die Anzahl der Eigenwerte zu bestimmen.
-            Genau dies ist auch die Grundidee in \cite{grundlageFutamura,hauptteilTkachuk}.
+            Genau dies ist auch die Grundidee in \cite{hauptteilTkachuk} und \cite{grundlageFutamura}.
 % hier noch entscheiden, was drin gelassen wird
             
 \chapter{Massen- und Steifigkeitsmatrizen}
 \label{sec: MS Matrizen}
-      Die Berechnung von Eigenkreisfrequenzen hat in der Mechanik einen besonderen Stand:
-      Durch die Betrachtung von Systemen und der Berechnung von Eigenfrequenzen, kann vorhergesagt werden, mit welchen Frequenzen das System schwingen wird.
 
-      Betrachte nun ein mechanisches System, das so verändert werden kann, dass die Veränderungen der Charakteristiken abhängig von einem Design-Parameter \s sind.
-      Durch das kontrollierte Verändern dieses Design-Parameters $s$ kann daher sichergestellt werden, dass keine Eigenfrequenz des Systems in einem vorgegebenen Intervall liegt.
-      Durch das Entfernen aller Eigenwerten aus diesem Intervall wird garantiert, dass keine Frequenz in diesem Intervall das System anregt.
-      Es kommt daher zu keiner Anregung durch Frequenzen, die häufig auftreten, wie die Frequenz des Gehens.
-      Falls es zu solcher Anregung kommt, dann könnte die Frequenz einer Gruppe von Menschen, die alle im Gleichtakt laufen,
-      die Brücke in Schwingung versetzen und in Extremfällen sogar zum Einsturz bringen.
-
-      In dieser Ausarbeitung werden die folgenden Systeme untersucht:
+      Um die Eigenkreisfrequenzen eines mechanischen Systems vorherzusagen, benötigt man die Massen- und Steifigkeitsmatrizen dieser Systeme.
+      Diese Systeme werden nun vorgestellt.
       \begin{figure}[h!t]
             \centering
             \begin{minipage}[ht]{0.49\linewidth}
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./System1.png}
-                  \caption{System 1}
+                  \caption{Schema System 1}
                   \label{fig: System 1}
             \end{minipage}
             \hfill
             \begin{minipage}[ht]{0.49\linewidth}
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./System2.png}
-                  \caption{System 2}
+                  \caption{Schema System 2}
                   \label{fig: System 2}
             \end{minipage}
       \end{figure}
 
-      Der Vektor $x = (x_1,\dots,x_n)^T$ enthält hier die Auslenkungen der Massen aus ihrer Ruhelage und $s\in\R^l$ wird Design-Parameter (vgl. \cite[S. 2]{hauptteilTkachuk}) genannt.
+      Der Vektor $x = (x_1,\dots,x_n)^T$ enthält hier die Auslenkungen der Massen aus ihrer Ruhelage und $s\in\R^l$ wird Design-Parameter genannt.
 
-      Falls in dieser Arbeit je von \zitat{Systemen} die Rede ist, so sind damit diese Systeme, die in den Abbildungen \ref{fig: System 1} und \ref{fig: System 2} beschrieben wurden, gemeint.
+      Falls in dieser Arbeit je von \zitat{Systemen} die Rede ist, so sind damit die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} gemeint.
 
       Die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} werden \zitat{Schwingerketten}\cite[S. 236]{maschinendynamikDresig} genannt,
       da sie aus starren Massen und masselosen Federn bestehen, die linear miteinander verbunden sind.
       Es existiert zudem in diesen Systemen keine Dämpfung.
       
-      Laut \cite[S. 362-365]{maschinendynamikDresig} könne man für diese Systeme die \zitat{Differentialgleichung der freien Schwingungen}\cite[S. 365]{maschinendynamikDresig}
-      erhalten, wenn man für jede Masse ein Kräftegleichgewicht aufstellt.
-% komisch
-      Diese Differentialgleichung besitzt folgende Form:
+      Laut \cite[S. 362-365]{maschinendynamikDresig} könne man für diese Systeme die \zitat{Differentialgleichung der freien Schwingungen} \cite[S. 365]{maschinendynamikDresig}
+      erhalten, wenn man für jede Masse ein \linebreak Kräftegleichgewicht aufstellt und geeignet umformt.
+      Diese Differentialgleichung besitzt die Form
       \begin{equation}
             \label{eqn: Dgl freie Schwingungen}
-            Kx+M\ddot x = 0
+            Kx+M\ddot x = 0,
       \end{equation}
 
       wobei $K$ die Steifigkeitsmatrix und $M$ die Massenmatrix des Systems sind.
@@ -1205,14 +1205,14 @@ Tag der Einreichung: \datum
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_100_0.5.png}
-                  \caption{Plots zu System 1, $m=100$, $\lambda_*=0.5$}
+                  \caption{System 1, $m=100$, $\lambda_*=0.5$}
                   \label{fig: Plot_1_100_0.5}
             \end{figure}
 
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_150_0.5.png}
-                  \caption{Plots zu System 1, $m=100$, $\lambda_*=0.5$}
+                  \caption{System 1, $m=100$, $\lambda_*=0.5$}
                   \label{fig: Plot_1_150_0.5}
             \end{figure}
 
@@ -1244,14 +1244,14 @@ Tag der Einreichung: \datum
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_2_100_0.05.png}
-                  \caption{Plots zu System 2, $m=100$, $\lambda_*=0.05$}
+                  \caption{System 2, $m=100$, $\lambda_*=0.05$}
                   \label{fig: Plot_2_100_0.05}
             \end{figure}
 
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_2_150_0.05.png}
-                  \caption{Plots zu System 2, $m=150$, $\lambda_*=0.05$}
+                  \caption{System 2, $m=150$, $\lambda_*=0.05$}
                   \label{fig: Plot_2_150_0.05}
             \end{figure}
 
@@ -1409,7 +1409,7 @@ Tag der Einreichung: \datum
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Gauss2/Plot_2_100_0.05.png}
-                  \caption[Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel]{Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel verwendet}
+                  \caption[System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel]{Plot zu System 2, $m=100$, $\lambda_*=0.05$, Zweipunkt-Formel verwendet}
                   \label{fig: Plot_2_100_0.05_Gauss2}
             \end{figure}
 
