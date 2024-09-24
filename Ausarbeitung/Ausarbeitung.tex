@@ -52,7 +52,6 @@
 \newcommand{\Res}{\text{Res}}
 \newcommand{\interior}{\text{int}}
 
-
 \acsetup{
       list / display = all 
 }
@@ -61,6 +60,7 @@
       short = Abb.,
       long = Abbildung,
       tag = abbrev}
+
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
 
@@ -476,8 +476,9 @@ Tag der Einreichung: \datum
 
       Falls in dieser Arbeit je von \zitat{Systemen} die Rede ist, so sind damit die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} gemeint.
 
-      Die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} werden \zitat{Schwingerketten}\cite[S. 236]{maschinendynamikDresig} genannt,
-      da sie aus starren Massen und masselosen Federn bestehen, die linear miteinander verbunden sind.
+      Die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2} werden \zitat{Schwingerketten} \cite[S. 236]{maschinendynamikDresig} genannt,
+      da sie aus Massen und Federn bestehen, die linear miteinander verbunden sind.
+% zitat?
       Es existiert zudem in diesen Systemen keine Dämpfung.
       
       Laut \cite[S. 362-365]{maschinendynamikDresig} könne man für diese Systeme die \zitat{Differentialgleichung der freien Schwingungen} \cite[S. 365]{maschinendynamikDresig}
@@ -499,7 +500,7 @@ Tag der Einreichung: \datum
       
       \section{Herleitung durch das Prinzip von d'Alembert}
             Nach \cite{d_AlembertPrinzip} besage das Prinzip von d'Alembert, dass die Summe aller wirkenden Kräfte in einem beschleunigten System verschwinde.
-
+% naja
             Wir betrachten hier ein beschleunigtes System, da man in den Systemen die Massen von einem festen Standpunkt beobachtet.
             Daher gibt es für jede Masse eine Auslenkung aus der Ruhelage\footnote{man könnte auch ein System betrachten,
             in dem die Auslenkung einer bestimmten Masse immer gleich Null ist, in diesem System würden alle anderen Auslenkungen von dieser einen abhängen.}.
@@ -519,20 +520,19 @@ Tag der Einreichung: \datum
 
             Beachte, dass nach Definition die Federkraft entgegen der Auslenkung wirkt, da bei Auslenkung die Feder in die Ruhelage zurückkehren will.
                   
-            Der Betrag $F_T$ der Trägheitskraft ist nach \cite{trägheitskraft} definiert durch:
+            Der Betrag $F_T$ der Trägheitskraft ist nach \cite{trägheitskraft} durch
             \begin{equation}
                   \label{eqn: Trägheitskraft}
                   F_T = m\cdot a
             \end{equation}
-            mit Masse $m$ und Beschleunigungsvektor $a$.    
+            mit Masse $m$ und Beschleunigungsvektor $a$ definiert.    
             
             Beachte, dass laut \cite{trägheitskraft} auch diese Kraft der Auslenkung entgegenwirkt.
-            Für einen Kraftvektor \FT gilt daher:
-            $$\FT = -m\cdot a$$
+            Für den Kraftvektor \FT gilt daher:
+            $$\FT = -m\cdot a\,.$$
 
             Um das Schemas der Kräfte klarer zu gestalten, werden die Kraftpfeile immer so gezeichnet, dass ihre Werte nichtnegativ sind.
             Hier bedeutet das, dass beide Kräfte entgegen der Auslenkung gezeichnet werden, dies kann man auch in Abb. \ref{fig: KräfteAnFeder} erkennen.
-% Schemas, Kraftschemas,...
             Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht.
 
             \begin{figure}[h!t]
@@ -542,11 +542,12 @@ Tag der Einreichung: \datum
                   \label{fig: KräfteAnFeder}
             \end{figure}
 % in diesem ganzen Teil gibt es Verbesserungsbedarf
-            In Abb. \ref{fig: KräfteAnFeder} ist $z$ die Auslenkung und demnach gilt $F_L = c\cdot z$ (vgl. \cite{federkraft}).
-
+% vgl. nicht richtig
+            Laut \cite{BildKräfteFeder} gelte zwar $F_L = c\cdot z$, aber auch hier werden $F_L$ und die Auslenkung $z$ in entgegengesetzte Richtungen eingezeichnet.
             Da in dieser Ausarbeitung nur Feder-Masse-Systeme behandelt werden, kann man $s$ und $a$ auf die Auslenkungen $(\xk)_k$ zurückführen:
-            Im Allgemeinen wird hier $s$ durch $(x_{k+1}-\xk)$ und $a$, wie schon in Abb. \ref{fig: KräfteAnFeder}, durch die zweite Ableitung $\ddot \xk$ beschrieben.
-% Man könnte es auch umschreiben
+            Im Allgemeinen wird hier $s$ durch $(x_{k+1}-\xk)$ und $a$, ähnlich zu Abb. \ref{fig: KräfteAnFeder}, durch die zweite Ableitung $\ddot \xk$ beschrieben.
+
+
             Betrachte nun ein System mit 3 Massen, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
             Anhand dieses Systems soll eine allgemeines Kräftegleichgewicht aufgestellt werden.
 
@@ -566,21 +567,18 @@ Tag der Einreichung: \datum
                         \label{fig: Kräfte Masse 1D}
                   \end{minipage}
             \end{figure}
-
+% ähnlich zu Quelle
             Für $m_2$ erhält man die wirkenden Kräfte, wie sie in Abb. \ref{fig: Kräfte Masse 1D} dargestellt wurden.
-
-            Beachte, dass die Kraftpfeile hier korrekt eingezeichnet wurden:
-            Sei $x_1 \equiv x_3 \equiv 0$, dann folgt:
-            $$x_2 > 0 \Rightarrow a(x_2-x_1) > 0 \Rightarrow \text{\zitat{Feder will sich zusammenziehen}}$$
-            und analog
-            $$x_2 < 0 \Rightarrow b(x_3-x_2) > 0 \Rightarrow \text{\zitat{Feder will sich zusammenziehen}}$$
+            Ein ähnliches Schema findet man auch in \cite{präsiLängsschwinger} und Bild 4.6 d) aus \cite[S. 237]{maschinendynamikDresig}.
+            In letzterem sind einige Kraftpfeile entgegengesetzt eingezeichnet, dafür wurden aber die Beträge mit $-1$ multipliziert\footnote{in diesem Bild aus \cite{maschinendynamikDresig} wurde folgender Fehler gemacht: Die linke Kraft wurde mit $c_k (x_{k-1}-x_k)$ bezeichnet, richtig wäre $c_{k-1} (x_{k-1}-x_k)$}.
+            
             Mit dem Prinzip von d'Alembert führt dies auf die Gleichung
             \begin{equation}
                   \label{eqn: Gl für Masse}
-                  m_2\,\ddot x_2 + a\,(x_2-x_1) - b\,(x_3-x_2) = 0
+                  m_2\,\ddot x_2 + a\,(x_2-x_1) - b\,(x_3-x_2) = 0\,.
             \end{equation}
-
-            Nehme man an,  es gelte $x_1 \equiv 0$\footnote{das entspricht in einer Differentialgleichung einer Dirichlet-Randbedingung},
+% diese Gleichungen könnte man weglassen
+            Nehme man an, es gelte $x_1 \equiv 0$,
             dann würde (\ref{eqn: Gl für Masse}) sich zu
 
             \begin{equation}
@@ -602,11 +600,11 @@ Tag der Einreichung: \datum
             Die Form der Gleichung für die linke Masse ist durch (\ref{eqn: Gl für Masse mit Rand links}) gegeben.
             Für $k=2,\dots, n-1$ gilt eine Gleichung der Form (\ref{eqn: Gl für Masse}).
             
-            Da die letzte Masse durch die rechte Feder mit dem Rand verbunden ist, gilt also $x_{n+1} \equiv 0$.
+            Da die Masse $m_n$ durch die rechte Feder mit dem Rand verbunden ist, gilt also $x_{n+1} \equiv 0$.
             Und analog zu (\ref{eqn: Gl für Masse mit Rand links}) erhält man
             $$(s+1)\,\ddot x_n + c\,(x_n-x_{n-1}) + c\,x_n = 0$$  
 
-            Falls man nun alle Massen, Federkonstanten und Auslenkungen einsetzt, so erhält man nach Umstellen das Gleichungssystem
+            Nach Einsetzen aller Massen, Federkonstanten und Auslenkungen erhält man nach Umstellen das Gleichungssystem
 
             $$\begin{cases}
                   m\ \ddot x_1 + 2s\,x_1 - s\,x_2 & = 0   \\
@@ -614,20 +612,18 @@ Tag der Einreichung: \datum
                   (s+1)\,\ddot x_j -s\,x_{j-1} + (s+c)\,x_j -c\,x_{j+1} & = 0\\
                   (s+1)\,\ddot x_k -c\,x_{k-1} + 2c\,x_k -c\,x_{k+1} & = 0,\quad k=j+1,\dots,n-1\\
                   (s+1)\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
-            \end{cases}$$
+            \end{cases}\,.$$
 
-
-            Definiere nun $n$ und $j$ explizit, damit auch $M$ und $K$ explizit beschrieben werden können.
+            Definiere nun $n$ und $j$ explizit, damit auch $M$ und $K$ explizit beschrieben werden können:
             \begin{equation}
                   \label{def: nUndJ explizit}
-                  n=8,\\
-                  j=n/2=4
+                  n=8,\quad j=n/2=4\,.
             \end{equation}
 
-            Dann kann das erste System zu einer Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) zusammengefasst werden.
+            Dann kann dieses System zu einer Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) zusammengefasst werden.
             Hierbei gilt
             \begin{align}
-                  M &= \diag(m, m, m, s+1, s+1,s+1, s+1,  s+1),\label{def: M1}\\
+                  M &= \diag(m, m, m, s+1, s+1,s+1, s+1,  s+1)\text{ und }\label{def: M1}\\
                   K &= \begin{pmatrix}
                         2s & -s &  &  &  &  &  &  \\
                         -s &  2s& -s &  &  &  &0  &  \\
@@ -637,7 +633,7 @@ Tag der Einreichung: \datum
                          &  &  &  & -c & 2c & -c &  \\
                          & 0 &  &  &  & -c & 2c &  -c\\
                          &  &  &  &  &  & -c & 2c \\
-                        \end{pmatrix}\label{def: K1}
+                        \end{pmatrix}\,.\label{def: K1}
             \end{align}\\
 
             Wende dieses Vorgehen auch für das System aus Abb. \ref{fig: System 2} an und erhalte
@@ -648,9 +644,8 @@ Tag der Einreichung: \datum
                   s_j\,\ddot x_{j-1} -s_{j-1}\,x_{j-2} + (s_{j-1}+c)\,x_{j-1} -c\,x_{j+1} & = 0\\
                   s_j\,\ddot x_k -c\,x_{k-1} + 2c\,x_k -c\,x_{k+1} & = 0,\quad k=j,\dots,n-1\\
                   s_j\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
-            \end{cases}$$
+            \end{cases}\,.$$
             
-
             Dieses System kann man analog zu oben zu einer Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) umformen.
             Hier gilt nun aber, mit $n$ und $j$ wie in (\ref{def: nUndJ explizit})
             \begin{align}
@@ -664,10 +659,15 @@ Tag der Einreichung: \datum
                               &  &  &  & -c & 2c & -c &  \\
                               & 0 & &  &  & -c & 2c &  -c\\
                               &  &  &  &  &  & -c & 2c \\
-                        \end{pmatrix}\label{def: K2}
+                        \end{pmatrix}\,.\label{def: K2}
             \end{align}
-                  
-            Man beachte, dass für positiven Design-Parameter \s, bzw. für ein \s, wo alle Einträge positiv sind, die Massenmatrix regulär ist.
+                 
+            Wie man sieht, gibt es noch zwei unbekannte Parameter: $m$ und $c$.
+            Beide seien positiv und werden in Kapitel \ref{sec: Programmieren} festgelegt.
+
+            Man beachte, dass für positive Parameter $m\in \R$ und $s$\footnote{mit $s\in\mathbb R^l>0$ ist gemeint, dass $s_i>0\ \forall i=1,\dots,l$}, beide Massenmatrizen regulär ist.
+
+            Damit auch $s$ positiv ist, wähle man einen positiven Startwert und eine zulässige Menge $ \Omega \subset [0,\infty]^l$. Dies wird ebenfalls später festgelegt.
 
       \section{Zusammenhang Eigenwert und Eigenfrequenz}
             \label{sec: Formel EW}      
@@ -676,27 +676,27 @@ Tag der Einreichung: \datum
             Die Schritte in diesem Abschnitt folgen \cite[S. 380]{maschinendynamikDresig} und \cite[S. 2]{hauptteilTkachuk}.
             Nach \cite[S. 380]{maschinendynamikDresig} gelte für die Auslenkungen der Massen mit $x$ statt $q$:
             $$x(t) = v\,\exp(i\w t),\ \ \ddot x(t) = -\w^2\,v \exp(i\w t)$$
-            mit $v=(v_1,\dots,v_n)^T$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfrequenz \w}\cite[S. 380]{maschinendynamikDresig}
-            
+            mit $v=(v_1,\dots,v_n)^T$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfrequenz $\omega$} \cite[S. 380]{maschinendynamikDresig}.
+% zitat?
             Diesen Ansatz wird in (\ref{eqn: Dgl freie Schwingungen}) eingesetzt und durch Division mit
             $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$ folgt:
             
             \begin{equation}
                   \label{eqn: allg EW Problem mit w}
-                  (K-\w^2\,M)\,v = 0
+                  (K-\w^2\,M)\,v = 0\,.
             \end{equation}
 
             Die Gleichung kann ebenfalls in \cite[S. 380]{maschinendynamikDresig} gefunden werden.
 
             Man will diese Gleichung für $v\ne 0$ lösen, da man sonst eine triviale Lösung erhält, in der keine Masse schwingt.
 
-            Um die Theorie aus Kapitel \ref{sec: EW Problem_Futamura} anzuwenden, so definiere
-            $$\lambda_i := \w_i^2,\quad i=1,\dots,n$$
+            Um die Theorie aus Kapitel \ref{sec: EW Problem_Futamura} anzuwenden, so definiere wie in \cite{hauptteilTkachuk}
+            $$\lambda_i := \w_i^2,\quad i=1,\dots,n\,.$$
 
             Es folgt das allgemeine Eigenwertproblem
             \begin{equation}
                   \label{eqn: allg EW Problem mit lam}
-                  (\K-\lambda\,\M)\,v = 0
+                  (\K-\lambda\,\M)\,v = 0\,.
             \end{equation}
 
             Man beachte, dass diese Gleichung genau die Form aus (\ref{eqn: allg EW Problem}) besitzt.
