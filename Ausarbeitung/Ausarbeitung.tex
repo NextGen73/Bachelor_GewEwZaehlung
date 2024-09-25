@@ -204,7 +204,7 @@ Tag der Einreichung: \datum
       
       \section{Der Matrix-Pencil}
             Betrachte zunächst das Konzept des \zitat{Matrix-Pencils} \cite[S. 32]{matrixPencilDeutsch}, welches in dieser Ausarbeitung eine entscheidende Rolle spielt,
-            den viele Aussagen aus Kapitel \ref{sec: EW Problem_Futamura} beziehen sich auf eine Menge von Matrizen dieser Form.
+            denn viele Aussagen aus Kapitel \ref{sec: EW Problem_Futamura} beziehen sich auf eine Menge von Matrizen dieser Form.
       
             \begin{definition}(pencil, vgl. \cite[S. 375]{matrixGolub})
                   \label{def: pencil}
@@ -368,39 +368,29 @@ Tag der Einreichung: \datum
                   $S$ und $T$ sind hier obere Dreiecksmatrizen.
             \end{theorem}
 
-            % \begin{remark}
-            %       \label{Bem: matrixPencilRegulärWennNegativRegulär}
-            %       Es gilt folgende Äquivalenz:
-            %       $$(\lambda B-A)\text{ regulär} \Leftrightarrow (A-\lam B)\text{ regulär}$$ 
-            % \end{remark}
-            % Beweis:\\
-            % Offenbar gilt:
-            % $$(\lambda B-A) = -(A-\lam B) = (-\In) (A-\lam B)$$
-            % Nach Satz 4.24 und Korollar 4.23 aus \cite[S. 80]{LinAlgWerner} gilt:
-            % \begin{align*}
-            %       \det(\lam B-A) =& \det((-\In) (A-\lam B)) = \det(-\In)\det(A-\lam B)\\
-            %        =& \underbrace{(-1)^n}_{\ne 0} \det(A-\lam B)
-            % \end{align*}
-            % Es folgt für ein $\lam'\in\C$:
-            % $$\det(\lam' B-A)\ne 0 \Leftrightarrow \det(A-\lam'B)\ne 0$$
-            % Nach Anwendung der Definition \ref{def: regulärer Pencil} folgt Behauptung.\qed\\
+            \begin{remark}
+                  \label{Bem: matrixPencilRegulärWennNegativRegulär}
+                  Es gilt folgende Äquivalenz:
+                  $$(\lambda B-A)\text{ regulär} \Leftrightarrow (A-\lam B)\text{ regulär}$$ 
+                  Damit ist auch $(A-\lam B)$ regulär.
+            \end{remark}
+            Beweis:\\
+            Offenbar gilt:
+            $$(\lambda B-A) = -(A-\lam B) = (-\In) (A-\lam B)$$
+            Nach Satz 4.24 und Korollar 4.23 aus \cite[S. 80]{LinAlgWerner} gilt:
+            \begin{align*}
+                  \det(\lam B-A) =& \det((-\In) (A-\lam B)) = \det(-\In)\det(A-\lam B)\\
+                   =& \underbrace{(-1)^n}_{\ne 0} \det(A-\lam B)
+            \end{align*}
+            Es folgt für ein $\lam'\in\C$:
+            $$\det(\lam' B-A)\ne 0 \Leftrightarrow \det(A-\lam'B)\ne 0$$
+            Nach Anwendung der Definition \ref{def: regulärer Pencil} folgt Behauptung.\qed\\
 
             Beweis Theorem \ref{thrm: IdentitätFutamura}:
             Nach Theorem \ref{thrm: allg Schur Zerlegung} existieren unitäre Matrizen $Q$ und $U\in\Cnn$, sodass nach entsprechender Multiplikation gilt:
             $$A=QTU^H,\quad B=QSU^H$$
             mit $T,S\in\Cnn$ obere Dreiecksmatrizen.
             
-            % Hierbei sind $S$ und $T$ obere Dreiecksmatrizen, und es gilt:
-            % $$\lambda(B)=\lambda(S) = \{s_{ii}:i=1,\dots,n\},$$
-            % aber diese Eigenwerte sind noch ungeordnet und man kann nicht wie in \cite{grundlageFutamura}:
-            % \begin{align*}
-            %       s_{ii} = \begin{cases}
-            %             \ne 0 & : i\le n'\\
-            %             0 & : i>n'
-            %       \end{cases}
-            % \end{align*}
-            % annehmen für $n':=|\{i\in\{1,\dots,n\}: s_{ii}\ne 0\}|$.
-
             Es folgt:
             \begin{align*}
                   (zB-A)\inv B =& (z\,QSU^H-QTU^H)\inv QSU^H = (Q(zS-T)U^H)\inv QSU^H \\
@@ -507,7 +497,7 @@ Tag der Einreichung: \datum
       wobei $K$ die Steifigkeitsmatrix und $M$ die Massenmatrix des Systems sind.
       Da genau diese Matrizen benötigt werden, um die Eigenkreisfrequenzen zu berechnen, ist das Ziel dieses Kapitels die Systeme von Kräftegleichgewichten
       aufzustellen und anschließend so umzuformen, dass eine Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) entsteht.
-      Anhand dieser Gleichung werden die Matrizen abgelesen.
+      Anhand dieser Gleichung werden die Matrizen bestimmt.
 % sehr komisch
       Dafür wird der erste Abschnitt die im System wirkenden Kräfte und die Anwendung des Prinzips von d'Alembert behandeln.
       Im zweiten Abschnitt werden die Matrizen der Systeme bestimmt und anschließend wird in Abschnitt \ref{sec: Formel EW}
@@ -546,8 +536,8 @@ Tag der Einreichung: \datum
             Für den Kraftvektor \FT gilt daher
             $$\FT = -m\cdot a\,.$$
 
-            Um das Schemas der Kräfte klarer zu gestalten, werden die Kraftpfeile immer so gezeichnet, dass ihre Werte nichtnegativ sind.
-            Hier bedeutet das, dass beide Kräfte entgegen der Auslenkung gezeichnet werden, dies kann man auch in Abb. \ref{fig: KräfteAnFeder} erkennen.
+            Um die Darstellung der Kräfte klarer zu gestalten, werden die Kraftpfeile immer so gezeichnet, dass ihre Werte nichtnegativ sind.
+            Das bedeutet, dass beide Kräfte entgegen der Auslenkung gezeichnet werden, dies kann man auch in Abb. \ref{fig: KräfteAnFeder} erkennen.
 
             \begin{figure}[h!t]
                   \centering
@@ -678,7 +668,7 @@ Tag der Einreichung: \datum
             Wie man sieht, gibt es noch zwei unbekannte Parameter: $m$\footnote{es gibt hier eine Doppelbelegung von $m$: einerseits ist es ein Parameter der Massenmatrix, andererseits gibt es die Anzahl an Teilintervallen in Kapitel \ref{sec: Programmieren} an} und $c$.
             Beide seien positiv und werden in Kapitel \ref{sec: Programmieren} festgelegt.
 
-            Man beachte, dass für positive Parameter $m\in \R$ und $s$\footnote{mit $s\in\mathbb R^l>0$ ist gemeint, dass $s_i>0\ \forall i=1,\dots,l$}, beide Massenmatrizen regulär ist.
+            Man beachte, dass für positive Parameter $m\in \R$ und $s$\footnote{mit $s\in\mathbb R^l>0$ ist gemeint, dass $s_i>0\ \forall i=1,\dots,l$} beide Massenmatrizen regulär ist.
 
             Damit auch $s$ positiv ist, wähle man einen positiven Startwert und eine zulässige Menge $ \Omega \subset (0,\infty]^l$. Dies wird ebenfalls später festgelegt.
 
@@ -1204,11 +1194,11 @@ Tag der Einreichung: \datum
                   \label{fig: Plot_1_150_0.05}
             \end{figure}
 
-            Die gepunkteten Linien stellen immer die Grenzen des Intervall \lamAlamB dar.
+            Die gepunkteten Linien stellen immer die Grenzen des Intervalls \lamAlamB dar.
             Ferner werden die Eigenwerte in den Plots \zitat{Entwicklung der Eigenwerte} nicht mithilfe einer Legende beschriftet, da dies keinen Mehrwert bringt.
             Mit \zitat{erster Eigenwert} werde hier immer der größte Eigenwert bezeichnet, den man sehen kann, mit \zitat{zweiter Eigenwert} der nächstkleinere.
             Man sehe zuerst in Abb. \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05}, dass sich der betrachtete Eigenwert dem oberen Rand des Intervalls ($\lam_b$) nähert, aber ihn nicht überschreitet.
-            Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man anhand Tabelle \ref{tab: Ergebnisse} vermuten kann.
+            Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man anhand von Tabelle \ref{tab: Ergebnisse} vermuten kann.
             Diese Durchläufe unterscheiden sich so minimal voneinander, dass die Unterschiede nur durch sehr starke Vergrößerung sichtbar werden.
             Dies kann man sich ebenfalls durch Ausführung des Programms klar machen.
 
