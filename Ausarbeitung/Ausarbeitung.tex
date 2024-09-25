@@ -66,6 +66,16 @@
       long = approximiert,
       tag = abbrev}
 
+\DeclareAcronym{vgl}{
+      short = vgl.,
+      long = vergleich,
+      tag = abbrev}
+
+\DeclareAcronym{oV}{
+      short = o.V.,
+      long = ohne Verfasser,
+      tag = abbrev}
+
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
 
@@ -94,26 +104,24 @@
 % Symbolverzeichnis
 \renewcommand{\symheadingname}{Symbolverzeichnis}
 \opensymdef
-      % \newsym[]{}{}
       \newsym[Design-Parameter]{s}{s}
       \newsym[Einheitsmatrix]{In}{I_n}
-      \newsym[Matrix-Pencil, $\lambda\in C$]{AlamB}{A-\lambda\,B}
+      \newsym[Element des Matrix-Pencils $(A,B)$]{AlamB}{A-\lambda\,B}
       \newsym[Eigenwerte des Matrix-Pencils $A-\lambda B$]{lamAB}{\lambda(A,B)}
       \newsym[Eigenwerte der Matrix $A$]{lamA}{\lambda(A)}
       \newsym[Massenmatrix]{M}{M}
       \newsym[Steifigkeitsmatrix]{K}{K}
       \newsym[Federkraft]{FL}{\overrightarrow{F_L}}
       \newsym[Trägheitskraft]{FT}{\overrightarrow{F_T}}
-      \newsym[Auslenkung des k-ten Massepunktes aus der Ruhelage]{xk}{x_k}
+      \newsym[Auslenkung des k-ten Massepunkts aus der Ruhelage]{xk}{x_k}
       \newsym[Eigenkreisfrequenz]{w}{\omega}
       \newsym[vorgegebenes Intervall]{wAwB}{[\omega_a,\omega_b]}
       \newsym[Eigenwert des Matrix-Pencils, definiert durch $\lambda:=\omega^2$]{lam}{\lambda}
       \newsym[Intervall, definiert durch $\lbrack\lambda_a,\lambda_b\rbrack := \lbrack\omega_a^2,\omega_b^2\rbrack$]{lamAlamB}{[\lambda_a,\lambda_b]}
       \newsym[Funktion, die Eigenwerte auf $\lbrack\lambda_a,\lambda_b\rbrack$ gewichtet zählt]{J}{J(s)}
       \newsym[positiv orientierter Kreis in der komplexen Ebene]{gamm}{\gamma}
-      \newsym[Durch Quadraturformel approximierte Funktion $J(s)$]{JStern}{J^*(s)}
+      \newsym[durch Quadraturformel approximierte Funktion $J(s)$]{JStern}{J^*(s)}
 \closesymdef
-% man könnte noch i einbauen
 
 \allowbreak
 \begin{document}
@@ -170,20 +178,21 @@ Tag der Einreichung: \datum
       Aufgrund der Resonanz reichen kleine Kräfte aus, um ein mechanisches System in so große Schwingung zu versetzen, dass die Materialien beschädigt werden können.
       In Extremfällen kann Resonanz auch zur Zerstörung des Systems führen, ein Beispiel dafür ist die Broughton Suspension Bridge, welche einstürzte, weil eine Armee im Gleichschritt über sie marschierte (vgl. \cite{brücken}).
 
-      Daher ist es von entscheidender Relevanz, durch bestimmte Maßnahmen die Eigenfrequenzen eines mechanischen Systems so weit weg von den Bereichen der möglichen Erregerfrequenzen zu legen, wie möglich (vg. \cite[S. 520]{maschinendynamikDresig}).
-      Man definiere daher ein Intervall \wAwB, in welchem zum Schluss keine Eigenfrequenzen liegen sollen.
+      Daher ist es von entscheidender Relevanz, durch bestimmte Maßnahmen die Eigenfrequenzen eines mechanischen Systems so weit weg von den Bereichen der möglichen Erregerfrequenzen zu legen, wie möglich (vgl. \cite[S. 520]{maschinendynamikDresig}).
+      Man definiere daher ein Intervall $[\omega_a, \omega_b]$, in welchem zum Schluss keine Eigenfrequenzen liegen sollen.
       
       % Dies kann durch viele Maßnahmen erfolgen, aber bei den meisten werden die Steifigkeit und die Massen so verändert, dass sich die Eigenfrequenzen von diesen Bereichen wegbewegen.
 
       Um diese Systeme formal zu beschreiben, kann man die Massen- und Steifigkeitsmatrix eines Systems bestimmen, anhand derer können durch die Berechnung von bestimmten Eigenwerten die Eigenfrequenzen ermittelt werden.
       Da durch die Maßnahmen auch diese Matrizen verändert werden, besitzen diese Matrizen eine Abhängigkeit von einem Parameter, der hier \zitat{Design-Parameter} \cite[S. 2]{hauptteilTkachuk}\footnote{Übersetzung des Autors} genannt wird und mit \s bezeichnet wird.
+      Der Design-Parameter soll dabei aus einer Menge $\Omega$ an zulässigen Parametern stammen.
 
       Diese Ausarbeitung beschäftigt sich daher mit der Zählung von Eigenwerten auf einem vorgegebenen Intervall. Dazu werden in Kapitel \ref{sec: EW Problem_Futamura} wichtige Aussagen vorgestellt, welche die Berechnung der Eigenwerte und somit auch der Eigenfrequenzen vereinfachen.
       In Kapitel \ref{sec: MS Matrizen} werden zwei einfache Beispielsysteme aufgestellt und die zugehörigen Massen- und Steifigkeitsmatrizen berechnet.
 
       Anschließend werden in Kapitel \ref{sec: EW Zählung} Formeln zur Zählung der Eigenwerte hergeleitet und so umgestellt, dass diese Formel direkt vom Design-Parameter \s abhängt.
 
-      In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches den Parameter \s so verändern soll, dass alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
+      In Kapitel \ref{sec: Programmieren} wird die Zählung der Eigenwerte implementiert und ein Minimierungsverfahren angewendet, welches den Parameter \s so verändern soll, dass $\s \in \Omega$ gilt und alle Eigenwerte außerhalb des vorgegebenen Intervalls liegen.
 
       Verbesserungen der Implementierung folgen in Kapitel \ref{sec: Verbesserungen} und die Zusammenfassung der Erkenntnisse in Kapitel \ref{sec: Auswertung}.
 
@@ -195,7 +204,7 @@ Tag der Einreichung: \datum
       
       \section{Der Matrix-Pencil}
             Betrachte zunächst das Konzept des \zitat{Matrix-Pencils} \cite[S. 32]{matrixPencilDeutsch}, welches in dieser Ausarbeitung eine entscheidende Rolle spielt,
-            den viele Aussagen aus Kapitel \ref{sec: EW Problem_Futamura} beziehen sich auf einen Matrix-Pencil.
+            den viele Aussagen aus Kapitel \ref{sec: EW Problem_Futamura} beziehen sich auf eine Menge von Matrizen dieser Form.
       
             \begin{definition}(pencil, vgl. \cite[S. 375]{matrixGolub})
                   \label{def: pencil}
@@ -220,7 +229,7 @@ Tag der Einreichung: \datum
             wird die Suche nach den $\lambda\in\C$, die (\ref{eqn: allg EW Problem}) erfüllen,
             auch \zitat{allgemeines Eigenwertproblem} \cite[S. 380]{maschinendynamikDresig} genannt, da sie eine größere Klasse von Gleichungen abdeckt.
             Falls man $\AlamB$ durch die Matrix $C$ ersetzt, so entsteht aus (\ref{eqn: allg EW Problem}) das Gleichungssystem
-            $$Cx=0,\quad x\ne 0$$
+            $$Cx=0,\quad x\ne 0\,.$$
             Da
             $$\det(C)\ne 0 \Leftrightarrow Cx=0 \text{ hat als einzige Lösung }x=0$$
             gilt\footnote{Beweis: $\det(C)\ne 0 \Leftrightarrow C \text{ regulär} \Leftrightarrow \text{Lösung von }Cx=b:\ x=C\inv b$}, folgt durch Kontraposition:
@@ -236,7 +245,7 @@ Tag der Einreichung: \datum
                   \lamAB:=\{z\in\C:\ \det(A - zB) = 0\}
             \end{equation}
 
-            definiert. Laut \cite[S. 375]{matrixGolub} gelte zudem:
+            definiert. Laut \cite[S. 375]{matrixGolub} gelte zudem
             \begin{equation}
                   \label{eqn: n EW äquiv rang B n}
                   \AlamB \text{ hat }n\text{ Eigenwerte}\Leftrightarrow \rang(B)=n\, .
@@ -400,10 +409,9 @@ Tag der Einreichung: \datum
 
             Man sieht, dass $(zB-A)\inv B$ und  $(zS-T)\inv S$ ähnlich zueinander sind.\\
             Da die Spur invariant unter Ähnlichkeitstransformation ist (vgl. \cite[Exercise unter Example 1.3.5]{matrixSpur}), gilt
-% Fussnote irgendwie schlecht
             \begin{equation}
                   \label{eqn: Haltepunkt Bew Futamura}
-                  \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}
+                  \tr((zB-A)\inv B) = \tr((zS-T)\inv S) = \sum_{i=1}^{n}((zS-T)\inv S)_{ii}\,.
             \end{equation}
 
             Es sei $$N:=\{i=1,\dots,n: s_{ii}\ne 0\}\,.$$
@@ -411,18 +419,18 @@ Tag der Einreichung: \datum
             \ref{Hilfslemma_Futamura: Diag Inv Dreieck} folgt für (\ref{eqn: Haltepunkt Bew Futamura}):
             \begin{align*}
                   \tr((zB-A)\inv B) =& \sum_{i=1}^{n}((zS-T)\inv)_{ii}\ S_{ii} = \sum_{i=1}^{n}((zS-T)_{ii})\inv\ S_{ii}\\
-                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}}
+                  =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}}\,.
             \end{align*}
 
             Für $i\notin N$ gilt nach Definition von $N$:
-            $$\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \frac 0 {-t_{ii}} = 0,$$
+            $$\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \frac 0 {-t_{ii}} = 0\,.$$
             Beweis:\\
             Nach Voraussetzung ist der Matrix-Pencil regulär, daher folgt:
 
             \begin{align*}
                   \text{Matrix-Pencil regulär} \Rightarrow& \exists \lambda'\in \C: \det(A-\lam B)\ne 0 \Rightarrow \lambda'\notin \lamAB\\
                   \Rightarrow & \C \neq \lamAB \Rightarrow \nexists i\in\{1,\dots, n\}: s_{ii}=t_{ii}=0\\
-                  \Rightarrow & t_{ii}\neq 0\ \forall i\notin N
+                  \Rightarrow & t_{ii}\neq 0\ \forall i\notin N\,,
             \end{align*}
             wobei in der ersten Implikation Definition \ref{def: regulärer Pencil} und in der vierten Implikation Theorem \ref{thrm: allg Schur Zerlegung} verwendet wurde.\qed \\
 
@@ -432,8 +440,8 @@ Tag der Einreichung: \datum
 
             \begin{align*}
                   \tr((zB-A)\inv B) =& \sum_{i=1}^{n}\frac{s_{ii}}{z\,s_{ii}-t_{ii}} = \sum_{i\in N}\frac{s_{ii}}{s_{ii}(z-t_{ii}\, s_{ii}\inv)}\\
-                  =& \sum_{i\in N} \frac{1}{z-\lambda_i}\,.\qed
-            \end{align*}
+                  =& \sum_{i\in N} \frac{1}{z-\lambda_i}\,.
+            \end{align*}\qed
 
             \begin{remark}
                   Hier wurde nicht die originale Identität von Futamura gezeigt, da nicht bewiesen wurde, dass
@@ -535,12 +543,11 @@ Tag der Einreichung: \datum
             mit Masse $m$ und Beschleunigungsvektor $a$ definiert.    
             
             Beachte, dass laut \cite{trägheitskraft} auch diese Kraft der Auslenkung entgegenwirkt.
-            Für den Kraftvektor \FT gilt daher:
+            Für den Kraftvektor \FT gilt daher
             $$\FT = -m\cdot a\,.$$
 
             Um das Schemas der Kräfte klarer zu gestalten, werden die Kraftpfeile immer so gezeichnet, dass ihre Werte nichtnegativ sind.
             Hier bedeutet das, dass beide Kräfte entgegen der Auslenkung gezeichnet werden, dies kann man auch in Abb. \ref{fig: KräfteAnFeder} erkennen.
-            Beide Kräfte werden in Abb. \ref{fig: KräfteAnFeder} veranschaulicht.
 
             \begin{figure}[h!t]
                   \centering
@@ -551,9 +558,8 @@ Tag der Einreichung: \datum
 % in diesem ganzen Teil gibt es Verbesserungsbedarf
 % vgl. nicht richtig
             Laut \cite{BildKräfteFeder} gelte zwar $F_L = c\cdot z$, aber auch hier werden $F_L$ und die Auslenkung $z$ in entgegengesetzte Richtungen eingezeichnet.
-            Da in dieser Ausarbeitung nur Feder-Masse-Systeme behandelt werden, kann man $s$ und $a$ auf die Auslenkungen $(\xk)_k$ zurückführen:
-            Im Allgemeinen wird hier $s$ durch $(x_{k+1}-\xk)$ und $a$, ähnlich zu Abb. \ref{fig: KräfteAnFeder}, durch die zweite Ableitung $\ddot \xk$ beschrieben.
-
+            Da in dieser Ausarbeitung nur Feder-Masse-Systeme behandelt werden, kann man $s$ und $a$ auf die Auslenkungen $(\xk(t))_k$ zurückführen:
+            Im Allgemeinen wird hier $s$ durch $(x_{k+1}-\xk)$ und $a$, ähnlich zu Abb. \ref{fig: KräfteAnFeder}, durch die zweite Ableitung $\ddot \xk(t)$ beschrieben.
 
             Betrachte nun ein System mit 3 Massen, wie es in Abb. \ref{fig: 3 Massen System} dargestellt wird.
             Anhand dieses Systems soll eine allgemeines Kräftegleichgewicht aufgestellt werden.
@@ -627,7 +633,7 @@ Tag der Einreichung: \datum
                   n=8,\quad j=n/2=4\,.
             \end{equation}
 
-            Dann kann dieses System zu einer Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) zusammengefasst werden.
+            Dann kann dieses System in eine Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) zusammengefasst werden.
             Hierbei gilt
             \begin{align}
                   M &= \diag(m, m, m, s+1, s+1,s+1, s+1,  s+1)\text{ und }\label{def: M1}\\
@@ -653,7 +659,7 @@ Tag der Einreichung: \datum
                   s_j\,\ddot x_n -c\,x_{n-1}+ 2c\,x_n & = 0
             \end{cases}\,.$$
             
-            Dieses System kann man analog zu oben zu einer Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) umformen.
+            Dieses System kann man analog zu oben in eine Gleichung der Form (\ref{eqn: Dgl freie Schwingungen}) umformen.
             Hier gilt nun aber, mit $n$ und $j$ wie in (\ref{def: nUndJ explizit})
             \begin{align}
                   M &= \diag(m, m, s_4, s_4, s_4, s_4, s_4, s_4)\label{def: M2}\\
@@ -669,14 +675,14 @@ Tag der Einreichung: \datum
                         \end{pmatrix}\,.\label{def: K2}
             \end{align}
                  
-            Wie man sieht, gibt es noch zwei unbekannte Parameter: $m$ und $c$.
+            Wie man sieht, gibt es noch zwei unbekannte Parameter: $m$\footnote{es gibt hier eine Doppelbelegung von $m$: einerseits ist es ein Parameter der Massenmatrix, andererseits gibt es die Anzahl an Teilintervallen in Kapitel \ref{sec: Programmieren} an} und $c$.
             Beide seien positiv und werden in Kapitel \ref{sec: Programmieren} festgelegt.
 
             Man beachte, dass für positive Parameter $m\in \R$ und $s$\footnote{mit $s\in\mathbb R^l>0$ ist gemeint, dass $s_i>0\ \forall i=1,\dots,l$}, beide Massenmatrizen regulär ist.
 
-            Damit auch $s$ positiv ist, wähle man einen positiven Startwert und eine zulässige Menge $ \Omega \subset [0,\infty]^l$. Dies wird ebenfalls später festgelegt.
+            Damit auch $s$ positiv ist, wähle man einen positiven Startwert und eine zulässige Menge $ \Omega \subset (0,\infty]^l$. Dies wird ebenfalls später festgelegt.
 
-      \section{Zusammenhang Eigenwert und Eigenfrequenz}
+      \section{Zusammenhang Eigenwert und Eigenkreisfrequenz}
             \label{sec: Formel EW}      
             Nach der Ermittlung der zugehörigen Matrizen bestimme nun die Formel für die Eigenkreisfrequenzen eines Systems.
 
@@ -685,7 +691,7 @@ Tag der Einreichung: \datum
             $$x(t) = v\,\exp(i\w t),\ \ \ddot x(t) = -\w^2\,v \exp(i\w t)$$
             mit $v=(v_1,\dots,v_n)^T$ Vektor der Amplituden und der \zitat{noch unbekannten Eigenkreisfrequenz $\omega$} \cite[S. 380]{maschinendynamikDresig}.
 % zitat?
-            Diesen Ansatz wird in (\ref{eqn: Dgl freie Schwingungen}) eingesetzt und durch Division mit
+            Dieser Ansatz wird in (\ref{eqn: Dgl freie Schwingungen}) eingesetzt und durch Division mit
             $\exp(i\w t)\footnote{offensichtlich ist die Division wohldefiniert, da $\exp(i\w t)\ne 0\ \forall \w, t\in\R,$}$ folgt:
             
             \begin{equation}
@@ -697,7 +703,7 @@ Tag der Einreichung: \datum
 
             Man will diese Gleichung für $v\ne 0$ lösen, da man sonst eine triviale Lösung erhält, in der keine Masse schwingt.
 
-            Um die Theorie aus Kapitel \ref{sec: EW Problem_Futamura} anzuwenden, so definiere wie in \cite{hauptteilTkachuk}
+            Um die Theorie aus Kapitel \ref{sec: EW Problem_Futamura} anzuwenden, so definiere wie in \cite[S. 2]{hauptteilTkachuk}
             $$\lambda_i := \w_i^2,\quad i=1,\dots,n\,.$$
 
             Es folgt das allgemeine Eigenwertproblem
@@ -718,7 +724,7 @@ Tag der Einreichung: \datum
             und folglich
             \begin{equation}
                   \label{eqn: Ew Pencil gleich Ew Matrix}
-                  \lambda(K, M) =\lambda(M\inv K,\In) = \lambda(M\inv K)
+                  \lambda(K, M) =\lambda(M\inv K,\In) = \lambda(M\inv K)\,.
             \end{equation}
 
             Somit sind die Eigenwerte des Matrix-Pencils $K-\lambda M$ und der Matrix $M\inv K$ gleich.
@@ -727,7 +733,7 @@ Tag der Einreichung: \datum
             Es gilt daher für die Systeme aus Abb. \ref{fig: System 1} und \ref{fig: System 2}
             \begin{equation}
                   \label{eqn: alle Ew reell}
-                  \lambda(K, M) = \lambda(M\inv K) \subset \R
+                  \lambda(K, M) = \lambda(M\inv K) \subset \R\,,
             \end{equation}
             wobei \cite[S. 393]{matrixGolub} angewendet wurde.
 
@@ -743,20 +749,21 @@ Tag der Einreichung: \datum
       \section{Vorüberlegungen}
             Die in diesem Abschnitt erwähnten Schritte stammen aus \cite[S. 2-4]{hauptteilTkachuk}.
 
-            Betrachte Gleichung (\ref{eqn: allg EW Problem mit lam}), durch die Definition $\lam = \w^2$ verändert sich auch das Intervall, welches man betrachtet:
+            Betrachte Gleichung (\ref{eqn: allg EW Problem mit lam}), durch die Definition $\lam = \w^2$ verändert sich auch das Intervall, welches man betrachtet.
+            Das neue Intervall sei definiert als:
             $$\lamAlamB:=\wAwB\,.$$
             Definiere nun die Funktion $h$ wie folgt:
             $$h(\lambda):=\1_{[\lambda_a,\lambda_b]}(\lambda)\,.$$
 
-            Da man erstmal daran interessiert ist, wie viele Eigenwerte auf dem Intervall liegen, definiere
+            Da man erstmal daran interessiert ist, die Anzahl an Eigenwerten auf dem Intervall zu erfassen, definiere
 
-            $$\mu := \sum_{j\in N} h(\lambda_j)\,.$$
+            $$\mu := \sum_{j\in N} h(\lambda_j) = \sum_{j=1}^n h(\lambda_j)\,,$$
 
-            Nach Kapitel \ref{sec: Formel EW} gilt aber $N=\{1,\dots,n\}$.\\
+            da nach Kapitel \ref{sec: Formel EW} $N=\{1,\dots,n\}$ gilt.\\
             Obwohl diese Funktion die Anzahl der Eigenwerte korrekt beschreibt, gibt es einige Schwachstellen, sollte man diese Funktion minimieren wollen:
             Die Funktion ist eine Treppenfunktion, damit ist sie nicht stetig und alle Ableitungen sind gleich 0, also unbrauchbar für Minimierungsalogrithmen, die eine Ableitung verwenden.
 
-            Diese Probleme kann man teilweise umgehen, indem man die Funktion auf dem Intervall $[\lambda_a, \lambda_b]$ gewichtet.
+            Diese Probleme kann man teilweise umgehen, indem man die Funktion h auf dem Intervall $[\lambda_a, \lambda_b]$ gewichtet.
 
             Um die Eigenwerte effektiv aus dem Intervall zu entfernen, nutze eine Gewichtungsfunktion, die auf dem ganzen Intervall positiv und konkav ist (vgl. \cite[S. 3]{hauptteilTkachuk}).
 % zitat
@@ -812,18 +819,19 @@ Tag der Einreichung: \datum
                   die Bedingungen $\gamma \sim 0$ und $a_j\notin \gamma,\ j=1,\dots,n$ erfüllt sind, dann
                   $$\int_\gamma f(z)\ dz = 2\pi i\sum_{k=1}^{n} n(\gamma, a_k)\Res_{a_k}f\,.$$
             \end{theorem}
-            Beweis: siehe \cite[S. 142]{complexAnalysis}
+            Beweis: siehe \cite[S. 142]{complexAnalysis},\qed
 
             Die folgenden Aussagen erklären die Voraussetzungen und das Resultat des Theorems und stammen aus \cite{complexAnalysis}.
             Die Aussagen und Definitionen werden nur kurz angeschnitten, da man sie in dieser Ausarbeitung nur für den Residuensatz (Theorem \ref{thrm: Residuensatz})
             und Gleichung (\ref{eqn: IntZielfunktionMitPolstellen}) verwendet. Die Beweise sind ebenfalls in \cite{complexAnalysis} wiederzufinden.
             \begin{itemize}
 % nicht alle sind fett markiert
-                  \item \textbf{analytisch in }$\mathbf{z:}$ ist eine Eigenschaft von komplexen Funktionen, die besagt, dass man die Funktion als eine Potenzreihe um $z$ entwickeln kann.
+                  \item \textbf{analytisch in }$\mathbf{z:}$ Ist eine Eigenschaft von komplexen Funktionen, die besagt, dass man die Funktion als eine Potenzreihe um $z$ entwickeln kann.
+                        
                         Für $L(z, s)$ reicht aber folgende Aussage aus \cite[S. 24]{complexAnalysis}:
                         Für Polynome $p(z)$ und $q(z)$ sei die rationale Funktion $L(z):=\frac{p(z)}{q(z)}$ analytisch auf $\{z\in\C: q(z)\ne 0\}$.
                         
-                        Offenbar ist $L(z)$ eine rationale Funktion:
+                        Offenbar ist $L(z)$ eine rationale Funktion
 
                         $$L(z) = \frac{p(z)}{q(z)}$$
                         mit 
@@ -832,7 +840,7 @@ Tag der Einreichung: \datum
                               q(z) &= \prod_{i=1}^{n} z-\lambda_i\,.
                         \end{align*}
 
-                        Offenbar sind $p$ und $q$ Polynome und $\{z: q(z)\ne 0\} = \C\setminus\{\lambda_i, i=1,\dots,n\}$.
+                        Offenbar sind $p$ und $q$ Polynome und es gilt $\{z: q(z)\ne 0\} = \C\setminus\{\lambda_i, i=1,\dots,n\}$.
                         Daher ist $L$ analytisch auf $\C$ bis auf $\lambda_1,\dots,\lambda_n$.
                   \item $\mathbf{b}$\textbf{ isolierte Singularität}:
                         Laut \cite[S. 74]{complexAnalysis} habe $L$ eine isolierte Singularität bei $\lambda_i$, wenn $L(\lambda_i)$ nicht definiert
@@ -874,7 +882,7 @@ Tag der Einreichung: \datum
                                     0& \text{ : }a\notin\overline {B_r(z_0)}
                               \end{cases}\,.
                         \end{equation}
-                        Hierbei benötigt man das $\gamma$ aus (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}),
+                        Hierbei benötigt man das $\gamma$ wie in (\ref{hilfe: complexAnalysis_IntegralEinsDurchX}),
                         damit der Kreis in positive Richtung durchlaufen wird und kein Punkt (bis auf $z=z_0+r$) mehrmals vorkommt.
                   \item $\mathbf{\gamma \sim 0}$:
                         Nach Definition 5.5 aus \cite[S. 67]{complexAnalysis} folgt
@@ -884,64 +892,49 @@ Tag der Einreichung: \datum
                         $$n(\gamma, \alpha) = 0\,.$$
 
                   \item $\mathbf{\Res_af}$:
-                        Nach Beispiel 9.3 aus \cite[S. 142]{complexAnalysis} gilt für eine einfache Polstelle\footnote{es gibt hier nur einfache Polstellen, da nach (\ref{eqn: ZielfunktionMitPolstellen}) kein Term der Form $\frac{1}{(z-\nu)^r},\ r>1$ vorkommen kann}:
+                        Nach Beispiel 9.3 aus \cite[S. 142]{complexAnalysis} gelte für eine einfache Polstelle\footnote{es gibt hier nur einfache Polstellen, da nach (\ref{eqn: ZielfunktionMitPolstellen}) kein Term der Form $\frac{1}{(z-\nu)^r},\ r>1$ vorkommen kann}:
                         \begin{equation}
                               \label{hilfe: complexAnalysis_Residuum}
-                              \Res_af = \lim_{z\to a} (z-a)f(z)
+                              \Res_af = \lim_{z\to a} (z-a)f(z)\,.
                         \end{equation}
                         Anwenden auf $\Res_{\lambda_i}L$ ergibt:
                         \begin{align*}
                               \Res_{\lambda_i}L =& \lim_{z\to \lambda_i} \sum_{j=1}^{n} (z-\lambda_i)\frac{g(z)}{z-\lambda_j}
                               = g(z)\underbrace{\sum_{\underset{j\ne i}{j=1}}^{n} \frac{z-\lambda_i}{z-\lambda_j}}_{\to 0} + g(z)\frac{z-\lambda_i}{z-\lambda_i} \\
-                              =& g(\lambda_i)
+                              =& g(\lambda_i)\,.
                         \end{align*}
 
-%                         Für ein beliebiges $\widetilde \lambda \in \C$ sei \footnote{falls $\widetilde{\lambda}$ keiner der Eigenwerte ist,
-%                         dann gilt offenbar $P_{\widetilde \lambda} = \varnothing$}
-%                         $$P_{\widetilde \lambda} :=\{i\in\{1,\dots,n\}: \lambda_i = \widetilde{\lam}\}\,.$$
-
-%                         Dann gilt
-%                         \begin{align*}
-%                               L(z) =& \sum_{i=1}^{n} \frac{g(z)}{z-\lam_i}
-%                               = \sum_{i\in P_{\widetilde \lambda}} \frac{g(z)}{z-\widetilde{\lambda}}+\sum_{N^C\cap\{1,\dots,n\}}\frac{g(z)}{z-\lam_i}\\
-%                               =& \frac{|P_{\widetilde \lambda}| g(z)}{z-\widetilde{\lambda}}+\sum_{N^C\cap\{1,\dots,n\}}\frac{g(z)}{z-\lam_i}\,.
-%                         \end{align*}
-
-%                         Und für $\Res_{\widetilde{\lam}}L(z)$ folgt
-%                         $$\Res_{\widetilde{\lam}}L(z) = |P_{\widetilde \lambda}|\ g(\widetilde{\lam})\,.$$
-% % ist vllt alles unnütz gewesen
-%                         Für mehrfach vorkommende Eigenwerte entstehen somit keine Änderungen. 
             \end{itemize}
 
             Damit wurde gezeigt, dass der Residuensatz auf die Funktion $L$ angewendbar ist.
 
-            Mit dem Residuensatz (Theorem \ref{thrm: Residuensatz}) gilt folglich für (\ref{eqn: IntZielfunktionMitPolstellen}):
-            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} n(\gamma, \lambda_k) \Res_{\lambda_k}L = \sum_{k=1}^{n} n(\gamma, \lambda_k) g(\lambda_k)\,.$$
+            Mit dem Residuensatz (Theorem \ref{thrm: Residuensatz}) gilt folglich für (\ref{eqn: IntZielfunktionMitPolstellen})
+            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} n(\gamma, \lambda_k) \Res_{\lambda_k}L = \sum_{k=1}^{n} n(\gamma, \lambda_k) g(\lambda_k)$$
 
             mit \begin{align}
                   \gamma =& \{\Tilde{z_0} + \Tilde r\exp(i t): t\in [0,2\pi]\},\label{def: gamma}\\
-                  \Tilde{z_0} =& \frac {\lambda_a+\lambda_b} {2},\quad\Tilde r = \frac {\lambda_b-\lambda_a} {2}\nonumber
+                  \Tilde{z_0} =& \frac {\lambda_a+\lambda_b} {2},\quad\Tilde r = \frac {\lambda_b-\lambda_a} {2}\,.\nonumber
             \end{align}
 
-            Mit (\ref{hilfe: complexAnalysis_WindungNullEins}) folgt für $n(\gamma, \lam_k)$:
+            Mit (\ref{hilfe: complexAnalysis_WindungNullEins}) folgt für $n(\gamma, \lam_k)$
             $$n(\gamma, \lam_k) = \begin{cases}
                   1& \text{ : }\lam_k\in B_{\Tilde{r}}(\Tilde{z_0})\\
                   0& \text{ : }\lam_k\notin\overline {B_{\Tilde{r}}(\Tilde{z_0})}
             \end{cases}$$
             
-            Da aber $\lam_k\in \R\ \forall k=1,\dots,n$, ist diese Gleichung äquivalent zu
+            Da aber $\lam_k\in \R$ für $k=1,\dots,n$, ist diese Gleichung äquivalent zu
             $$n(\gamma, \lam_k) = \begin{cases}
                   1& \text{ : }\lam_k\in (\lam_a,\lam_b)\\
                   0& \text{ : }\lam_k\notin \lamAlamB
-            \end{cases} = \1_{\lamAlamB}(\lambda_k) = h(\lambda_k)$$
+            \end{cases} = \1_{\lamAlamB}(\lambda_k) = h(\lambda_k)\,.$$
 
             Beachte, dass für den Fall $\lam_k \in \{\lam_a, \lam_b\}$ diese Theorie und auch der Residuensatz aus Theorem \ref{thrm: Residuensatz}
             keine Aussage trifft, dieser Fall tritt aber fast sicher nicht ein.
 
             Für (\ref{eqn: IntZielfunktionMitPolstellen}) folgt
-            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} h(\lambda_k) g(\lambda_k) = J(s)$$
+            $$\frac 1 {2\pi i}\int_\gamma L(z,s)\ dz = \sum_{k=1}^{n} h(\lambda_k) g(\lambda_k) = J(s)\,,$$
 
-            Womit gezeigt wurde, dass tatsächlich (\ref{eqn: IntZielfunktionMitPolstellen}) die Eigenwerte auf dem Intervall gewichtet zählt.
+            womit gezeigt wurde, dass tatsächlich (\ref{eqn: IntZielfunktionMitPolstellen}) die Eigenwerte auf dem Intervall gewichtet zählt.
 % % kann auch rausgelassen werden
 %             Ferner gelte nach \cite[S. 77]{complexAnalysisVL} der Residuensatz auch für \zitat{toy contours}\cite[S. 77]{complexAnalysisVL}.
 % % Zitat überprüfen/ übersetzen
@@ -957,7 +950,7 @@ Tag der Einreichung: \datum
 
             Diese Funktion hängt nun explizit von $s$ ab und kann daher in Kapitel \ref{sec: Programmieren} minimiert werden.
             
-            Gehe zuletzt auf $\frac{\partial L(z,s)}{\partial s}$ ein, da diese Ableitung in Kapitel \ref{sec: Programmieren} benötigt wird.
+            Gehe zuletzt auf $\frac{\partial L(z,s)}{\partial s}$ ein, da diese Ableitung in Kapitel \ref{sec: Programmieren} benötigt wird:
             \begin{equation}
                   \label{eqn: AbleitungZielfunktion}
                   \frac{\partial L(z,s)}{\partial s} = g(z) \frac{\partial}{\partial s}\klammer{\tr(\underbrace{(zM-K)\inv M}_{=:B(z, s)})}
@@ -978,13 +971,13 @@ Tag der Einreichung: \datum
             $$\nabla A(t)\inv = -A(t)\inv\ \nabla A(t)\ A(t)\inv$$
             angewendet wurde.\\
 % man müsste eig d/ds_i betrachten
-            Beweis: siehe \cite{derivativeInverseMatrix}\qed
+            Beweis: siehe \cite{derivativeInverseMatrix}.\qed
 % in Quelle wurde t auf ein Intervall beschränkt, A muss Inverse haben und stetig diffb. sein für alle t, das müsste man noch zeigen
 
             Die endgültige Formel für die Ableitung von $L$ ist
             \begin{equation}
                   \label{eqn: vollständigeAblL}
-                  \frac{\partial L(z,s)}{\partial s} = g(z)\,\klammer{\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}}\,.
+                  \frac{\partial L(z,s)}{\partial s} = g(z)\,\left[\tr\klammer{D \ \frac{dM}{ds}} - \tr\klammer{D \klammer{z \frac{dM}{ds}-\frac{dK}{ds}} D}\right]\,.
             \end{equation}
 % man könnte noch auf die Wohldefiniertheit eingehen, da es mit den Dimensionen passt, aber es geht erstmal
             
@@ -1002,25 +995,25 @@ Tag der Einreichung: \datum
 
       Man wende sich nun der Implementierung des Minimierungsverfahrens zu.
       Wie schon in (\ref{def: nUndJ explizit}) erwähnt gilt für beide Systeme aus Kapitel \ref{sec: MS Matrizen}
-      $$n=8,\quad j=4$$
+      $$n=8,\quad j=4\,.$$
       Es gibt aber noch mehr Parameter, die zuerst definiert werden müssen:
       \begin{itemize}
             \item für System 1 aus Abb. \ref{fig: System 1} gelte
             \begin{itemize}
-                  \item $\lambda_a = 1.5$
-                  \item $\lambda_b = 2.5$
-                  \item $s_0 = 3.5\in\R$
-                  \item $\Omega = [2,5]\subset \R$
-                  \item $m = 4$
+                  \item $\lambda_a = 1.5$,
+                  \item $\lambda_b = 2.5$,
+                  \item $s_0 = 3.5\in\R$,
+                  \item $\Omega = [2,5]\subset \R$,
+                  \item $m = 4$ und
                   \item $c = 1.5$
             \end{itemize}
             \item für System 2 aus Abb. \ref{fig: System 2} gelte
             \begin{itemize}
-                  \item $\lambda_a = 0.9$
-                  \item $\lambda_b = 1.5$
-                  \item $s_0 = (0.7, 0.7, 0.7, 1.5)^T\in \R^4$
-                  \item $\Omega = [1,2]^3\times [0.5,3.5]\subset \R^4$
-                  \item $m = 2$
+                  \item $\lambda_a = 0.9$,
+                  \item $\lambda_b = 1.5$,
+                  \item $s_0 = (0.7, 0.7, 0.7, 1.5)^T\in \R^4$,
+                  \item $\Omega = [1,2]^3\times [0.5,3.5]\subset \R^4$,
+                  \item $m = 2$ und
                   \item $c = 0.75$
             \end{itemize}
       \end{itemize}
@@ -1046,7 +1039,7 @@ Tag der Einreichung: \datum
                               \State $s:=s-\lam_*d;$
                         \Until{$J(s)=0;$}
                         \State $s^*:=s;$
-                        \Return $s^*;$
+                        \State \Return $s^*;$
                   \end{algorithmic}
             \end{algorithm}
 
@@ -1073,7 +1066,7 @@ Tag der Einreichung: \datum
             \end{align}
             wobei $z_k:=\Tilde{z_0}+\Tilde r\exp\klammer{\frac {2\pi ik} m}, \quad k=0,\dots,m$.
             Es wurde hier eine Transformation zur Berechnung von Kurvenintegralen verwendet, siehe \cite[S. 21]{complexAnalysisVL}.
-            Ferner wurde in der zweiten Zeile die Trapezregel angewendet, wie sie in \cite[S. 498]{numerikHermann} vorgestellt wird.
+            Ferner wurde in der zweiten Zeile die Trapezregel angewendet, wie sie in \cite[S. 498]{numerikHermann} beschrieben ist.
             
             Es gilt daher
             \begin{align}
@@ -1103,7 +1096,7 @@ Tag der Einreichung: \datum
                   \label{def: DiffVerfahren}
                   (D^+u)(x):=[u(x+h)-u(x)]/h
             \end{equation}
-            mit $h=0.1$.
+            mit $h=\frac 1 {10}$.
 
             Da im Allgemeinen $s\in \R^l$, werden hier aber partielle Ableitungen approximiert.
             Für die $i$-te partielle Ableitung gelte
@@ -1115,35 +1108,42 @@ Tag der Einreichung: \datum
 
             Die verschiedenen übergreifenden Funktionen, die von allen Programmen verwendet werden, findet man in \mbox{\cite[\textit{./Funktionen.py}]{github}}.
 
-            Da die restlichen Dateien aus \cite{github} nur eine Funktion aus \textit{./Funktionen.py} aufrufen, werden kurz die verschiedenen Funktionen aus dieser Datei erklärt.
+            Da die restlichen Dateien aus \cite{github} nur eine Funktion aus \textit{./Funktionen.py} aufrufen, werden kurz die verschiedenen Funktionen dieser Datei erwähnt.
+            
             Durch die Funktion \textit{init()} können verschiedene Parameter definiert werden. Darunter fallen unter anderem die Anzahl an Freiheitsgraden $n$, die Anzahl an Teilintervallen $m$ und der Inflationsparameter $\alpha$.
+            
             \textit{systemAuswaehlen()} wird verwendet, um zu entscheiden, ob System 1 aus Abb. \ref{fig: System 1} oder System 2 verwendet wird. Abhängig davon werden gemäß Kapitel \ref{sec: Programmieren} Variablen wie $\lambda_a$, $\lam_b$ und $s_0$ definiert.
+            
             Die vier Funktionen, die mit \textit{quadratureContourIntegralCircle} beginnen, sind Quadraturformeln für einen Kurvenintegral.
+            
             \textit{ableitungDurchDifferenz()} approximiert die Ableitung einer Funktion \textit{f} an einer Stelle \textit{x} durch ein Differenzenverfahren, wie es in (\ref{def: DiffVerfahren}) definiert ist.
             Für $\frac{dM}{ds}$ benötigt man aber $l$ partielle Ableitungen, weshalb man die $l$ partiellen Ableitungen einzeln berechnet und zu einer Matrix vereint.
-            Eine partielle Ableitung besitzt als Array die Form $(n\times n)$. Um alle partiellen Ableitungen zu einem Array zusammenzuführen, werden dieses Arrays auf die $(n\times n\times 1)$ erweitert, um nun alle partiellen Ableitungen in der dritten Ebene zusammenzufügen (vgl. \cite{numpyAppend}).
-            Das Ergebnis besitzt daher die Form $(n\times n\times l)$. Die Funktion \textit{schrittGradientenverfahren()} berechnet den Punkt $s_{k+1}$ aus $s_k$,
+            Eine partielle Ableitung besitzt als Array die Form $(n\times n)$. Um alle partiellen Ableitungen zu einem Array zusammenzuführen, werden dieses Arrays auf die Form $(n\times n\times 1)$ erweitert, um nun alle partiellen Ableitungen in der dritten Ebene zusammenzufügen (vgl. \cite{numpyAppend}).
+            Das Ergebnis besitzt daher die Form $(n\times n\times l)$.
+            
+            Die Funktion \textit{schrittGradientenverfahren()} berechnet den Punkt $s_{k+1}$ aus $s_k$,
             wohingegen \textit{bedingungenPruefen()} prüft, ob ein Wert innerhalb der zulässigen Menge $\Omega$ liegt.
             Sollte dies nicht der Fall sein, wird der Design-Parameter mithilfe einer Projektion wie in \cite[S. 314]{optimierungJarreProjektion} wieder auf $\Omega$ abgebildet
             und im nächsten Schritt wird statt dem berechneten Wert die Projektion verwendet.
 
             Die Funktion \textit{EigenwerteMinimierenAufIntervall()} definiert wichtige Funktionen, wie \textit{J(), J\_Stern() und nablaJ\_Stern()}, um dann wiederholt \textit{schrittGradientenverfahren()} aufzurufen und somit die Eigenwertzählungen zu minimieren.
-            Für die Ausführbarkeit von \textit{nablaJ\_Stern()} wird die Funktion \zitat{numpy.transpose} \cite{numpyTranspose} benötigt, damit die Multiplikation der Matrizen in \ref{eqn: vollständigeAblL} durchgeführt werden kann.
+            Für die Ausführbarkeit von \textit{nablaJ\_Stern()} wird die Funktion \zitat{numpy.transpose} \cite{numpyTranspose} benötigt, damit die Multiplikation der Matrizen wie in \ref{eqn: vollständigeAblL} durchgeführt werden kann.
 
             Schließlich wird \textit{minimierenPlottenUndEckdatenAnzeigen()} genutzt, um vorherige Funktion aufzurufen, die benötigte Zeit zu stoppen, die Plots anzuzeigen und einige Kennzahlen des Durchlaufs auszugeben.
 
-            In Kapitel \ref{sec: Programmieren} werden ausschließlich die Ergebnisse des Programms \mbox{\cite[\textit{./erste Implementierung.py}]{github}} behandelt.
+            In Kapitel \ref{sec: Programmieren} werden ausschließlich die Ergebnisse des Programms\linebreak
+            \mbox{\cite[\textit{./erste Implementierung.py}]{github}} behandelt.
             In dieser Datei werden sechs Durchläufe des Minimierungsverfahrens durchgeführt, beschrieben und die Plots gezeigt.
             Verbesserungen aus Kapitel \ref{sec: Verbesserungen} werden in den anderen Dateien zu finden sein.
             
             Bei den Programmen gibt es eine Begrenzung für die Anzahl an Schritten pro Durchlauf der Minimierung.
             Falls ein Durchlauf mehr als 500 Schritte benötigen sollte, um zu einem Ergebnis zu kommen, wird er abgebrochen, damit ein einzelner Durchlauf nicht zu viel Zeit beansprucht.
-            Diese Begrenzung kann man umgehen, indem man in Zeile 15 in \text{./erste Implementierung.py} den Wert des Arguments \mbox{\zitat{maxIter}} beliebig verändert.
+            Diese Begrenzung kann man umgehen, indem man in Zeile 15 in \textit{./erste Implementierung.py} den Wert des Arguments \mbox{\zitat{maxIter}} beliebig verändert.
             Man beachte aber, dass für nicht-positive Werte keine Begrenzung vorhanden ist.
             Das Verfahren wird in diesem Fall solange ausgeführt, bis es zu einem Ergebnis kommt, oder manuell abgebrochen wird.
             Diese Sperre wurde auf 10000 erhöht, um die Ergebnisse in Tabelle \ref{tab: Ergebnisse} zu erhalten.
 
-            Es folgt nun eine Auflistung der 6 Durchläufe, die in diesem Programm durchgeführt werden.
+            Es folgt nun eine Auflistung der Kennzahlen der 6 Durchläufe, die in diesem Programm durchgeführt werden.
 
             Es gehören immer 2 nacheinander folgende Durchläufe zusammen, da sie sich nur in der Anzahl der verwendeten Teilintervalle $m$
             und somit der Genauigkeit der Quadraturformel unterscheiden.
@@ -1185,9 +1185,9 @@ Tag der Einreichung: \datum
 
             Der obere Plot eines Durchlaufs zeigt, wie sich die gewichteten und die ungewichtete Eigenwertzählung veränderten.
             Der untere Plot zeigt jeweils das vorgegebene Intervall und die Verteilung der Eigenwerte.
-            Oft werden nur Ausschnitte gezeigt, um die Eigenwerte innerhalb diese Intervalls deutlicher zu erkennen.
+            Oft werden nur Ausschnitte gezeigt, um die Eigenwerte innerhalb des Intervalls deutlicher zu erkennen.
             Es ist daher möglich, dass nicht alle Eigenwerte abgebildet werden.
-            Die kompletten Abbildungen kann man aber durch Ausführen des Programms \textit{erste Implementierung.py} erhalten.
+            Die kompletten Abbildungen kann man aber durch Ausführen des Programms \textit{./erste Implementierung.py} erhalten.
             
             Für diese beiden Durchläufe beschränke man sich auf die Verteilung der Eigenwerte, also den unteren Plot.
             \begin{figure}[h!t]
@@ -1204,9 +1204,9 @@ Tag der Einreichung: \datum
                   \label{fig: Plot_1_150_0.05}
             \end{figure}
 
-            Die gepunkteten Linien stellen immer das Intervall \lamAlamB dar.
+            Die gepunkteten Linien stellen immer die Grenzen des Intervall \lamAlamB dar.
             Ferner werden die Eigenwerte in den Plots \zitat{Entwicklung der Eigenwerte} nicht mithilfe einer Legende beschriftet, da dies keinen Mehrwert bringt.
-            Mit \textit{erster Eigenwert} werde hier immer der größte Eigenwert bezeichnet, den man sehen kann, mit \textit{zweiter} der nächstkleinere.
+            Mit \zitat{erster Eigenwert} werde hier immer der größte Eigenwert bezeichnet, den man sehen kann, mit \zitat{zweiter Eigenwert} der nächstkleinere.
             Man sehe zuerst in Abb. \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05}, dass sich der betrachtete Eigenwert dem oberen Rand des Intervalls ($\lam_b$) nähert, aber ihn nicht überschreitet.
             Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man anhand Tabelle \ref{tab: Ergebnisse} vermuten kann.
             Diese Durchläufe unterscheiden sich so minimal voneinander, dass die Unterschiede nur durch sehr starke Vergrößerung sichtbar werden.
@@ -1237,11 +1237,12 @@ Tag der Einreichung: \datum
             Bei der Approximation $J^*_\text{Tr}(s)$ wird $L(z,s)$ an den Stellen $z=\lambda_a$ und $z=\lambda_b$ ausgewertet.
             Falls aber ein Eigenwert sich nahe des Intervallrands befindet, so befindet sich eine Stützstelle nahe einer Polstelle, siehe Gleichung (\ref{eqn: ZielfunktionMitPolstellen}).
             Das führt zu unerwünschten Erscheinungen:
+
             In Abb. \ref{fig: Plot_1_100_0.5} wird die gewichtete Eigenwertzählung bei Schritt 15 viel zu hoch approximiert,
             in Abb. \ref{fig: Plot_1_150_0.5} wird sie bei Schritt 15 negativ.
 
             Bei Durchlauf \ref{fig: Plot_1_100_0.5} wird infolge dessen nicht mehr versucht, den zweiten Eigenwert zu vergrößern,
-            damit er das obere Ende des Intervalls überschreitet, sondern der zweite Eigenwert wird so stark verringert, sodass nun sogar der erste Eigenwert im Intervall liegt.
+            damit er das obere Ende des Intervalls überschreitet, sondern der Design-Parameter wird derart verändert, sodass nun sogar der erste Eigenwert im Intervall liegt.
             Obwohl die negative Approximation bei Abb. \ref{fig: Plot_1_150_0.5} einen Wert annimmt, der für die genauen Eigenwertzählung nicht möglich ist, so ändert es nichts an dem Verlauf,
             da in diesem Schritt alle Eigenwert außerhalb des Intervalls liegen und laut Algorithmus \ref{alg: steilster Abstieg}
             die genaue gewichtete Zählung \J verwendet wird, um zu entscheiden, ob ein Minimum erreicht wurde. Wie man sehen kann verschwinden die genauen Eigenwertzählung bei Schritt 15.
@@ -1293,7 +1294,7 @@ Tag der Einreichung: \datum
       Man sehe zudem, dass sich viele der Durchläufe mit kurzen Schrittweiten $\lambda_*$ über lange Strecken kaum verändern.
       Um dem vorzubeugen berechne die Schrittweite des Gradientenverfahrens dynamisch, wie es auch im klassischen Gradientenverfahren \cite[S. 285 f.]{optimierungBurkhard} üblich ist.
       Zuletzt sind diese langen Zeiten für Probleme mit einstelligen Freiheitsgraden nicht wünschenswert,
-      da einige tatsächlich verwendete Berechnungsmodelle $n>1.000.000$ Freiheitsgrade besitzen (vgl. \cite[S. 359]{maschinendynamikDresig}).
+      da laut \cite[S. 359]{maschinendynamikDresig} einige tatsächlich verwendete Berechnungsmodelle $n>1.000.000$ Freiheitsgrade besitzen.
 
       \section{Verbesserte Quadraturformeln}
             Man wende sich zuerst der Verbesserung der Quadraturformel zu.
@@ -1302,7 +1303,7 @@ Tag der Einreichung: \datum
 
             Man nutze daher eine Quadraturformel, welche das Integral zwar approximiert, aber nicht an den Stellen $\lambda_a$ und $\lam_b$ ausgewertet wird.
 
-            Die einfachste Quadraturformel, die dies bewerkstelligt ist die \zitat{Mittelpunkts-Regel} \cite[S. 526]{numerikHermann}:
+            Die einfachste Quadraturformel, die dies bewerkstelligt ist die \zitat{Mittelpunkts-Regel} \cite[S. 526]{numerikHermann}.
 
             Sei dazu $\gamma_k, k=0,\dots,m-1$ wie in (\ref{def: gamma_k}), nach (\ref{eqn: Teilintegral Kurve zu Intergral normal}) gilt:
             \begin{align*}
@@ -1354,7 +1355,7 @@ Tag der Einreichung: \datum
             In den Durchläufen zu System 2 sieht man zudem, dass sich die Anzahl an Iterationen für $m=100$ im Vergleich zu Tabelle \ref{tab: Ergebnisse} verdoppelt,
             allerdings ist dies auf die Tatsache zurückzuführen, dass der Verlauf der Eigenwerte keine plötzlichen Sprünge mehr ausführt, wie sie in Abb. \ref{fig: Plot_2_100_0.05} zu sehen waren.
 
-            Zuletzt sei angemerkt, dass sich die Zeiten zwischen 2 Durchläufen mit unterschiedlicher Anzahl an Teilintervallen $m$ ungefähr im Verhältnis $1:1,5$ befinden.
+            Zuletzt sei angemerkt, dass sich die Zeiten zwischen 2 Durchläufen mit unterschiedlicher Anzahl an Teilintervallen $m$ ungefähr im Verhältnis $1:1.5$ befinden, was offenbar auf das Verhältnis der Anzahl an Teilintervallen $m$ zurückzuführen ist.
 
             Die folgende Abbildung zeigt, wie sich die Eigenwerte des ersten Durchlaufs verändern. Da ab nun alle Plots von System 1 sehr ähnlich zueinander sind,
             sei Abb. \ref{fig: Plot_1_100_0.05_Mittelpunkt} in diesem Abschnitt der einzige Plot zu System 1.
@@ -1366,8 +1367,8 @@ Tag der Einreichung: \datum
                   \label{fig: Plot_1_100_0.05_Mittelpunkt}
             \end{figure}
 
-            Der zweite Eigenwert verlässt in Abb. \ref{fig: Plot_1_100_0.05_Mittelpunkt} langsam das Intervall und hat keine Probleme die Intervallgrenze zu überqueren.
-            Der Verlauf der Eigenwertzählungen ist hier zwar nicht abgebildet, aber an der Abwesenheit von Sprüngen kann man schließen, dass die approximiere gewichtete Eigenwertzählung die genaue hier überall gut approximiert. 
+            Der zweite Eigenwert verlässt in Abb. \ref{fig: Plot_1_100_0.05_Mittelpunkt} langsam das Intervall und hat keine Probleme, die Intervallgrenze zu überqueren.
+            % Der Verlauf der Eigenwertzählungen ist hier zwar nicht abgebildet, aber an der Abwesenheit von Sprüngen kann man schließen, dass die approximiere gewichtete Eigenwertzählung die genaue hier überall gut approximiert. 
             Betrachte nun einen Durchlauf zu System 2:
 
             \begin{figure}[h!t]
@@ -1384,7 +1385,7 @@ Tag der Einreichung: \datum
                   J(s) \approx& \frac 1 {2\pi i}\left[\frac{\pi i \Tilde r}{m}\sum_{k=0}^{m-1}\klammer{L(z_{k,-}, s)\exp\klammer{-\frac{\pi i}{\sqrt{3}m}}+L(z_{k,+}, s)\exp\klammer{\frac{\pi i}{\sqrt{3}m}}}\right]\nonumber\\
                   =&: J^*_{\text{Gauss}}(s)
             \end{align}
-            mit $z_{k,\pm}:=\Tilde z_0+\Tilde r\exp\klammer{\frac{\pi I}{\sqrt{3}m}(2\sqrt 3 k+\sqrt 3 \pm 1)}$
+            mit $z_{k,\pm}:=\Tilde z_0+\Tilde r\exp\klammer{\frac{\pi I}{\sqrt{3}m}(2\sqrt 3 k+\sqrt 3 \pm 1)}\,.$
 
             Diese Formel erhält man durch Anwenden der Zweipunkt-Formel aus \cite[S. 526]{numerikHermann} und Einsetzen von
             $$u= \frac{a+b}{2} = \frac{2\pi}{m}(k+\frac 1 2)\text{ und }v=\frac{b-a}{2}=\frac \pi m$$
@@ -1426,7 +1427,7 @@ Tag der Einreichung: \datum
             Man sieht in Abb. \ref{fig: Plot_2_100_0.05_Gauss2}, dass sich die Eigenwerte hier von Anfang an schnell auf den Intervallrand zubewegen,
             im Gegensatz zu Abb. \ref{fig: Plot_2_100_0.05_Mittelpunkt}, wo die Eigenwerte sich in den Schritten 40 bis 200 wenig bis kaum veränderten.
             Durch die bessere Approximation kann trotz des erhöhten Rechenaufwands, der mit der Zweipunkt-Formel entsteht, die benötigte Zeit stark reduziert werden.
-            Ferner kommt dazu, dass nun auch die Wahl von $m$ eine Rolle spielt: in den Tabellen \ref{tab: Ergebnisse_Mittelpunkt} 
+            Ferner kommt dazu, dass für System 2 nun auch die Wahl von $m$ eine Rolle spielt: In den Tabellen \ref{tab: Ergebnisse_Mittelpunkt} 
             und \ref{tab: Ergebnisse_Gauss2} verringert sich die Anzahl an Iterationen bei erhöhter Anzahl an Stützstellen.
             Man nehme daher für die Minimierung der Eigenwerte in dem restlichen Kapitel immer die Zweipunkt-Formel.
 
@@ -1489,7 +1490,7 @@ Tag der Einreichung: \datum
             Wie man sehen kann, wird die Eigenwertzählung bei allen Durchläufen zu System 1 innerhalb eines Schrittes minimiert.
             Dies war aber zu erwarten, da $s$ in System 1 ein Skalar war.
             Sofern die Ableitung hier immer das gleiche Vorzeichen besitzt, gehen auch alle anderen Durchläufe aus Kapitel \ref{sec: Verbesserungen} bei System 1 immer nur in eine Richtung.
-            Somit erreicht hier das Verfahren in einem Schritt, wofür vorher $n$ Schritten benötigt wurden.
+            Somit erreicht hier das Verfahren in einem Schritt, wofür vorher $p$ Schritte benötigt wurden.
 
             Hier benötigt der zweite Durchlauf zu System 2 mehr Schritte als der der vergleichbare Durchlauf aus Tabelle \ref{tab: Ergebnisse_Gauss2} und die Minimierung dauert dabei noch länger,
             da jeder Schritt des Gradientenverfahrens hier zusätzlich aus Unterschritten (der Bestimmung der optimalen Schrittweite) besteht.
@@ -1516,7 +1517,7 @@ Tag der Einreichung: \datum
             aber hier wird sie für keinen Schritt des Gradientenverfahrens verwendet.
             Nehme daher für System 1 nicht vier Durchläufe, sondern nur zwei, da die Unterscheidung bezüglich $m$ entfällt.
             Den vierten Durchlauf findet man zwar nicht in dem Programm \mbox{\cite[\textit{./Verbesserung\_NablaJ.py}]{github}}, man kann ihn aber durch Veränderung des Werts von Argument \zitat{maxIter} in Zeile 15 berechnen lassen.
-            Dieser Durchlauf wird nicht immer durchgeführt, da er zu viel Zeit in Anspruch nehmen.
+            Dieser Durchlauf wird nicht immer durchgeführt, da er zu viel Zeit in Anspruch nimmt.
             Die folgenden Ergebnisse können auch in \mbox{\textit{./Verbesserung\_NablaJ.py}} wiedergefunden werden.
 
             \begin{table}[!ht]
@@ -1537,7 +1538,7 @@ Tag der Einreichung: \datum
 
             Man beachte, dass diese Approximation für System 1 genau genug war, um ein Minimum innerhalb von 0.03 s zu finden.
             Allerdings ist dieses Verfahren in dieser Form für System 2 unzureichend. Man könnte die Ableitung genauer approximieren,
-            indem die Schrittweite $h$ aus (\ref{def: DiffVerfahren}) verringert.
+            indem die Schrittweite $h$ aus (\ref{def: DiffVerfahren}) verringert wird.
             Ferner würde vielleicht eine größere Schrittweite $\lambda_*$ helfen, um (ähnlich wie bei System 1) die Anzahl an Iterationen zu verringern.
             Solche Überlegungen werden in dieser Arbeit aber nicht weiter ausgeführt.
 
@@ -1556,7 +1557,8 @@ Tag der Einreichung: \datum
 
       In Kapitel \ref{sec: MS Matrizen} wurden die Systeme vorgestellt, welche in Kapitel \ref{sec: Programmieren} und \ref{sec: Verbesserungen} behandelt werden.
       Um die Eigenwerte dieser Systeme zu berechnen, wurden die Massen- und Steifigkeitsmatrizen der Systeme berechnet und eine Formel für die Berechnung der Eigenkreisfrequenzen aufgestellt.
-      Durch eine Substitution in dieser Formel erhält man in (\ref{eqn: allg EW Problem mit lam}) die Formel für die Eigenwerte des Matrix-Pencils $(K-\lambda M)$.
+      Durch eine Substitution erhält man in (\ref{eqn: allg EW Problem mit lam}) ein allgemeines Eigenwertproblem des Matrix-Pencils $(K-\lambda M)$.
+      Die gesuchten Eigenwerte sind dabei genau die Eigenkreisfrequenzen des Systems.
 
       In Kapitel \ref{sec: EW Zählung} wurde die gewichtete Eigenwertzählung auf einem Intervall hergeleitet. Diese Funktion besitzt die Form aus (\ref{def: J original})
       und ist einfach zu berechnen, hängt aber nicht direkt von dem Design-Parameter ab.
@@ -1570,7 +1572,7 @@ Tag der Einreichung: \datum
 
       Unter anderem wurde in Kapitel \ref{sec: Verbesserungen} diese Problem behoben.
       Auch wurde in Kapitel \ref{sec: Verbesserungen} das Gradientenverfahren aus Algorithmus \ref{alg: steilster Abstieg} weiterentwickelt, sodass die Schrittweite nun dynamisch berechnet wird.
-      Durch mangelnde Möglichkeiten, diese Schrittweite effizient zu berechnen, war dieses Verfahren nicht so effektiv wie das in Kapitel \ref{sec: Programmieren} vorgestellte Gradientenverfahren.
+      Durch mangelnde Möglichkeiten, diese Schrittweite effizient zu berechnen, war dieses Verfahren aber nicht so effektiv, wie das in Kapitel \ref{sec: Programmieren} vorgestellte Gradientenverfahren.
 
       Zuletzt wurde in Kapitel \ref{sec: Verbesserungen} auch eine Approximation der Ableitung von $J(s)$ eingeführt.
       Diese kann zwar die Eigenwertzählung von System 1 unglaublich schnell minimieren, sie versagte aber bei einem mehrdimensionalen Design-Parameter, wie er in System 2 genutzt wird.
@@ -1590,7 +1592,7 @@ Tag der Einreichung: \datum
 
       Zudem könnte man für Systeme mit einer hohen Anzahl an Freiheitsgraden die Spur($\tr$) in (\ref{eqn: vollständigeAblL}) approximieren.
       Man erhofft sich dadurch, die Komplexität der Funktion und ebenso die benötigte Zeit zu verringern (vgl. \cite[S. 128]{grundlageFutamura}).
-      Dazu wäre Hutchinson's Schätzer (vgl. \cite[S. 142]{hutch++Meyer}), oder dessen Erweiterung \zitat{Hutch++} \cite[S. 142]{hutch++Meyer} nützlich.
+      Dazu wäre \zitat{Hutchinson's Schätzer} \cite[S. 142]{hutch++Meyer}\footnote{Übersetzung des Autors} oder dessen Erweiterung \zitat{Hutch++} \cite[S. 142]{hutch++Meyer} nützlich.
       Solche Überlegungen könnten in einer weiterführenden Arbeit behandelt und mit den hier erhaltenen Ergebnissen verglichen werden.
 
 \chapter{Verzeichnisse}
