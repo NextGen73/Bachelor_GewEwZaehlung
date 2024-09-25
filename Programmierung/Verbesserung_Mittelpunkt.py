@@ -24,12 +24,16 @@ if(__name__=='__main__'):
     minimierenPlottenUndEckdatenAnzeigen(150, 0.05)
 
     print("Erhöhe nun die Schrittweite des Gradientenverfahrens, um eine schnellere Konvergenz zu erwarten.")
+    print("Wie bei allen Programmen, die die Eigenwertzählung beinSystem 1 zuverlässig minimierne können,\n")
+    print("verringert sich die benötigte Zeit, da durch die erhöhte Schrittweite weniger Stellen berechnet werden müssen.\n")
     # Verfahren mit Standardwerten, aber groesserer Schrittweite des Gradientenverfahrens
     minimierenPlottenUndEckdatenAnzeigen(100, 0.5)
     # wieder mehr Teilintervalle verwenden
     minimierenPlottenUndEckdatenAnzeigen(150, 0.5)
 
     print("Betrachte nun das zweite System mit kleiner Schrittweite.")
+    print("Man sieht hier sehr gut, dass die approximierte gewichtete Eigenwertzählung ungenau wird, falls ein Eigenwert sich einer Intervallgrenze nähern sollte.\n")
+    print("an genau diesen Stellen findet man in den Verläufen der Eigenwerte auch einen Sprung.")
     # System 2 mit Standardwerten
     systemAuswaehlen(2)
 

@@ -37,3 +37,6 @@ if(__name__=='__main__'):
     minimierenPlottenUndEckdatenAnzeigen(100, 0.05)
     # mehr Teilintervalle verwenden
     minimierenPlottenUndEckdatenAnzeigen(150, 0.05)
+
+    print("Die unterschiedliche Performance bei einer Veränderung der Anzahl an Teilintervallen lässt sich auf Zufall zurückführen.")
+    print("Bei den Durchläufen 4 und 5 war die Veränderung des Design-Parameters derart, dass zufällig alle Eigenwerte außerhalb des Intervalls lagen.")
