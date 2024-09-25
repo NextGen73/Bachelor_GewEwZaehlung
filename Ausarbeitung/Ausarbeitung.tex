@@ -61,6 +61,11 @@
       long = Abbildung,
       tag = abbrev}
 
+\DeclareAcronym{approx}{
+      short = approx,
+      long = approximiert,
+      tag = abbrev}
+
 % wird für Symbolverzeichnis benutzt, sonst gibt es Fehler
 \DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
 
@@ -732,7 +737,7 @@ Tag der Einreichung: \datum
 \label{sec: EW Zählung}
 % vielleicht eher Finden der Zielfunktion nennen
       Nun wende man sich dem Finden einer Zielfunktion zu, die die Anzahl der Eigenwerte auf einem Intervall beschreibt.
-      Diese gesuchte Funktion soll von dem Design-Parameter $s$ (vgl. \cite[S. 2]{hauptteilTkachuk}) abhängen und wird offenbar minimal,
+      Diese gesuchte Funktion soll von dem Design-Parameter $s$ abhängen und wird offenbar minimal,
       wenn kein Eigenwert des Matrix-Pencils in dem Intervall liegt.
 % zitat
       \section{Vorüberlegungen}
@@ -1021,15 +1026,14 @@ Tag der Einreichung: \datum
       \end{itemize}
 
       Hierbei ist $\Omega$ die zulässige Menge des Design-Parameters $s$ und $s_0$ der Startwert der Minimierung.
-      $m$ und $c$ wurden für die Massen- und Steifigkeitsmatrizen (\ref{def: M1}) - (\ref{def: K2}) verwendet.
-
+      Die Parameter $m$ und $c$ werden für die Massen- und Steifigkeitsmatrizen (\ref{def: M1}) - (\ref{def: K2}) verwendet.
 
       Es folgt zunächst noch der verwendete Algorithmus zur Minimierung und die Anwendung einer Quadraturformel
       zur Approximation des Integrals aus (\ref{eqn: JGleichIntTr}).
       \section{Theorie}
             Um die Funktion (\ref{eqn: JGleichIntTr}) zu minimieren, verwende eine Variation des Gradientenverfahrens
             aus \cite[S. 285]{optimierungBurkhard}, diese sei in Algorithmus \ref{alg: steilster Abstieg} beschrieben.
-            \begin{algorithm}[h!t]
+            \begin{algorithm}[!ht]
                   \caption{Verfahren des steilsten Abstiegs (vgl. \cite[S. 285]{optimierungBurkhard})}
                   \label{alg: steilster Abstieg}
 
@@ -1046,27 +1050,26 @@ Tag der Einreichung: \datum
                   \end{algorithmic}
             \end{algorithm}
 
-            Die Schrittweite $\lambda_*$ sei hier fest und da man das Minimum der gewichteten Eigenwertzählung bekannt ist,
-            so benötigt man nur Information über $J(s)$, um ein Minimum zu erkennen.
+            Die Schrittweite $\lambda_*$ sei hier fest und da das Minimum der gewichteten Eigenwertzählung bekannt ist,
+            benötigt man nur Information über $J(s)$, um ein Minimum zu erkennen.
             Diese Variation der Abbruchbedingung sorgt für eine schnellstmögliche Beendung des Minimierungsverfahrens.
 
             Allerdings werden für einen Schritt des Verfahrens $\nabla J(s)$ und $J(s)$ benötigt.
-            Durch (\ref{eqn: Ew Pencil gleich Ew Matrix}) können zwar die Eigenwerte des Matrix-Pencils $K-\lambda M$ einfach bestimmt werden,
-            aber die Ableitung kann dadurch nicht direkt ermittelt werden.
-
-            Da keine Vorschrift zur Berechnung von $\nabla J(s)$ existiert, approximiere $J(s)$ zunächst durch eine Quadraturformel.
+            Durch (\ref{eqn: Ew Pencil gleich Ew Matrix}) können die Eigenwerte des Matrix-Pencils $K-\lambda M$ einfach bestimmt werden, wodurch die Berechnung von \J durch Gleichung (\ref{def: J original}) trivial wird.
+            Aber für $\nabla J(s)$ müsste man die Funktion \J aus (\ref{eqn: JGleichIntTr}) ableiten.
+            Um dieses Parameterintegral zu umgehen, approximiere $J(s)$ zunächst durch eine Quadraturformel und differenziere dann diese Approximation $J^*(s)$.
 
             Teile dazu $\gamma = \{\Tilde{z_0}+\Tilde r\exp(it): t\in [0,2\pi]\}$ in $m$ Teile auf:
             \begin{equation}
                   \label{def: gamma_k}
-                  \gamma_k = \left\{\Tilde{z_0}+\Tilde r\exp(it): t\in \left[ 2\pi \frac k m, 2\pi \frac {k+1} m\right]\right\},\quad k=0,\dots,m-1
+                  \gamma_k = \left\{\Tilde{z_0}+\Tilde r\exp(it): t\in \left[ 2\pi \frac k m, 2\pi \frac {k+1} m\right]\right\},\quad k=0,\dots,m-1\,.
             \end{equation}
 
             Es folgt
             \begin{align}
                   \int_{\gamma_k} f(z)\ dz =& \int_{2 \pi \frac k m}^{2\pi \frac {k+1} m} f(\Tilde{z_0}+\Tilde r\exp(it))\,i\Tilde r\exp(it)\ dz\label{eqn: Teilintegral Kurve zu Intergral normal}\\
                   \approx& \frac{f(z_k)\,i\Tilde r\exp(\frac{2\pi i k}{m})+f(z_{k+1})\,i\Tilde r\exp(\frac{2\pi i (k+1)}{m})}{2} \frac{2\pi} m\nonumber\\
-                  =& \klammer{f(z_k)+f(z_{k+1})\,\exp\klammer{\frac{2\pi i}{m}}}\frac{\pi i \Tilde r} m \,\exp(\frac{2\pi i k}{m})\nonumber
+                  =& \klammer{f(z_k)+f(z_{k+1})\,\exp\klammer{\frac{2\pi i}{m}}}\frac{\pi i \Tilde r} m \,\exp(\frac{2\pi i k}{m})\,,\nonumber
             \end{align}
             wobei $z_k:=\Tilde{z_0}+\Tilde r\exp\klammer{\frac {2\pi ik} m}, \quad k=0,\dots,m$.
             Es wurde hier eine Transformation zur Berechnung von Kurvenintegralen verwendet, siehe \cite[S. 21]{complexAnalysisVL}.
@@ -1075,22 +1078,23 @@ Tag der Einreichung: \datum
             Es gilt daher
             \begin{align}
                   J(s) =& \frac{1}{2\pi i}\sum_{k=0}^{m-1}\int_{\gamma_k} L(z,s)\ dz\nonumber\\
-                  \approx& \frac{1}{2\pi i}\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\left[\klammer{L(z_k, s)+
+                  \approx& \frac{1}{2\pi i}\left[\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\klammer{L(z_k, s)+
                   L(z_{k+1}, s)\,\exp\klammer{\frac{2\pi i}{m}}}\,\exp\klammer{\frac{2\pi i k}{m}}\right]\label{def: JSternTrapez}\\
-                  =&:J_{\text{Tr}}^*(s)\nonumber
+                  =&:J_{\text{Tr}}^*(s)\,.\nonumber
             \end{align}
 
-            Der Index \zitat{Tr} steht hier für die verwendete Quadraturformel: die Trapezregel.
-            In der Implementierung wird nur eine Funktion \zitat{JStern} definiert, diese kann aber jede beliebige Quadraturformel nutzen, um \J zu approximieren.
+            \JStern steht hierbei für die approximierte gewichtete Eigenwertzählung durch eine nicht näher bestimmte Quadraturformel.
+            Der Index \zitat{Tr} steht hier für die verwendete Trapezregel.
             Man kann leicht sehen, dass mit der Summen- und Faktorregel für Ableitungen
-            $$\nabla J_{\text{Tr}}^*(s) = \frac{1}{2\pi i}\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\left[\klammer{\partial_s L(z_k, s)+\partial_s L(z_{k+1}, s)\,
+            $$\nabla J_{\text{Tr}}^*(s) = \frac{1}{2\pi i}\left[\frac{\pi i \Tilde r} m\sum_{k=0}^{m-1}\klammer{\partial_s L(z_k, s)+\partial_s L(z_{k+1}, s)\,
             \exp\klammer{\frac{2\pi i}{m}}}\,\exp\klammer{\frac{2\pi i k}{m}}\right]$$
             gilt.
 
-            Die Faktoren vor $J^*(s)$ und $\nabla J^*(s)$ wurde nicht zusammengefasst, da in der Implementierung eine Funktion die Trapezregel auf eine Funktion anwendet,
-            $\frac 1 {2\pi i}$ gehört aber nicht zur Quadraturformel dazu, sondern ist wegen der Anwendung des Residuensatzes vorhanden.
+            Die Faktoren vor \JStern und $\nabla J^*(s)$ werden nicht zusammengefasst, da die eckige Klammer die Quadraturformel beschreibt, der Faktor
+            $\frac 1 {2\pi i}$ gehört aber nicht zur Quadraturformel, sondern ist wegen der Anwendung des Residuensatzes vorhanden.
+            In der Implementierung wird nur eine Funktion \zitat{JStern} definiert, diese kann aber jede beliebige Quadraturformel nutzen, um \J zu approximieren.
 
-            Die Funktionen $\partial_s L(z, s)$ wurden schon in Kapitel \ref{sec: EW Zählung} in Gleichung (\ref{eqn: AbleitungZielfunktion}) definiert.
+            Die Funktion $\partial_s L(z, s)$ wurde schon in Kapitel \ref{sec: EW Zählung} in Gleichung (\ref{eqn: AbleitungZielfunktion}) definiert.
 
             Die Ableitungen $\frac{d M}{d s}$ und $\frac{d K}{d s}$ werden durch eine Differenz, wie sie in \cite[S. 16 f.]{numerikGrossmann} vorgestellt wird, approximiert.
 
@@ -1103,24 +1107,34 @@ Tag der Einreichung: \datum
 
             Da im Allgemeinen $s\in \R^l$, werden hier aber partielle Ableitungen approximiert.
             Für die $i$-te partielle Ableitung gelte
-            $$\frac{\partial M}{\partial s_i}\approx \frac{M(s+h e_i)-M(s)}{h}$$
+            $$\frac{\partial M}{\partial s_i}\approx \frac{M(s+h e_i)-M(s)}{h},\quad i=1,\dots,l\,,$$
             wobei $e_i$ der $i$-te Einheitsvektor ist.
  
       \section{Implementation}
             Die folgenden Programme wurden mit Python geschrieben. Hauptsächlich wird das Paket \zitat{numpy} genutzt, welches Berechnungen von Matrizen sehr vereinfacht.
 
-            Bei Unwissenheit über einige Funktionen von Python wurden\linebreak
-            \textit{https://numpy.org/doc/stable/} und \textit{https://stackoverflow.com/} verwendet.
-
             Die verschiedenen übergreifenden Funktionen, die von allen Programmen verwendet werden, findet man in \mbox{\cite[\textit{./Funktionen.py}]{github}}.
 
-            In Kapitel \ref{sec: Programmieren} wird ausschließlich die Datei \mbox{\cite[\textit{./erste Implementierung.py}]{github}} behandelt.
+            Da die restlichen Dateien aus \cite{github} nur eine Funktion aus \textit{./Funktionen.py} aufrufen, werden kurz die verschiedenen Funktionen aus dieser Datei erklärt.
+            Durch die Funktion \textit{init()} können verschiedene Parameter definiert werden. Darunter fallen unter anderem die Anzahl an Freiheitsgraden $n$, die Anzahl an Teilintervallen $m$ und der Inflationsparameter $\alpha$.
+            \textit{systemAuswaehlen()} wird verwendet, um zu entscheiden, ob System 1 aus Abb. \ref{fig: System 1} oder System 2 verwendet wird. Abhängig davon werden gemäß Kapitel \ref{sec: Programmieren} Variablen wie $\lambda_a$, $\lam_b$ und $s_0$ definiert.
+            Die vier Funktionen, die mit \textit{quadratureContourIntegralCircle} beginnen, sind Quadraturformeln für einen Kurvenintegral.
+            \textit{ableitungDurchDifferenz()} approximiert die Ableitung einer Funktion \textit{f} an einer Stelle \textit{x} durch ein Differenzenverfahren, wie es in (\ref{def: DiffVerfahren}) definiert ist.
+            Für $\frac{dM}{ds}$ benötigt man aber $l$ partielle Ableitungen, weshalb man die $l$ partiellen Ableitungen einzeln berechnet und zu einer Matrix vereint.
+            Eine partielle Ableitung besitzt als Array die Form $(n\times n)$. Um alle partiellen Ableitungen zu einem Array zusammenzuführen, werden dieses Arrays auf die $(n\times n\times 1)$ erweitert, um nun alle partiellen Ableitungen in der dritten Ebene zusammenzufügen (vgl. \cite{numpyAppend}).
+            Das Ergebnis besitzt daher die Form $(n\times n\times l)$. Die Funktion \textit{schrittGradientenverfahren()} berechnet den Punkt $s_{k+1}$ aus $s_k$,
+            wohingegen \textit{bedingungenPruefen()} prüft, ob ein Wert innerhalb der zulässigen Menge $\Omega$ liegt.
+            Sollte dies nicht der Fall sein, wird der Design-Parameter mithilfe einer Projektion wie in \cite[S. 314]{optimierungJarreProjektion} wieder auf $\Omega$ abgebildet
+            und im nächsten Schritt wird statt dem berechneten Wert die Projektion verwendet.
+
+            Die Funktion \textit{EigenwerteMinimierenAufIntervall()} definiert wichtige Funktionen, wie \textit{J(), J\_Stern() und nablaJ\_Stern()}, um dann wiederholt \textit{schrittGradientenverfahren()} aufzurufen und somit die Eigenwertzählungen zu minimieren.
+            Für die Ausführbarkeit von \textit{nablaJ\_Stern()} wird die Funktion \zitat{numpy.transpose} \cite{numpyTranspose} benötigt, damit die Multiplikation der Matrizen in \ref{eqn: vollständigeAblL} durchgeführt werden kann.
+
+            Schließlich wird \textit{minimierenPlottenUndEckdatenAnzeigen()} genutzt, um vorherige Funktion aufzurufen, die benötigte Zeit zu stoppen, die Plots anzuzeigen und einige Kennzahlen des Durchlaufs auszugeben.
+
+            In Kapitel \ref{sec: Programmieren} werden ausschließlich die Ergebnisse des Programms \mbox{\cite[\textit{./erste Implementierung.py}]{github}} behandelt.
             In dieser Datei werden sechs Durchläufe des Minimierungsverfahrens durchgeführt, beschrieben und die Plots gezeigt.
             Verbesserungen aus Kapitel \ref{sec: Verbesserungen} werden in den anderen Dateien zu finden sein.
-            
-            Falls bei einem Schritt des Minimierungsverfahrens $s$ die Menge $\Omega$ der zulässigen Werte verlässt,
-            so wird der Design-Parameter mithilfe einer Projektion wie in \cite[S. 314]{optimierungJarreProjektion} wieder auf $\Omega$ abgebildet
-            und im nächsten Schritt wird statt dem berechneten Wert die Projektion verwendet.
             
             Bei den Programmen gibt es eine Begrenzung für die Anzahl an Schritten pro Durchlauf der Minimierung.
             Falls ein Durchlauf mehr als 500 Schritte benötigen sollte, um zu einem Ergebnis zu kommen, wird er abgebrochen, damit ein einzelner Durchlauf nicht zu viel Zeit beansprucht.
@@ -1133,12 +1147,11 @@ Tag der Einreichung: \datum
 
             Es gehören immer 2 nacheinander folgende Durchläufe zusammen, da sie sich nur in der Anzahl der verwendeten Teilintervalle $m$
             und somit der Genauigkeit der Quadraturformel unterscheiden.
-            Auch unterscheiden sich diese Durchläufe in der Schrittweite des Gradientenverfahrens $\lam_*$.
 
             Beim Ausführen des Programms werden noch verschiedene andere Kennzahlen, wie der Endpunkt des Design-Parameters, ausgegeben,
             hier werden aber nur die Anzahl an benötigten Iterationen und die dafür benötigte Zeit betrachtet.
-            Die Zeit misst nur die Zeit, die für die Minimierung benötigt wird.
-            Aufarbeitungen, wie das anschließende Berechnen der Eigenwerte, werden hier nicht gemessen. \\
+            Die Spalte \zitat{Zeit in s} gibt nur an, wie viel Zeit der Aufruf der Funktion \textit{EigenwerteMinimierenAufIntervall()} benötigte.
+            Aufarbeitungen, wie das anschließende Berechnen der Eigenwerte, werden dabei nicht gemessen. \\
 
             \begin{table}[ht]
                   \centering
@@ -1176,7 +1189,7 @@ Tag der Einreichung: \datum
             Es ist daher möglich, dass nicht alle Eigenwerte abgebildet werden.
             Die kompletten Abbildungen kann man aber durch Ausführen des Programms \textit{erste Implementierung.py} erhalten.
             
-            Für diese beiden Durchläufe beschränke man sich auf die Verteilung der Eigenwerte.
+            Für diese beiden Durchläufe beschränke man sich auf die Verteilung der Eigenwerte, also den unteren Plot.
             \begin{figure}[h!t]
                   \centering
                   \includegraphics[width=0.9\textwidth, keepaspectratio]{./Original/Plot_1_100_0.05.png}
@@ -1193,9 +1206,9 @@ Tag der Einreichung: \datum
 
             Die gepunkteten Linien stellen immer das Intervall \lamAlamB dar.
             Ferner werden die Eigenwerte in den Plots \zitat{Entwicklung der Eigenwerte} nicht mithilfe einer Legende beschriftet, da dies keinen Mehrwert bringt.
-            Mit erster Eigenwert werde hier immer der größte Eigenwert bezeichnet, den man sehen kann, mit zweiter der nächstkleinere.
-            Man sehe zuerst, dass sich der betrachtete Eigenwert dem oberen Rand des Intervalls ($\lam_b$) nähert, aber ihn nicht überschreitet.
-            Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man in Tabelle \ref{tab: Ergebnisse} erkennen kann.
+            Mit \textit{erster Eigenwert} werde hier immer der größte Eigenwert bezeichnet, den man sehen kann, mit \textit{zweiter} der nächstkleinere.
+            Man sehe zuerst in Abb. \ref{fig: Plot_1_100_0.05} und \ref{fig: Plot_1_150_0.05}, dass sich der betrachtete Eigenwert dem oberen Rand des Intervalls ($\lam_b$) nähert, aber ihn nicht überschreitet.
+            Daran ändert sich auch nach weiteren 9800 Schritten nichts, wie man anhand Tabelle \ref{tab: Ergebnisse} vermuten kann.
             Diese Durchläufe unterscheiden sich so minimal voneinander, dass die Unterschiede nur durch sehr starke Vergrößerung sichtbar werden.
             Dies kann man sich ebenfalls durch Ausführung des Programms klar machen.
 
@@ -1215,14 +1228,14 @@ Tag der Einreichung: \datum
                   \label{fig: Plot_1_150_0.5}
             \end{figure}
 
-            Hier kann man die Unterschiede zwischen den Genauigkeiten der Quadraturformeln leicht erkennen: während in Abb. \ref{fig: Plot_1_100_0.5}
+            In Abb. \ref{fig: Plot_1_100_0.5} und \ref{fig: Plot_1_150_0.5} kann man die Unterschiede zwischen den Genauigkeiten der Quadraturformeln leicht erkennen: während in Abb. \ref{fig: Plot_1_100_0.5}
             nach Schritt 15 nicht alle Eigenwerte aus dem Intervall entfernt wurden, so befinden sich in Abb. \ref{fig: Plot_1_150_0.5} nach dem gleichen Schritt alle Eigenwerte außerhalb des Intervalls.
             Da die Abbruchbedingung des Gradientenverfahrens hier die genaue gewichtete Eigenwertzählung ist, wird das Gradientenverfahren nach diesem Schritt beendet.
 
             Man sehe aber auch, dass die approximierte gewichtete Eigenwertzählung bei beiden Durchläufen in Schritt 15 sehr stark von der genauen abweicht.
             Dies kann sehr wahrscheinlich auf die verwendete Quadraturformel zurückgeführt werden:
-            Bei beiden Quadraturformeln wird L(z,s) an den Stellen $z=\lambda_a$ und $z=\lambda_b$ ausgewertet.
-            Falls aber ein Eigenwert sich nahe des Intervallrands befindet, so befindet sich eine Stützstelle nahe einer Polstelle.
+            Bei der Approximation $J^*_\text{Tr}(s)$ wird $L(z,s)$ an den Stellen $z=\lambda_a$ und $z=\lambda_b$ ausgewertet.
+            Falls aber ein Eigenwert sich nahe des Intervallrands befindet, so befindet sich eine Stützstelle nahe einer Polstelle, siehe Gleichung (\ref{eqn: ZielfunktionMitPolstellen}).
             Das führt zu unerwünschten Erscheinungen:
             In Abb. \ref{fig: Plot_1_100_0.5} wird die gewichtete Eigenwertzählung bei Schritt 15 viel zu hoch approximiert,
             in Abb. \ref{fig: Plot_1_150_0.5} wird sie bei Schritt 15 negativ.
@@ -1231,7 +1244,7 @@ Tag der Einreichung: \datum
             damit er das obere Ende des Intervalls überschreitet, sondern der zweite Eigenwert wird so stark verringert, sodass nun sogar der erste Eigenwert im Intervall liegt.
             Obwohl die negative Approximation bei Abb. \ref{fig: Plot_1_150_0.5} einen Wert annimmt, der für die genauen Eigenwertzählung nicht möglich ist, so ändert es nichts an dem Verlauf,
             da in diesem Schritt alle Eigenwert außerhalb des Intervalls liegen und laut Algorithmus \ref{alg: steilster Abstieg}
-            die genaue gewichtete Zählung verwendet wird, um zu entscheiden, ob ein Minimum erreicht wurde. Wie man sehen kann verschwinden die genauen Eigenwertzählung bei Schritt 15.
+            die genaue gewichtete Zählung \J verwendet wird, um zu entscheiden, ob ein Minimum erreicht wurde. Wie man sehen kann verschwinden die genauen Eigenwertzählung bei Schritt 15.
             Sollte man nur Informationen über die approximierte Zählung besitzen, so wäre das Verfahren, je nach Programmierung,
             nicht beendet worden, sondern fortgeführt worden, obwohl es ein Minimum erreicht hatte.
 
@@ -1254,12 +1267,15 @@ Tag der Einreichung: \datum
                   \label{fig: Plot_2_150_0.05}
             \end{figure}
 
-            Wie man leicht in Abb. \ref{fig: Plot_2_100_0.05} sehen kann, war das Erreichen eines Minimums nicht immer eine kontrollierte Veränderung:
+            Wie man leicht in Abb. \ref{fig: Plot_2_100_0.05} sehen kann, war das Erreichen eines Minimums an zwei Stellen keine kontrollierte, kleine Veränderung:
             An beiden Stellen kam ein Eigenwert sehr nahe an eine der beiden Intervallgrenzen. Wie schon in den vorherigen Abbildungen führt das zu einer ungenauen Approximation der gewichteten Eigenwertzählung.
             Zufällig waren diese Ungenauigkeit und somit auch die Sprünge in Abb. \ref{fig: Plot_2_100_0.05} derart, dass nach dem zweiten Sprung alle Eigenwerte außerhalb des Intervalls lagen,
             wohingegen bei Abb. \ref{fig: Plot_2_150_0.05} die genauere Quadraturformel zur Folge hatte, dass nicht alle Eigenwerte nach diesen Sprüngen außerhalb des Intervalls lagen.
 
-            Man könnte die Minimierung als instabiles System ansehen, da hier Veränderungen der Quadraturformel ausreichten, um den Verlauf der Eigenwerte komplett zu verändern\footnote{es reicht sogar ein Wechsel des Gerätes, welches das Programm ausführt, um unterschiedliche Ergebnisse hervorzubringen}.
+            Da schon Veränderungen der Quadraturformel ausreichten, um den Verlauf der Eigenwerte komplett zu verändern\footnote{es reicht sogar ein Wechsel des Gerätes, welches das Programm ausführt, um unterschiedliche Ergebnisse hervorzubringen},
+            werden auch andere wichtige Faktoren den Algorithmus und somit die Minimalstelle beeinflussen können.
+            
+            Laut \cite[S. 7]{hauptteilTkachuk} hänge der Algorithmus besonders von dem Startwert $s_0$ und seinen Parametern, wie $\alpha$, ab.
 
 \chapter{Verbesserungen}
 \label{sec: Verbesserungen}
