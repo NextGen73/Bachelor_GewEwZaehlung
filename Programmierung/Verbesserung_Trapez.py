@@ -14,7 +14,7 @@ if(__name__=='__main__'):
     
     init(quadratureContourIntegralCircleTrapezNeu, n, j, maxIter=500)
     print("Verschiebe in diesen Durchläufen die Stützstellen der Trapezregel so, dass keine Stützstelle bei lambda_a oder lambda_b liegt.")
-    print("Allein das reicht aus, damit die Minimierung zu beschleunigen.\n")
+    print("Allein das reicht aus, damit die Minimierung beschleunigt wird.\n")
     # System 1 mit Standardwerten initialisieren
     systemAuswaehlen(1)
 
@@ -31,7 +31,7 @@ if(__name__=='__main__'):
 
     print("Betrachte nun das zweite System mit kleiner Schrittweite.")
     print("Auch hier bewirkt die leicht veränderte Quadraturformel eine verbesserte Performance.")
-    print("Diese Performance kann zwar nicht direkt im Durchlauf mit m=100 gesehen werden, aber die Sprünge in der Verteilung der Eigenwerte wurden hier viel kleiner.\n")
+    print("Diese Performance kann zwar nicht direkt im Durchlauf mit m=100 gesehen werden, aber die Sprünge in der Verteilung der Eigenwerte wurden viel kleiner, was auf eine bessere Approximation schließen lässt.\n")
     # System 2 mit Standardwerten
     systemAuswaehlen(2)
 
