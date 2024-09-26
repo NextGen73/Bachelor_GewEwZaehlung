@@ -17,4 +17,4 @@ for s in sArray:
     print("")
 
 print("wie man sehen kann, wächst die einfache Trapezformel immer weiter, je näher sich die Polstelle der Integrationskurve nähert")
-print("die Realteil der anderen Quadraturformeln geht hingegen gegen 0.5, allerdings ist der Imaginärteil bei der verschobenen Trapezformel viel größer als bei allen anderen Quadraturen")
+print("die Realteile der anderen Quadraturformeln gehen hingegen gegen 0.5, allerdings ist der Imaginärteil bei der verschobenen Trapezformel viel größer als bei allen anderen Quadraturen")
