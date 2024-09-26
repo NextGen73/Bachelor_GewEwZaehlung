@@ -17,14 +17,14 @@ if(__name__=='__main__'):
     print("Das ist aber nicht verwunderlich, da der Parameter eindimensional ist.\n")
     # System 1 mit Standardwerten initialisieren
     systemAuswaehlen(1)
-    # minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
-    # minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(100, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(150, dynamischSchritt=True)
 
     # verwende nun wieder eine größere Reichweite
     print("Durch eine größere Schrittweite wird das Verfahren beschleunigt, da nun nicht mehr so viele Teilschritte benötigt werden.")
     print("Die Anzahl an kompletten Schritten bleibt daher 1, aber die Zahl an Unterschritten wird geringer.\n")
-    # minimierenPlottenUndEckdatenAnzeigen(100, 0.5, dynamischSchritt=True)
-    # minimierenPlottenUndEckdatenAnzeigen(150, 0.5, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(100, 0.5, dynamischSchritt=True)
+    minimierenPlottenUndEckdatenAnzeigen(150, 0.5, dynamischSchritt=True)
 
     print("Betrachte nun das zweite System mit kleiner Schrittweite.")
     print("Hier wird durch die variable Schrittweite zwar mehr Zeit benötigt, aber die Anzahl an benötigten Schritten verringert sich stark für m=100.")
